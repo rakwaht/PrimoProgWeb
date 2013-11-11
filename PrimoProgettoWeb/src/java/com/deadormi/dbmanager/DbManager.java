@@ -35,7 +35,8 @@ public class DbManager implements Serializable {
     public static void shutdown() {
         try {
             DriverManager.getConnection("jdbc:derby:;shutdown=true");
-        } catch (SQLException e) {
+        } catch (SQLException ex) {
+            //Logger.getLogger(DBManager.class.getName()).info(ex.getMessage());
         }
     }
 
