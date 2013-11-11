@@ -88,7 +88,8 @@ public class TestServlet extends HttpServlet {
         if(request.getParameter("logout") != null){
             HttpSession session = request.getSession();
             session.invalidate();
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/login"
+                    + "");
         }
         else{
             processRequest(request, response);
