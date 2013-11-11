@@ -4,6 +4,7 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -33,15 +34,10 @@ public class InvitoServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet InvitoServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet InvitoServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            MainLayout.printHeader(out);
+            out.println("<h1>INVITI: " + request.getContextPath() + "</h1>");
+            out.println("<a href='home'>Indietro</a><br />");
+            MainLayout.printFooter(out);
         } finally {            
             out.close();
         }

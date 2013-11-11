@@ -101,7 +101,7 @@ public class LoginServlet extends HttpServlet {
          String username = request.getParameter("username");
          String password = request.getParameter("password");
          try{
-             Utente utente = manager.authenticate(username, password);
+            Utente utente = manager.authenticate(username, password);
             if(utente != null){
                 HttpSession session = request.getSession();
                 Boolean logged = true;

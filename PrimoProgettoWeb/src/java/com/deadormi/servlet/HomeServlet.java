@@ -45,7 +45,7 @@ public class HomeServlet extends HttpServlet {
         }
         try {
             MainLayout.printHeader(out);
-            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>HOME at " + request.getContextPath() + "</h1>");
             out.println("<h2> Bentornato " + session.getAttribute("user_id") + "</h2>");
             out.println("<h2>" + cookie.getValue() + "</h2>");
             out.println("<a href='inviti'>Inviti</a><br />");
