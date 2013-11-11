@@ -4,9 +4,10 @@
  */
 package com.deadormi.servlet;
 
-import com.deadormi.util.LoginController;
+import com.deadormi.dbmanager.DbManager;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,13 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
+    private DbManager manager;
+    
+    @Override
+    public void init(){
+        this.manager = (DbManager) super.getServletContext().getAttribute("dbmanager");
+    }
+    
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -89,8 +97,8 @@ public class LoginServlet extends HttpServlet {
          String redirect = "/secure/testservlet";
          String username = request.getParameter("username");
          String password = request.getParameter("password");
-
-            if(LoginController.authenticate(username, password)){
+         try{
+            if(manager.authenticate(username, password) != null){
                 request.setAttribute("username", username);
                 request.setAttribute("password", password);
                 HttpSession session = request.getSession();
@@ -99,6 +107,13 @@ public class LoginServlet extends HttpServlet {
                 RequestDispatcher rd = request.getRequestDispatcher(redirect);
                 rd.forward(request, response);
             }
+            else{
+                processRequest(request, response);
+            }
+         }
+         catch(SQLException e){
+             
+         }
     }
 
     /**
