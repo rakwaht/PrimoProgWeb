@@ -54,6 +54,7 @@ public class DbManager implements Serializable {
                 if(rs.next()){
                     Utente utente = new Utente();
                     utente.setNome(username);
+                    utente.setId_utente(Integer.parseInt(rs.getString("id_utente")));
                     System.out.println("########## trovato ##########");
                     return utente;
                 }

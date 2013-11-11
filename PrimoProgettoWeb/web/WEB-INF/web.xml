@@ -8,6 +8,58 @@
         <filter-name>LoggedFilter</filter-name>
         <url-pattern>/secure/*</url-pattern>
     </filter-mapping>
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>com.deadormi.servlet.HomeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.deadormi.servlet.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TuoiGruppiServlet</servlet-name>
+        <servlet-class>com.deadormi.servlet.TuoiGruppiServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GruppoServlet</servlet-name>
+        <servlet-class>com.deadormi.servlet.GruppoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InvitoServlet</servlet-name>
+        <servlet-class>com.deadormi.servlet.InvitoServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreaGruppoServlet</servlet-name>
+        <servlet-class>com.deadormi.servlet.CreaGruppoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/secure/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/secure/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TuoiGruppiServlet</servlet-name>
+        <url-pattern>/secure/tuoi_gruppi</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GruppoServlet</servlet-name>
+        <url-pattern>/secure/gruppo/show</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InvitoServlet</servlet-name>
+        <url-pattern>/secure/inviti</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreaGruppoServlet</servlet-name>
+        <url-pattern>/secure/crea</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

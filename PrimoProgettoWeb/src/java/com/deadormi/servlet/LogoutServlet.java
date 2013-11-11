@@ -6,18 +6,19 @@ package com.deadormi.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Davide
  */
-@WebServlet(name = "OnlyLogged", urlPatterns = {"/secure/onlylogged"})
-public class OnlyLogged extends HttpServlet {
+public class LogoutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP
@@ -38,10 +39,10 @@ public class OnlyLogged extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OnlyLogged</title>");            
+            out.println("<title>Servlet LogoutServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet OnlyLogged at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet LogoutServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         } finally {            
@@ -77,7 +78,24 @@ public class OnlyLogged extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        session.invalidate();
+        Cookie [] cookies = request.getCookies();
+        Cookie cookie = null;
+        Date date = new Date();
+        for(int i = 0; i<cookies.length; i++){
+            if(cookies[i].getName().equals("ultimo_login")){
+                cookie = cookies[i];
+                cookie.setValue(date.toString());
+                cookie.setMaxAge(604800);
+                response.addCookie(cookie);
+            }
+        }
+        if(cookie == null){
+            cookie = new Cookie("ultimo_login",date.toString());
+            response.addCookie(cookie);
+        }
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 
     /**

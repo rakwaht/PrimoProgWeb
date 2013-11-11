@@ -4,14 +4,10 @@
  */
 package com.deadormi.servlet;
 
-import com.deadormi.dbmanager.DbManager;
-import com.deadormi.entity.Utente;
+import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,16 +19,8 @@ import org.apache.tomcat.jni.Time;
  *
  * @author Davide
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
+public class HomeServlet extends HttpServlet {
 
-    private DbManager manager;
-    
-    @Override
-    public void init(){
-        this.manager = (DbManager) super.getServletContext().getAttribute("dbmanager");
-    }
-    
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -47,26 +35,27 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        Cookie[] cookies = request.getCookies();
+        Cookie cookie = null;
+        HttpSession session = request.getSession();
+        for (int i = 0; i < cookies.length; i++) {
+            if (cookies[i].getName().equals("ultimo_login")) {
+                cookie = cookies[i];
+            }
+        }
         try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
-            out.println("<form action=\"login\" method=\"POST\">");
-            out.println("Username:<input type=\"text\" name=\"username\" placeholder=\"Username\"/>");
-            out.println("<br />");
-            out.println("Password:<input type=\"password\" name=\"password\" placeholder=\"Password\" />");
-            out.println("<input type=\"submit\" value=\"Login\" />");
-            out.println("</form>");
-            out.println("</body>");
-            out.println("</html>");
+            MainLayout.printHeader(out);
+            out.println("<h1>Servlet HomeServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h2> Bentornato " + session.getAttribute("user_id") + "</h2>");
+            out.println("<h2>" + cookie.getValue() + "</h2>");
+            out.println("<a href='inviti'>Inviti</a><br />");
+            out.println("<a href='tuoi_gruppi'>Gruppi</a><br />");
+            out.println("<a href='crea'>Crea Gruppo</a><br />");
+            MainLayout.printFooter(out);
         } finally {
             out.close();
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -97,26 +86,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         String redirect = "/secure/home";
-         String username = request.getParameter("username");
-         String password = request.getParameter("password");
-         try{
-             Utente utente = manager.authenticate(username, password);
-            if(utente != null){
-                HttpSession session = request.getSession();
-                Boolean logged = true;
-                session.setAttribute("logged", logged);
-                System.out.println("#######" + utente.getId_utente() + "############");
-                session.setAttribute("user_id", utente.getId_utente());
-                response.sendRedirect(request.getContextPath() + redirect);
-            }
-            else{
-                processRequest(request, response);
-            }
-         }
-         catch(SQLException e){
-             
-         }
+        processRequest(request, response);
     }
 
     /**

@@ -4,35 +4,19 @@
  */
 package com.deadormi.servlet;
 
-import com.deadormi.dbmanager.DbManager;
-import com.deadormi.entity.Utente;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.tomcat.jni.Time;
 
 /**
  *
  * @author Davide
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
+public class CreaGruppoServlet extends HttpServlet {
 
-    private DbManager manager;
-    
-    @Override
-    public void init(){
-        this.manager = (DbManager) super.getServletContext().getAttribute("dbmanager");
-    }
-    
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -52,19 +36,13 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
+            out.println("<title>Servlet CreaGruppoServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
-            out.println("<form action=\"login\" method=\"POST\">");
-            out.println("Username:<input type=\"text\" name=\"username\" placeholder=\"Username\"/>");
-            out.println("<br />");
-            out.println("Password:<input type=\"password\" name=\"password\" placeholder=\"Password\" />");
-            out.println("<input type=\"submit\" value=\"Login\" />");
-            out.println("</form>");
+            out.println("<h1>Servlet CreaGruppoServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
-        } finally {
+        } finally {            
             out.close();
         }
     }
@@ -97,26 +75,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         String redirect = "/secure/home";
-         String username = request.getParameter("username");
-         String password = request.getParameter("password");
-         try{
-             Utente utente = manager.authenticate(username, password);
-            if(utente != null){
-                HttpSession session = request.getSession();
-                Boolean logged = true;
-                session.setAttribute("logged", logged);
-                System.out.println("#######" + utente.getId_utente() + "############");
-                session.setAttribute("user_id", utente.getId_utente());
-                response.sendRedirect(request.getContextPath() + redirect);
-            }
-            else{
-                processRequest(request, response);
-            }
-         }
-         catch(SQLException e){
-             
-         }
+        processRequest(request, response);
     }
 
     /**
