@@ -105,8 +105,7 @@ public class LoginServlet extends HttpServlet {
             if(utente != null){
                 HttpSession session = request.getSession();
                 Boolean logged = true;
-                session.setAttribute("logged", logged);
-                System.out.println("#######" + utente.getId_utente() + "############");
+                session.setAttribute("logged", logged);          
                 session.setAttribute("user_id", utente.getId_utente());
                 response.sendRedirect(request.getContextPath() + redirect);
             }

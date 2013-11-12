@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.tomcat.jni.User;
 
 /**
  *
@@ -134,5 +135,82 @@ public class DbManager implements Serializable {
             stm.close();
 
         }
+    }
+
+    public Utente getUserById(Integer user_id) throws SQLException {
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.UTENTE WHERE id_utente=?");
+        ResultSet rs;
+        Utente utente = null;
+        try {
+            stm.setInt(1, user_id);
+            rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    utente=new Utente();
+                    utente.setUsername(rs.getString("username"));
+                    utente.setId_utente(user_id);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return utente;
+    }
+
+    public Gruppo getGruppoById(Integer gruppo_id) throws SQLException {
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.GRUPPO WHERE id_gruppo=?");
+        ResultSet rs;
+        Gruppo gruppo = null;
+        try {
+            stm.setInt(1, gruppo_id);
+            rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    gruppo=new Gruppo();
+                    gruppo.setNome(rs.getString("nome"));
+                    gruppo.setDescrizione(rs.getString("descrizione"));
+                    gruppo.setData_creazione(rs.getString("data_creazione"));
+                    gruppo.setId_gruppo(gruppo_id);
+                    gruppo.setId_proprietario(rs.getInt("id_proprietario"));
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return gruppo;
+    }
+
+    
+    
+    public List<Invito> getInvitiByUserId(Integer user_id) throws SQLException {
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.INVITO WHERE id_invitato=? AND invito_abilitato=true");
+        ResultSet rs;
+        Invito invito;
+        List<Invito> inviti = new ArrayList<Invito>();
+        try {
+            stm.setInt(1, user_id);
+            rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    invito = new Invito();
+                    invito.setId_invito(rs.getInt("id_invito"));
+                    invito.setId_invitato(user_id);
+                    invito.setId_invitante(rs.getInt("id_invitante"));
+                    invito.setId_gruppo(rs.getInt("id_gruppo"));
+                    invito.setInvito_abilitato(rs.getBoolean("invito_abilitato"));
+                    inviti.add(invito);
+                    System.out.println(invito.getId_invito() + " " + invito.getId_gruppo()+ " " + invito.getId_invitante());
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return inviti;
     }
 }

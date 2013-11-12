@@ -4,13 +4,23 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.dbmanager.DbManager;
+import com.deadormi.entity.Gruppo;
+import com.deadormi.entity.Invito;
+import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -18,10 +28,16 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class InvitoServlet extends HttpServlet {
 
+    private DbManager manager;
+
+    @Override
+    public void init() {
+        this.manager = (DbManager) super.getServletContext().getAttribute("dbmanager");
+    }
+
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -32,21 +48,66 @@ public class InvitoServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        List<Invito> inviti = null;
+        Invito invito = null;
+        Integer id_gruppo = null;
+        Integer id_invitante = null;
+        Utente invitante = null;
+        Gruppo gruppo = null;
+        
+        HttpSession session = request.getSession();
+        try {
+            inviti = manager.getInvitiByUserId((Integer) session.getAttribute("user_id"));
+        } catch (SQLException ex) {
+            Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
             out.println("<h1>INVITI: " + request.getContextPath() + "</h1>");
             out.println("<a href='home'>Indietro</a><br />");
+            if (inviti != null) {
+                out.println("<h2>Inviti</h2>");
+                out.println("<form method='POST'>");
+                out.println("<table>");
+                
+                for (int i = 0; i < inviti.size(); i++) {
+                    invito = inviti.get(i);
+                    id_gruppo = invito.getId_gruppo();
+                    try {
+                        gruppo = manager.getGruppoById(id_gruppo);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    id_invitante = invito.getId_invitante();
+                    try {
+                        invitante = manager.getUserById(id_invitante);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    out.println("<tr>");
+                    out.println("<td>" + gruppo.getNome() + " da " + invitante.getUsername() + "</td>");
+                    out.println("<td><input type='checkbox' name='gruppi_selezionati' value='"+ gruppo.getId_gruppo()+"'/></td>");
+                    out.println("</tr>");
+                }
+                
+                
+                out.println("</table>");
+                out.println("<input type='submit' value='ISCRIVITI'/>");
+                out.println("</form>");
+            } else {
+                out.println("Nessun invito nel db!");
+            }
             MainLayout.printFooter(out);
-        } finally {            
+        } finally {
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -60,8 +121,7 @@ public class InvitoServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
