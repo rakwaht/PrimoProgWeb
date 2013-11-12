@@ -12,13 +12,21 @@ import java.io.Serializable;
  */
 public class Utente implements Serializable {
     private Integer id_utente;
-    private String nome;
+    private String username;
     private String password;
     private Boolean utente_abilitato;
     private String nome_avatar;
-
+    
     public String getNome_avatar() {
         return nome_avatar;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setNome_avatar(String nome_avatar) {
@@ -29,9 +37,7 @@ public class Utente implements Serializable {
         this.id_utente = id_utente;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+   
 
     public void setPassword(String password) {
         this.password = password;
@@ -47,9 +53,7 @@ public class Utente implements Serializable {
         return id_utente;
     }
 
-    public String getNome() {
-        return nome;
-    }
+    
 
     public String getPassword() {
         return password;

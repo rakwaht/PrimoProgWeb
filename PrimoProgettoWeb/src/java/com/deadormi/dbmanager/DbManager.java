@@ -11,6 +11,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -53,13 +55,11 @@ public class DbManager implements Serializable {
             try {
                 if(rs.next()){
                     Utente utente = new Utente();
-                    utente.setNome(username);
+                    utente.setUsername(username);
                     utente.setId_utente(Integer.parseInt(rs.getString("id_utente")));
-                    System.out.println("########## trovato ##########");
                     return utente;
                 }
                 else {
-                    System.out.println("########## Non esiste l'utente in db ##########");
                     return null;
                 }
             } finally {
@@ -68,5 +68,26 @@ public class DbManager implements Serializable {
         } finally {
             stm.close();
         }
+    }
+    
+    public List<Utente> getUtentiAbilitati() throws SQLException{
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.UTENTE WHERE utente_abilitato=true");
+        List<Utente> list = new ArrayList<Utente>();
+        try {
+            ResultSet rs = stm.executeQuery();
+            try {
+                while(rs.next()){
+                    Utente utente = new Utente();
+                    utente.setUsername(rs.getString("username"));
+                    utente.setId_utente(Integer.parseInt(rs.getString("id_utente")));
+                    list.add(utente);
+                }             
+            } finally {               
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return list;
     }
 }

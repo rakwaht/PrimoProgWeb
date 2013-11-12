@@ -13,7 +13,15 @@ import java.sql.Date;
  */
 public class Gruppo implements Serializable{
     
-     
+    private String descrizione; 
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
     private Integer id_gruppo;
     private String nome;
     private Integer id_proprietario;
