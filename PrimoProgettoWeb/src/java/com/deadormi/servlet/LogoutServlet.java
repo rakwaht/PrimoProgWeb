@@ -4,6 +4,7 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.util.CurrentDate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -82,17 +83,16 @@ public class LogoutServlet extends HttpServlet {
         session.invalidate();
         Cookie [] cookies = request.getCookies();
         Cookie cookie = null;
-        Date date = new Date();
         for(int i = 0; i<cookies.length; i++){
             if(cookies[i].getName().equals("ultimo_login")){
                 cookie = cookies[i];
-                cookie.setValue(date.toString());
+                cookie.setValue(CurrentDate.getCurrentDate());
                 cookie.setMaxAge(604800);
                 response.addCookie(cookie);
             }
         }
         if(cookie == null){
-            cookie = new Cookie("ultimo_login",date.toString());
+            cookie = new Cookie("ultimo_login",CurrentDate.getCurrentDate());
             response.addCookie(cookie);
         }
         response.sendRedirect(request.getContextPath() + "/login");

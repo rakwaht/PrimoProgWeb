@@ -15,7 +15,15 @@ public class Post implements Serializable {
     private Integer id_scrivente;
     private Integer id_gruppo;
     private String testo;
+    private String data_creazione;
 
+    public String getData_creazione() {
+        return data_creazione;
+    }
+
+    public void setData_creazione(String data_creazione) {
+        this.data_creazione = data_creazione;
+    }
     public void setId_post(Integer id_post) {
         this.id_post = id_post;
     }

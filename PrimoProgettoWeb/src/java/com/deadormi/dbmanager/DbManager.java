@@ -4,6 +4,8 @@
  */
 package com.deadormi.dbmanager;
 
+import com.deadormi.entity.Gruppo;
+import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -11,6 +13,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,13 +56,12 @@ public class DbManager implements Serializable {
             stm.setString(2, password);
             ResultSet rs = stm.executeQuery();
             try {
-                if(rs.next()){
+                if (rs.next()) {
                     Utente utente = new Utente();
                     utente.setUsername(username);
                     utente.setId_utente(Integer.parseInt(rs.getString("id_utente")));
                     return utente;
-                }
-                else {
+                } else {
                     return null;
                 }
             } finally {
@@ -69,25 +71,68 @@ public class DbManager implements Serializable {
             stm.close();
         }
     }
-    
-    public List<Utente> getUtentiAbilitati() throws SQLException{
+
+    public List<Utente> getUtentiAbilitati() throws SQLException {
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.UTENTE WHERE utente_abilitato=true");
         List<Utente> list = new ArrayList<Utente>();
         try {
             ResultSet rs = stm.executeQuery();
             try {
-                while(rs.next()){
+                while (rs.next()) {
                     Utente utente = new Utente();
                     utente.setUsername(rs.getString("username"));
                     utente.setId_utente(Integer.parseInt(rs.getString("id_utente")));
                     list.add(utente);
-                }             
-            } finally {               
+                }
+            } finally {
                 rs.close();
             }
         } finally {
             stm.close();
         }
         return list;
+    }
+
+    public Integer creaGruppo(Gruppo gruppo) throws SQLException {
+        PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.GRUPPO (nome,id_proprietario,data_creazione,descrizione) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+        ResultSet generated_keys;
+
+        try {
+            stm.setString(1, gruppo.getNome());
+            stm.setInt(2, gruppo.getId_proprietario());
+            stm.setString(3, gruppo.getData_creazione());
+            stm.setString(4, gruppo.getDescrizione());
+            stm.executeUpdate();
+            generated_keys = stm.getGeneratedKeys();
+            if (generated_keys.next()) {
+                return generated_keys.getInt(1);
+            } else {
+                return 0;
+            }
+        } finally {
+            stm.close();
+
+        }
+    }
+
+    public Integer creaInvito(Invito invito) throws SQLException {
+        PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.INVITO (id_invitato,id_invitante,id_gruppo) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+        ResultSet generated_keys;
+
+        try {
+            stm.setInt(1, invito.getId_invitato());
+            stm.setInt(2, invito.getId_invitante());
+            stm.setInt(3, invito.getId_gruppo());
+            stm.executeUpdate();
+            generated_keys = stm.getGeneratedKeys();
+            if (generated_keys.next()) {
+                return generated_keys.getInt(1);
+            } else {
+                return 0;
+            }
+        } finally {
+            stm.close();
+
+        }
     }
 }

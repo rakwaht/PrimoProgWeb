@@ -25,7 +25,7 @@ public class Gruppo implements Serializable{
     private Integer id_gruppo;
     private String nome;
     private Integer id_proprietario;
-    private Date data_creazione;
+    private String data_creazione;
     private Boolean gruppo_abilitato;
 
     public Integer getId_gruppo() {
@@ -52,11 +52,11 @@ public class Gruppo implements Serializable{
         this.id_proprietario = id_proprietario;
     }
 
-    public Date getData_creazione() {
+    public String getData_creazione() {
         return data_creazione;
     }
 
-    public void setData_creazione(Date data_creazione) {
+    public void setData_creazione(String data_creazione) {
         this.data_creazione = data_creazione;
     }
 

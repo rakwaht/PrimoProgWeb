@@ -6,8 +6,10 @@ package com.deadormi.servlet;
 
 import com.deadormi.dbmanager.DbManager;
 import com.deadormi.entity.Gruppo;
+import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
+import com.deadormi.util.CurrentDate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -16,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -63,17 +66,17 @@ public class CreaGruppoServlet extends HttpServlet {
             out.println("<form method='POST'>");
             out.println("Titolo:<input type='text' name='titolo'/><br />");
             out.println("Descrizione:<textarea name='descrizione'></textarea><br />");
-            if (list != null && list.size()!=1) {
+            if (list != null && list.size() != 1) {
                 out.println("<table>");
                 out.println("<h2>Utenti</h2>");
                 for (int i = 0; i < list.size(); i++) {
-                    
+
                     utente = list.get(i);
                     if (!utente.getId_utente().equals(session.getAttribute("user_id"))) {
                         out.println("<tr>");
-                        
+
                         out.println("<td>" + utente.getUsername() + "</td>");
-                        out.println("<td><input type='checkbox' name='utenti_selezionati' value='"+ utente.getId_utente() + "'/></td>");
+                        out.println("<td><input type='checkbox' name='utenti_selezionati' value='" + utente.getId_utente() + "'/></td>");
                         out.println("</tr>");
                     }
                 }
@@ -116,15 +119,35 @@ public class CreaGruppoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Integer gruppo_id = null;
         String[] utenti_selezionati = request.getParameterValues("utenti_selezionati");
         String titolo = request.getParameter("titolo");
         String descrizione = request.getParameter("descrizione");
-        Date date = new Date();
+       
+        Invito invito;
         Gruppo gruppo = new Gruppo();
         gruppo.setNome(titolo);
         gruppo.setDescrizione(descrizione);
-        gruppo.setData_creazione((java.sql.Date) date);
-        
+        gruppo.setData_creazione(CurrentDate.getCurrentDate());
+        gruppo.setId_proprietario((Integer) session.getAttribute("user_id"));
+        try {
+            gruppo_id = manager.creaGruppo(gruppo);
+            for (int i = 0; i < utenti_selezionati.length; i++) {
+                
+                invito = new Invito();
+                invito.setId_invitante((Integer) session.getAttribute("user_id"));System.out.println(invito.getId_invitante());
+                invito.setId_invitato(Integer.parseInt(utenti_selezionati[i]));System.out.println(invito.getId_invitato());
+                invito.setId_gruppo(gruppo_id);System.out.println(invito.getId_gruppo());
+                manager.creaInvito(invito);
+            }
+        RequestDispatcher rd = request.getRequestDispatcher("/secure/gruppo/show");
+        request.setAttribute("gruppo_id", gruppo_id);
+        rd.forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(CreaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     /**

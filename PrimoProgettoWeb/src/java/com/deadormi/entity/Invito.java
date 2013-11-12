@@ -15,7 +15,15 @@ public class Invito implements Serializable {
     private Integer id_invitato;
     private Integer id_invitante;
     private Integer id_gruppo;
+    private Boolean invito_abilitato;
 
+    public Boolean isInvito_abilitato() {
+        return invito_abilitato;
+    }
+
+    public void setInvito_abilitato(Boolean invito_abilitato) {
+        this.invito_abilitato = invito_abilitato;
+    }
     public Integer getId_invito() {
         return id_invito;
     }

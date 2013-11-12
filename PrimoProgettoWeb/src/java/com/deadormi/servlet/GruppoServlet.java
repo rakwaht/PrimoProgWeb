@@ -8,6 +8,7 @@ import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,10 +33,13 @@ public class GruppoServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        Integer gruppo_id = (Integer)request.getAttribute("gruppo_id");
+        
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
             out.println("<h1>GRUPPO: " + request.getContextPath() + "</h1>");
+            out.println("<h1>ID: " + gruppo_id + "</h1>");
             out.println("<a href='home'>Indietro</a><br />");
             MainLayout.printFooter(out);
         } finally {            
