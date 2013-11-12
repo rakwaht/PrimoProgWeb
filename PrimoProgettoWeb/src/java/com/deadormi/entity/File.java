@@ -14,7 +14,7 @@ import java.sql.Blob;
 public class File implements Serializable{
     
     private Integer id_file;
-    private Blob file;
+    private String nome_file;
     private Integer id_post;
 
     public Integer getId_file() {
@@ -25,13 +25,14 @@ public class File implements Serializable{
         this.id_file = id_file;
     }
 
-    public Blob getFile() {
-        return file;
+    public String getNome_file() {
+        return nome_file;
     }
 
-    public void setFile(Blob file) {
-        this.file = file;
+    public void setNome_file(String nome_file) {
+        this.nome_file = nome_file;
     }
+
 
     public Integer getId_post() {
         return id_post;

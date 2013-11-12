@@ -15,7 +15,15 @@ public class Utente implements Serializable {
     private String nome;
     private String password;
     private Boolean utente_abilitato;
-    private Integer id_avatar;
+    private String nome_avatar;
+
+    public String getNome_avatar() {
+        return nome_avatar;
+    }
+
+    public void setNome_avatar(String nome_avatar) {
+        this.nome_avatar = nome_avatar;
+    }
 
     public void setId_utente(Integer id_utente) {
         this.id_utente = id_utente;
@@ -33,9 +41,7 @@ public class Utente implements Serializable {
         this.utente_abilitato = utente_abilitato;
     }
 
-    public void setId_avatar(Integer id_avatar) {
-        this.id_avatar = id_avatar;
-    }
+    
 
     public Integer getId_utente() {
         return id_utente;
@@ -53,8 +59,6 @@ public class Utente implements Serializable {
         return utente_abilitato;
     }
 
-    public Integer getId_avatar() {
-        return id_avatar;
-    }
+    
     
 }
