@@ -4,6 +4,7 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.dbmanager.DbManager;
 import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,7 +18,11 @@ import javax.servlet.http.HttpServletResponse;
  * @author Davide
  */
 public class TuoiGruppiServlet extends HttpServlet {
-
+    private DbManager manager;
+    @Override
+    public void init() {
+        this.manager = (DbManager) super.getServletContext().getAttribute("dbmanager");
+    }
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -37,6 +42,7 @@ public class TuoiGruppiServlet extends HttpServlet {
             MainLayout.printHeader(out);
             out.println("<h1>MIEI GRUPPI: " + request.getContextPath() + "</h1>");
             out.println("<a href='home'>Indietro</a><br />");
+            
             MainLayout.printFooter(out);
         } finally {            
             out.close();

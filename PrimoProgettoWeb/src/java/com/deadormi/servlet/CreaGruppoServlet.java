@@ -136,9 +136,9 @@ public class CreaGruppoServlet extends HttpServlet {
             for (int i = 0; i < utenti_selezionati.length; i++) {
                 
                 invito = new Invito();
-                invito.setId_invitante((Integer) session.getAttribute("user_id"));System.out.println(invito.getId_invitante());
-                invito.setId_invitato(Integer.parseInt(utenti_selezionati[i]));System.out.println(invito.getId_invitato());
-                invito.setId_gruppo(gruppo_id);System.out.println(invito.getId_gruppo());
+                invito.setId_invitante((Integer) session.getAttribute("user_id"));
+                invito.setId_invitato(Integer.parseInt(utenti_selezionati[i]));
+                invito.setId_gruppo(gruppo_id);
                 manager.creaInvito(invito);
             }
         RequestDispatcher rd = request.getRequestDispatcher("/secure/gruppo/show");

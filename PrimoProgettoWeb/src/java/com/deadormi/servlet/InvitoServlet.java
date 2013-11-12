@@ -6,6 +6,7 @@ package com.deadormi.servlet;
 
 import com.deadormi.dbmanager.DbManager;
 import com.deadormi.entity.Gruppo;
+import com.deadormi.entity.Gruppo_Utente;
 import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
@@ -131,7 +132,24 @@ public class InvitoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String[] gruppi_selezionati = request.getParameterValues("gruppi_selezionati");
+        String id_gruppo;
+        HttpSession session = request.getSession();
+        Gruppo_Utente gu = null;
+        
+        for(int i=0; i<gruppi_selezionati.length; i++){
+        
+            id_gruppo = gruppi_selezionati[i];
+            gu = new Gruppo_Utente();
+            gu.setId_gruppo(Integer.parseInt(id_gruppo));System.out.println(gu.getId_gruppo());
+            gu.setId_utente((Integer) session.getAttribute("user_id"));System.out.println(gu.getId_utente());
+            try {
+                manager.creaGruppo_Utente(gu);
+            } catch (SQLException ex) {
+                Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
     }
 
     /**

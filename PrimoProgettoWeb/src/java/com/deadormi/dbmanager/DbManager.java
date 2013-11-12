@@ -5,6 +5,7 @@
 package com.deadormi.dbmanager;
 
 import com.deadormi.entity.Gruppo;
+import com.deadormi.entity.Gruppo_Utente;
 import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
 import java.io.Serializable;
@@ -146,7 +147,7 @@ public class DbManager implements Serializable {
             rs = stm.executeQuery();
             try {
                 while (rs.next()) {
-                    utente=new Utente();
+                    utente = new Utente();
                     utente.setUsername(rs.getString("username"));
                     utente.setId_utente(user_id);
                 }
@@ -168,7 +169,7 @@ public class DbManager implements Serializable {
             rs = stm.executeQuery();
             try {
                 while (rs.next()) {
-                    gruppo=new Gruppo();
+                    gruppo = new Gruppo();
                     gruppo.setNome(rs.getString("nome"));
                     gruppo.setDescrizione(rs.getString("descrizione"));
                     gruppo.setData_creazione(rs.getString("data_creazione"));
@@ -184,8 +185,6 @@ public class DbManager implements Serializable {
         return gruppo;
     }
 
-    
-    
     public List<Invito> getInvitiByUserId(Integer user_id) throws SQLException {
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.INVITO WHERE id_invitato=? AND invito_abilitato=true");
         ResultSet rs;
@@ -203,7 +202,6 @@ public class DbManager implements Serializable {
                     invito.setId_gruppo(rs.getInt("id_gruppo"));
                     invito.setInvito_abilitato(rs.getBoolean("invito_abilitato"));
                     inviti.add(invito);
-                    System.out.println(invito.getId_invito() + " " + invito.getId_gruppo()+ " " + invito.getId_invitante());
                 }
             } finally {
                 rs.close();
@@ -212,5 +210,24 @@ public class DbManager implements Serializable {
             stm.close();
         }
         return inviti;
+    }
+
+    public Integer creaGruppo_Utente(Gruppo_Utente gu) throws SQLException {
+        PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.GRUPPO_UTENTE (id_gruppo,id_utente) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+        ResultSet generated_keys;
+
+        try {
+            stm.setInt(1, gu.getId_gruppo());
+            stm.setInt(2, gu.getId_utente());
+            stm.executeUpdate();
+            generated_keys = stm.getGeneratedKeys();
+            if (generated_keys.next()) {
+                return generated_keys.getInt(1);
+            } else {
+                return 0;
+            }
+        } finally {
+            stm.close();
+        }
     }
 }
