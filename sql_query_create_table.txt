@@ -18,7 +18,8 @@ CREATE TABLE gruppo(
  id_gruppo INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
 nome VARCHAR(100),
 id_proprietario INT,
-data_creazione DATE,
+data_creazione VARCHAR(30),
+descrizione VARCHAR(1000),
 gruppo_abilitato BOOLEAN  DEFAULT true,
 PRIMARY KEY (id_gruppo),
 FOREIGN KEY (id_proprietario) REFERENCES utente(id_utente)
@@ -36,6 +37,7 @@ CREATE TABLE post(
 id_post INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
 testo LONG VARCHAR,
 id_scrivente INT,
+data_creazione VARCHAR(30),
 id_gruppo INT,
 PRIMARY KEY (id_post),
 FOREIGN KEY (id_gruppo) REFERENCES gruppo(id_gruppo),
@@ -57,6 +59,7 @@ id_invito INT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 
 id_invitato INT,
 id_invitante INT,
 id_gruppo INT,
+invito_abilitato BOOLEAN DEFAULT true, 
 PRIMARY KEY (id_invito),
 FOREIGN KEY (id_invitato) REFERENCES utente(id_utente),
 FOREIGN KEY (id_invitante) REFERENCES utente(id_utente),
@@ -65,3 +68,9 @@ FOREIGN KEY (id_gruppo) REFERENCES gruppo(id_gruppo)
 
 INSERT INTO utente (username,password)
 VALUES ('pippo','pippa');
+INSERT INTO utente (username,password)
+VALUES ('gino','perna');
+INSERT INTO utente (username,password)
+VALUES ('giovanni','rossi');
+
+
