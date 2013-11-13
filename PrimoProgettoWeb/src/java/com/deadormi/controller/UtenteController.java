@@ -28,6 +28,7 @@ public class UtenteController {
         String password = request.getParameter("password");
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
+         HttpSession session = request.getSession();
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.UTENTE WHERE username = ? AND password = ?");
         try {
             stm.setString(1, username);
@@ -38,11 +39,11 @@ public class UtenteController {
                     Utente utente = new Utente();
                     utente.setUsername(username);
                     utente.setId_utente(Integer.parseInt(rs.getString("id_utente")));
-                    HttpSession session = request.getSession();
+                   
                     Boolean logged = true;
                     session.setAttribute("logged", logged);
                     session.setAttribute("user_id", utente.getId_utente());
-                  
+                    
                     CookiesManager.createNewDateCookie(request, response);
                     
                     return utente;

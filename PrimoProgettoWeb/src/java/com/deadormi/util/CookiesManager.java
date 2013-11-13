@@ -19,8 +19,11 @@ public class CookiesManager {
     public static void createNewDateCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         Cookie cookie = null;
-
-        if (cookies.length == 1 || cookies == null) {
+        if (cookies == null) {
+            cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate());
+            cookie.setMaxAge(604800);
+            response.addCookie(cookie);
+        } else if (cookies.length <= 1) {
 
             cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate());
             cookie.setMaxAge(604800);
