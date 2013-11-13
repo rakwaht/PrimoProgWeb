@@ -4,34 +4,25 @@
  */
 package com.deadormi.servlet;
 
-import com.deadormi.dbmanager.DbManager;
+import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
+import com.deadormi.util.CookiesManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.apache.tomcat.jni.Time;
 
 /**
  *
  * @author Davide
  */
 public class HomeServlet extends HttpServlet {
-
-    private DbManager manager;
-
-    @Override
-    public void init() {
-        this.manager = (DbManager) super.getServletContext().getAttribute("dbmanager");
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,26 +37,18 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        Cookie[] cookies = request.getCookies();
-        Cookie cookie = null;
-        HttpSession session = request.getSession();
         Utente utente = null;
+        String ultimo_accesso = CookiesManager.getLastOnline(request);
         try {
-            utente = manager.getUserById((Integer)session.getAttribute("user_id"));
+            utente = UtenteController.getUserById(request,(Integer) request.getSession().getAttribute("user_id"));
         } catch (SQLException ex) {
             Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        for (int i = 0; i < cookies.length; i++) {
-            if (cookies[i].getName().equals("ultimo_login")) {
-                cookie = cookies[i];
-            }
         }
         try {
             MainLayout.printHeader(out);
             out.println("<h1>HOME at " + request.getContextPath() + "</h1>");
             out.println("<h2> Bentornato " + utente.getUsername() + "!</h2>");
-            out.println("<h2>" + cookie.getValue() + "</h2>");
+            out.println("<h2>" + ultimo_accesso + "</h2>");
             out.println("<a href='inviti'>Inviti</a><br />");
             out.println("<a href='tuoi_gruppi'>Gruppi</a><br />");
             out.println("<a href='crea'>Crea Gruppo</a><br />");

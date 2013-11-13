@@ -4,16 +4,17 @@
  */
 package com.deadormi.servlet;
 
-import com.deadormi.dbmanager.DbManager;
+import com.deadormi.controller.GruppoController;
+import com.deadormi.controller.Gruppo_UtenteController;
+import com.deadormi.controller.InvitoController;
+import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Gruppo;
-import com.deadormi.entity.Gruppo_Utente;
 import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,20 +22,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Davide
  */
 public class InvitoServlet extends HttpServlet {
-
-    private DbManager manager;
-
-    @Override
-    public void init() {
-        this.manager = (DbManager) super.getServletContext().getAttribute("dbmanager");
-    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -50,15 +43,13 @@ public class InvitoServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         List<Invito> inviti = null;
-        Invito invito = null;
-        Integer id_gruppo = null;
+        Invito invito;
+        Integer id_gruppo;
         Integer id_invitante = null;
         Utente invitante = null;
         Gruppo gruppo = null;
-        
-        HttpSession session = request.getSession();
         try {
-            inviti = manager.getInvitiByUserId((Integer) session.getAttribute("user_id"));
+            inviti = InvitoController.getInvitiByUserId(request);
         } catch (SQLException ex) {
             Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,13 +67,13 @@ public class InvitoServlet extends HttpServlet {
                     invito = inviti.get(i);
                     id_gruppo = invito.getId_gruppo();
                     try {
-                        gruppo = manager.getGruppoById(id_gruppo);
+                        gruppo = GruppoController.getGruppoById(request,id_gruppo);
                     } catch (SQLException ex) {
                         Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     id_invitante = invito.getId_invitante();
                     try {
-                        invitante = manager.getUserById(id_invitante);
+                        invitante = UtenteController.getUserById(request,id_invitante);
                     } catch (SQLException ex) {
                         Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -134,21 +125,13 @@ public class InvitoServlet extends HttpServlet {
             throws ServletException, IOException {
         String[] gruppi_selezionati = request.getParameterValues("gruppi_selezionati");
         String id_gruppo;
-        HttpSession session = request.getSession();
-        Gruppo_Utente gu = null;
-        
         for(int i=0; i<gruppi_selezionati.length; i++){
-        
             id_gruppo = gruppi_selezionati[i];
-            gu = new Gruppo_Utente();
-            gu.setId_gruppo(Integer.parseInt(id_gruppo));System.out.println(gu.getId_gruppo());
-            gu.setId_utente((Integer) session.getAttribute("user_id"));System.out.println(gu.getId_utente());
             try {
-                manager.creaGruppo_Utente(gu);
+                Gruppo_UtenteController.creaGruppo_utente(request,id_gruppo);
             } catch (SQLException ex) {
                 Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
         }
     }
 

@@ -4,7 +4,8 @@
  */
 package com.deadormi.servlet;
 
-import com.deadormi.dbmanager.DbManager;
+import com.deadormi.controller.GruppoController;
+import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
@@ -13,8 +14,6 @@ import com.deadormi.util.CurrentDate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,16 +30,10 @@ import javax.servlet.http.HttpSession;
  */
 public class CreaGruppoServlet extends HttpServlet {
 
-    private DbManager manager;
-
-    @Override
-    public void init() {
-        this.manager = (DbManager) super.getServletContext().getAttribute("dbmanager");
-    }
-
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -55,7 +48,7 @@ public class CreaGruppoServlet extends HttpServlet {
         Utente utente;
         HttpSession session = request.getSession();
         try {
-            list = manager.getUtentiAbilitati();
+            list = UtenteController.getUtenti(request);
         } catch (SQLException ex) {
             //Logger.getLogger(CreaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -95,7 +88,8 @@ public class CreaGruppoServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -109,7 +103,8 @@ public class CreaGruppoServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -119,31 +114,11 @@ public class CreaGruppoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Integer gruppo_id = null;
-        String[] utenti_selezionati = request.getParameterValues("utenti_selezionati");
-        String titolo = request.getParameter("titolo");
-        String descrizione = request.getParameter("descrizione");
-       
-        Invito invito;
-        Gruppo gruppo = new Gruppo();
-        gruppo.setNome(titolo);
-        gruppo.setDescrizione(descrizione);
-        gruppo.setData_creazione(CurrentDate.getCurrentDate());
-        gruppo.setId_proprietario((Integer) session.getAttribute("user_id"));
         try {
-            gruppo_id = manager.creaGruppo(gruppo);
-            for (int i = 0; i < utenti_selezionati.length; i++) {
-                
-                invito = new Invito();
-                invito.setId_invitante((Integer) session.getAttribute("user_id"));
-                invito.setId_invitato(Integer.parseInt(utenti_selezionati[i]));
-                invito.setId_gruppo(gruppo_id);
-                manager.creaInvito(invito);
-            }
-        RequestDispatcher rd = request.getRequestDispatcher("/secure/gruppo/show");
-        request.setAttribute("gruppo_id", gruppo_id);
-        rd.forward(request, response);
+            Integer gruppo_id = GruppoController.creaGruppo(request);
+            RequestDispatcher rd = request.getRequestDispatcher("/secure/gruppo/show");
+            request.setAttribute("gruppo_id", gruppo_id);
+            rd.forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(CreaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

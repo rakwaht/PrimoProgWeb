@@ -4,11 +4,14 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.controller.UtenteController;
 import com.deadormi.dbmanager.DbManager;
 import com.deadormi.entity.Utente;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,13 +29,6 @@ import org.apache.tomcat.jni.Time;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
-    private DbManager manager;
-    
-    @Override
-    public void init(){
-        this.manager = (DbManager) super.getServletContext().getAttribute("dbmanager");
-    }
-    
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -97,25 +93,18 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         String redirect = "/secure/home";
-         String username = request.getParameter("username");
-         String password = request.getParameter("password");
-         try{
-            Utente utente = manager.authenticate(username, password);
-            if(utente != null){
-                HttpSession session = request.getSession();
-                Boolean logged = true;
-                session.setAttribute("logged", logged);          
-                session.setAttribute("user_id", utente.getId_utente());
-                response.sendRedirect(request.getContextPath() + redirect);
-            }
-            else{
-                processRequest(request, response);
-            }
-         }
-         catch(SQLException e){
-             
-         }
+        Utente utente = null;
+        try {
+            utente = UtenteController.authenticate(request);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String redirect = "/secure/home";
+        if (utente != null) {
+            response.sendRedirect(request.getContextPath() + redirect);
+        } else {
+            processRequest(request, response);
+        }
     }
 
     /**

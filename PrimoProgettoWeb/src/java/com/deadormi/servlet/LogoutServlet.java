@@ -4,10 +4,10 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.util.CookiesManager;
 import com.deadormi.util.CurrentDate;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -79,22 +79,7 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.invalidate();
-        Cookie [] cookies = request.getCookies();
-        Cookie cookie = null;
-        for(int i = 0; i<cookies.length; i++){
-            if(cookies[i].getName().equals("ultimo_login")){
-                cookie = cookies[i];
-                cookie.setValue(CurrentDate.getCurrentDate());
-                cookie.setMaxAge(604800);
-                response.addCookie(cookie);
-            }
-        }
-        if(cookie == null){
-            cookie = new Cookie("ultimo_login",CurrentDate.getCurrentDate());
-            response.addCookie(cookie);
-        }
+        CookiesManager.setLastOnline(request,response);
         response.sendRedirect(request.getContextPath() + "/login");
     }
 
