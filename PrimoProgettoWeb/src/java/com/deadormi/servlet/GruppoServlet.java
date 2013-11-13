@@ -4,9 +4,17 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.controller.PostController;
+import com.deadormi.controller.UtenteController;
+import com.deadormi.entity.Post;
+import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,14 +41,42 @@ public class GruppoServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         Integer id_gruppo = Integer.parseInt(request.getParameter("id_gruppo"));
-        
-        
+        List<Post> posts = null;
+        Post post = null;
+        Utente utente = null;
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
             out.println("<h1>GRUPPO: " + request.getContextPath() + "</h1>");
             out.println("<h1>ID: " + id_gruppo + "</h1>");
             out.println("<a href='/PrimoProgettoWeb/secure/tuoi_gruppi'>Indietro</a><br />");
+            try {
+                posts = PostController.getPostByGruppoId(request, id_gruppo);
+            } catch (SQLException ex) {
+                Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if(posts!=null && posts.size()!=0){
+                out.println("<table>");
+                for (int i = 0; i < posts.size(); i++) {
+                    
+                    post = posts.get(i);
+                    try {
+                        utente = UtenteController.getUserById(request,post.getId_scrivente());
+                    } catch (SQLException ex) {
+                        Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                   out.println("<tr>");
+                   out.println("TESTO:<td>"+ post.getTesto() +"</td>");
+                   out.println("<td> scritto il "+ post.getData_creazione() +"</td>");
+                   out.println("<td> da: "+ utente.getUsername() +"</td>");
+                   out.println("</tr>");
+                }
+                out.println("</table>");
+            }
+            else{
+                out.println("<p>Non vi sono posts nel db!</p>");
+            }
+            out.println("<a href=#>CREA POSTO DI LAVORO</a>");
             MainLayout.printFooter(out);
         } finally {            
             out.close();
