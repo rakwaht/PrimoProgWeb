@@ -40,7 +40,7 @@ public class GruppoServlet extends HttpServlet {
             MainLayout.printHeader(out);
             out.println("<h1>GRUPPO: " + request.getContextPath() + "</h1>");
             out.println("<h1>ID: " + id_gruppo + "</h1>");
-            out.println("<a href='home'>Indietro</a><br />");
+            out.println("<a href='/PrimoProgettoWeb/secure/tuoi_gruppi'>Indietro</a><br />");
             MainLayout.printFooter(out);
         } finally {            
             out.close();
