@@ -61,8 +61,8 @@ public class TuoiGruppiServlet extends HttpServlet {
                         Logger.getLogger(TuoiGruppiServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     out.println("<tr>");
-                    out.println("<td>Nome: "+ gruppo.getNome() + " Autore: "+ proprietario.getUsername() +"</td>");
-                    out.println("<td>Descrizione:  "+ gruppo.getDescrizione() +"</td>");
+                    out.println("<td>Nome: "+ gruppo.getNome() + "</td><td>  Autore: "+ proprietario.getUsername() +"</td>");
+                    out.println("<td>  Descrizione:  "+ gruppo.getDescrizione() +"</td>");
                     out.println("<td><a href='gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "'>VAI </a></td>");
                     out.println("</tr>");
                 }
