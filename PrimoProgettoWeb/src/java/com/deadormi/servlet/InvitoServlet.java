@@ -58,7 +58,7 @@ public class InvitoServlet extends HttpServlet {
             MainLayout.printHeader(out);
             out.println("<h1>INVITI: " + request.getContextPath() + "</h1>");
             out.println("<a href='home'>Indietro</a><br />");
-            if (inviti != null) {
+            if (inviti != null && inviti.size()>0) {
                 out.println("<h2>Inviti</h2>");
                 out.println("<form method='POST'>");
                 out.println("<table>");
@@ -80,7 +80,8 @@ public class InvitoServlet extends HttpServlet {
                     
                     out.println("<tr>");
                     out.println("<td>" + gruppo.getNome() + " da " + invitante.getUsername() + "</td>");
-                    out.println("<td><input type='checkbox' name='gruppi_selezionati' value='"+ gruppo.getId_gruppo()+"'/></td>");
+                    out.println("<td><input type='radio' name='" + gruppo.getId_gruppo() + "'  value='true'>Si");
+                    out.println("<input type='radio' name='" + gruppo.getId_gruppo() + "'  value='false'>No</td>");
                     out.println("</tr>");
                 }
                 
@@ -123,16 +124,12 @@ public class InvitoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String[] gruppi_selezionati = request.getParameterValues("gruppi_selezionati");
-        String id_gruppo;
-        for(int i=0; i<gruppi_selezionati.length; i++){
-            id_gruppo = gruppi_selezionati[i];
-            try {
-                Gruppo_UtenteController.creaGruppo_utente(request,id_gruppo);
-            } catch (SQLException ex) {
-                Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            InvitoController.processaInviti(request);
+        } catch (SQLException ex) {
+            Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+        processRequest(request, response);
     }
 
     /**

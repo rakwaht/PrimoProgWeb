@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -46,7 +47,7 @@ public class InvitoController {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
         HttpSession session = request.getSession();
-        Integer user_id = (Integer) session.getAttribute("user_id");        
+        Integer user_id = (Integer) session.getAttribute("user_id");
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.INVITO WHERE id_invitato=? AND invito_abilitato=true");
         ResultSet rs;
         Invito invito;
@@ -71,7 +72,32 @@ public class InvitoController {
             stm.close();
         }
         return inviti;
-    
+
     }
 
+    public static void processaInviti(HttpServletRequest request) throws SQLException {
+        Enumeration<String> id_gruppi = request.getParameterNames();
+        while(id_gruppi.hasMoreElements()){
+            String id_gruppo = id_gruppi.nextElement();
+            String value = request.getParameter(id_gruppo);
+            if(value.equals("true")){
+                Gruppo_UtenteController.creaGruppo_utente(request, id_gruppo);
+            }
+            InvitoController.eliminaInvitoById(request,id_gruppo);
+        }
+    }
+
+    private static void eliminaInvitoById(HttpServletRequest request, String id_gruppo) throws SQLException {
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        HttpSession session = request.getSession();
+        PreparedStatement stm = connection.prepareStatement("UPDATE ROOT.INVITO SET invito_abilitato=false WHERE id_gruppo=? AND id_invitato=?");
+        try {
+            stm.setInt(1, Integer.parseInt(id_gruppo));
+            stm.setInt(2, (Integer) session.getAttribute("user_id"));
+            stm.executeUpdate();
+        } finally {
+            stm.close();
+        }
+    }
 }

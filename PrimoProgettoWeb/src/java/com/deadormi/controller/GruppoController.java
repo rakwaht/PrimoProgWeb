@@ -38,9 +38,11 @@ public class GruppoController {
             generated_keys = stm.getGeneratedKeys();
             if (generated_keys.next()) {
                 //mando gli inviti
-                request.setAttribute("gruppo_id", generated_keys.getInt(1));
+                Integer id_gruppo = generated_keys.getInt(1);
+                Gruppo_UtenteController.creaGruppo_utente(request, id_gruppo.toString() );
+                request.setAttribute("gruppo_id", id_gruppo);
                 InvitoController.creaInvito(request);
-                return generated_keys.getInt(1);
+                return id_gruppo;
             } else {
                 return 0;
             }

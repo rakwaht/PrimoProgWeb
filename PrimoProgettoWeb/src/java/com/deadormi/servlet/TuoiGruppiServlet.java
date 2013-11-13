@@ -4,9 +4,12 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.controller.Gruppo_UtenteController;
+import com.deadormi.entity.Gruppo;
 import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,12 +35,13 @@ public class TuoiGruppiServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        List<Gruppo> gruppi = Gruppo_UtenteController.getGruppiByUserId(request);
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
             out.println("<h1>MIEI GRUPPI: " + request.getContextPath() + "</h1>");
             out.println("<a href='home'>Indietro</a><br />");
-            
+            out.println("<table>");
             MainLayout.printFooter(out);
         } finally {            
             out.close();

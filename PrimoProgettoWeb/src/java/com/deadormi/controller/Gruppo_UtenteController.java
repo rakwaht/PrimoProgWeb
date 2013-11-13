@@ -5,9 +5,11 @@
 package com.deadormi.controller;
 
 import com.deadormi.dbmanager.DbManager;
+import com.deadormi.entity.Gruppo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -29,9 +31,20 @@ public class Gruppo_UtenteController {
         } finally {
             stm.close();
         }
-    }
+    } 
 
-    
-    
+    public static List<Gruppo> getGruppiByUserId(HttpServletRequest request) throws SQLException {
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        HttpSession session = request.getSession();
+        PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.GRUPPO_UTENTE (id_gruppo,id_utente) VALUES (?,?)");
+        try {
+            stm.setInt(1, Integer.parseInt(id_gruppo));
+            stm.setInt(2, (Integer) session.getAttribute("user_id"));
+            stm.executeUpdate();
+        } finally {
+            stm.close();
+        }  
+    }
     
 }
