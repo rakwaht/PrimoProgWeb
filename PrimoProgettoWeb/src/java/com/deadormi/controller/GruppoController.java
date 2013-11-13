@@ -25,30 +25,37 @@ public class GruppoController {
     public static Integer creaGruppo(HttpServletRequest request) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
-        PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.GRUPPO (nome,id_proprietario,data_creazione,descrizione) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-        ResultSet generated_keys;
-        HttpSession session = request.getSession();
-        Invito invito;
-        try {
-            stm.setString(1, request.getParameter("titolo"));
-            stm.setInt(2, (Integer) session.getAttribute("user_id"));
-            stm.setString(3, CurrentDate.getCurrentDate());
-            stm.setString(4, request.getParameter("descrizione"));
-            stm.executeUpdate();
-            generated_keys = stm.getGeneratedKeys();
-            if (generated_keys.next()) {
-                //mando gli inviti
-                Integer id_gruppo = generated_keys.getInt(1);
-                Gruppo_UtenteController.creaGruppo_utente(request, id_gruppo.toString() );
-                request.setAttribute("gruppo_id", id_gruppo);
-                InvitoController.creaInvito(request);
-                return id_gruppo;
-            } else {
-                return 0;
-            }
-        } finally {
-            stm.close();
+        String titolo = request.getParameter("titolo");
+        String descrizione = request.getParameter("descrizione");
+        if (titolo != "" && descrizione != "") {
+            PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.GRUPPO (nome,id_proprietario,data_creazione,descrizione) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            ResultSet generated_keys;
+            HttpSession session = request.getSession();
+            Invito invito;
+            try {
+                stm.setString(1, titolo);
+                stm.setInt(2, (Integer) session.getAttribute("user_id"));
+                stm.setString(3, CurrentDate.getCurrentDate());
+                stm.setString(4, descrizione);
+                stm.executeUpdate();
+                generated_keys = stm.getGeneratedKeys();
+                if (generated_keys.next()) {
+                    //mando gli inviti
+                    Integer id_gruppo = generated_keys.getInt(1);
+                    Gruppo_UtenteController.creaGruppo_utente(request, id_gruppo.toString());
+                    request.setAttribute("gruppo_id", id_gruppo);
+                    InvitoController.creaInvito(request);
+                    return id_gruppo;
+                } else {
+                    return -1;
+                }
+            } finally {
+                stm.close();
 
+            }
+        }
+        else{
+            return 0;
         }
     }
 

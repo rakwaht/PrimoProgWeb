@@ -116,8 +116,13 @@ public class CreaGruppoServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             Integer id_gruppo = GruppoController.creaGruppo(request);
+            if(id_gruppo>0){
             RequestDispatcher rd = request.getRequestDispatcher("/secure/gruppo/show?id_gruppo=" + id_gruppo);
             rd.forward(request, response);
+            }
+            else{
+                processRequest(request,response);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(CreaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
