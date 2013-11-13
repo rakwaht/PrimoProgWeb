@@ -37,8 +37,9 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        Utente utente = null;
-        String ultimo_accesso = CookiesManager.getLastOnline(request);
+        Utente utente = null;  
+        String ultimo_login = CookiesManager.getOldDateCookie(request, response);
+        
         try {
             utente = UtenteController.getUserById(request,(Integer) request.getSession().getAttribute("user_id"));
         } catch (SQLException ex) {
@@ -48,7 +49,7 @@ public class HomeServlet extends HttpServlet {
             MainLayout.printHeader(out);
             out.println("<h1>HOME at " + request.getContextPath() + "</h1>");
             out.println("<h2> Bentornato " + utente.getUsername() + "!</h2>");
-            out.println("<h2>" + ultimo_accesso + "</h2>");
+            out.println("<h2>" + ultimo_login + "</h2>");
             out.println("<a href='inviti'>Inviti</a><br />");
             out.println("<a href='tuoi_gruppi'>Gruppi</a><br />");
             out.println("<a href='crea'>Crea Gruppo</a><br />");

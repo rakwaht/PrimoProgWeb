@@ -90,7 +90,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         Utente utente = null;
         try {
-            utente = UtenteController.authenticate(request);
+            utente = UtenteController.authenticate(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

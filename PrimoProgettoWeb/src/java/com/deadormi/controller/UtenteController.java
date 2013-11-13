@@ -6,6 +6,7 @@ package com.deadormi.controller;
 
 import com.deadormi.dbmanager.DbManager;
 import com.deadormi.entity.Utente;
+import com.deadormi.util.CookiesManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -21,7 +23,7 @@ import javax.servlet.http.HttpSession;
  */
 public class UtenteController {
 
-    public static Utente authenticate(HttpServletRequest request) throws SQLException {
+    public static Utente authenticate(HttpServletRequest request, HttpServletResponse response) throws SQLException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
@@ -40,6 +42,9 @@ public class UtenteController {
                     Boolean logged = true;
                     session.setAttribute("logged", logged);
                     session.setAttribute("user_id", utente.getId_utente());
+                  
+                    CookiesManager.createNewDateCookie(request, response);
+                    
                     return utente;
                 } else {
                     return null;

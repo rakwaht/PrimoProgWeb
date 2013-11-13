@@ -79,7 +79,8 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CookiesManager.setLastOnline(request,response);
+        HttpSession session = request.getSession();
+        session.invalidate();
         response.sendRedirect(request.getContextPath() + "/login");
     }
 
