@@ -32,13 +32,14 @@ public class GruppoServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        Integer gruppo_id = (Integer)request.getAttribute("gruppo_id");
+        Integer id_gruppo = Integer.parseInt(request.getParameter("id_gruppo"));
+        
         
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
             out.println("<h1>GRUPPO: " + request.getContextPath() + "</h1>");
-            out.println("<h1>ID: " + gruppo_id + "</h1>");
+            out.println("<h1>ID: " + id_gruppo + "</h1>");
             out.println("<a href='home'>Indietro</a><br />");
             MainLayout.printFooter(out);
         } finally {            

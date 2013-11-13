@@ -29,16 +29,18 @@ public class InvitoController {
         String[] utenti_selezionati = request.getParameterValues("utenti_selezionati");
         HttpSession session = request.getSession();
         Integer gruppo_id = (Integer) request.getAttribute("gruppo_id");
-        for (int i = 0; i < utenti_selezionati.length; i++) {
-            PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.INVITO (id_invitato,id_invitante,id_gruppo) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            try {
-                stm.setInt(1, Integer.parseInt(utenti_selezionati[i]));
-                stm.setInt(2, (Integer) session.getAttribute("user_id"));
-                stm.setInt(3, gruppo_id);
-                stm.executeUpdate();
-            } finally {
-                stm.close();
+        if (utenti_selezionati != null) {
+            for (int i = 0; i < utenti_selezionati.length; i++) {
+                PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.INVITO (id_invitato,id_invitante,id_gruppo) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                try {
+                    stm.setInt(1, Integer.parseInt(utenti_selezionati[i]));
+                    stm.setInt(2, (Integer) session.getAttribute("user_id"));
+                    stm.setInt(3, gruppo_id);
+                    stm.executeUpdate();
+                } finally {
+                    stm.close();
 
+                }
             }
         }
     }
@@ -77,13 +79,13 @@ public class InvitoController {
 
     public static void processaInviti(HttpServletRequest request) throws SQLException {
         Enumeration<String> id_gruppi = request.getParameterNames();
-        while(id_gruppi.hasMoreElements()){
+        while (id_gruppi.hasMoreElements()) {
             String id_gruppo = id_gruppi.nextElement();
             String value = request.getParameter(id_gruppo);
-            if(value.equals("true")){
+            if (value.equals("true")) {
                 Gruppo_UtenteController.creaGruppo_utente(request, id_gruppo);
             }
-            InvitoController.eliminaInvitoById(request,id_gruppo);
+            InvitoController.eliminaInvitoById(request, id_gruppo);
         }
     }
 

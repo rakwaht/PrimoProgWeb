@@ -115,9 +115,8 @@ public class CreaGruppoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            Integer gruppo_id = GruppoController.creaGruppo(request);
-            RequestDispatcher rd = request.getRequestDispatcher("/secure/gruppo/show");
-            request.setAttribute("gruppo_id", gruppo_id);
+            Integer id_gruppo = GruppoController.creaGruppo(request);
+            RequestDispatcher rd = request.getRequestDispatcher("/secure/gruppo/show?id_gruppo=" + id_gruppo);
             rd.forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(CreaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
