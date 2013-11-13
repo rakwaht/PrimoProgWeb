@@ -18,24 +18,24 @@ public class CookiesManager {
 
     public static void createNewDateCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
+        HttpSession session = request.getSession();
         Cookie cookie = null;
         if (cookies == null) {
-            cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate());
-            cookie.setMaxAge(604800);
-            response.addCookie(cookie);
-        } else if (cookies.length <= 1) {
-
-            cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate());
+            cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate() + "?" + session.getAttribute("user_id"));
             cookie.setMaxAge(604800);
             response.addCookie(cookie);
         } else {
             for (int i = 0; i < cookies.length; i++) {
                 cookie = cookies[i];
-                if (cookie.getName().equals("ultimo_login")) {
+                if (cookie.getName().equals("ultimo_login") && CookiesManager.getIdFromCookie(cookie.getValue()).equals(session.getAttribute("user_id"))) {
                     CookiesManager.createOldDateCookie(cookie.getValue(), response);
-                    System.out.println("olddatecokieki   kdiwk");
-
-                    cookie.setValue(CurrentDate.getCurrentDate());
+                    cookie.setMaxAge(0);
+                    cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate() + "?" + session.getAttribute("user_id"));
+                    cookie.setMaxAge(604800);
+                    response.addCookie(cookie);
+                } else {
+                    cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate() + "?" + session.getAttribute("user_id"));
+                    cookie.setMaxAge(604800);
                     response.addCookie(cookie);
                 }
             }
@@ -62,4 +62,9 @@ public class CookiesManager {
         return res;
     }
 
+    public static String getIdFromCookie(String value) {
+        String result = value.substring(value.indexOf("?") + 1, value.length());
+        System.out.println(result);
+        return result;
+    }
 }
