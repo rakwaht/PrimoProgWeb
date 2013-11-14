@@ -28,9 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 public class GruppoServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -42,7 +41,6 @@ public class GruppoServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         Integer id_gruppo = Integer.parseInt(request.getParameter("id_gruppo"));
-        
         
         List<Post> posts = null;
         Post post = null;
@@ -58,28 +56,27 @@ public class GruppoServlet extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if(posts!=null && posts.size()!=0){
+            if (posts != null && posts.size() != 0) {
                 out.println("<table>");
                 for (int i = 0; i < posts.size(); i++) {
                     
                     post = posts.get(i);
                     try {
-                        utente = UtenteController.getUserById(request,post.getId_scrivente());
+                        utente = UtenteController.getUserById(request, post.getId_scrivente());
                     } catch (SQLException ex) {
                         Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                   out.println("<tr>");
-                   out.println("TESTO:<td>"+ post.getTesto() +"</td>");
-                   out.println("<td> scritto il "+ post.getData_creazione() +"</td>");
-                   out.println("<td> da: "+ utente.getUsername() +"</td>");
-                   out.println("</tr>");
+                    out.println("<tr>");
+                    out.println("TESTO:<td>" + post.getTesto() + "</td>");
+                    out.println("<td> scritto il " + post.getData_creazione() + "</td>");
+                    out.println("<td> da: " + utente.getUsername() + "</td>");
+                    out.println("</tr>");
                 }
                 out.println("</table>");
-            }
-            else{
+            } else {
                 out.println("<p>Non vi sono posts nel db!</p>");
             }
-            out.println("<form method='post' >");
+            out.println("<form method='POST'>");
             out.println("<input type='submit' value='NUOVO POST'/>");
             out.println("</form>");
             MainLayout.printFooter(out);
@@ -90,8 +87,7 @@ public class GruppoServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -105,8 +101,7 @@ public class GruppoServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -116,10 +111,10 @@ public class GruppoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            Integer id = Integer.parseInt(request.getParameter("id_gruppo"));
-            request.setAttribute("id_gruppo", id);
-            RequestDispatcher rd = request.getRequestDispatcher("/secure/nuovo_post");
-            rd.forward(request, response);
+        Integer id = Integer.parseInt(request.getParameter("id_gruppo"));
+        request.setAttribute("id_gruppo", id);
+        RequestDispatcher rd = request.getRequestDispatcher("/secure/nuovo_post");
+        rd.forward(request, response);
     }
 
     /**

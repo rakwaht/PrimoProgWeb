@@ -73,6 +73,14 @@
             30
         </session-timeout>
     </session-config>
+    <filter>
+        <filter-name>CreaPostFilter</filter-name>
+        <filter-class>com.deadormi.util.CreaPostFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CreaPostFilter</filter-name>
+        <servlet-name>CreaPostServlet</servlet-name>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>GroupFilter</filter-name>
         <servlet-name>GruppoServlet</servlet-name>

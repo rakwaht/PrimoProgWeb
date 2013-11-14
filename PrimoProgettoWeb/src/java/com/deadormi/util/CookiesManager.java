@@ -4,7 +4,7 @@
  */
 package com.deadormi.util;
 
-import com.sun.corba.se.spi.presentation.rmi.StubAdapter;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,24 +18,28 @@ public class CookiesManager {
 
     public static void createNewDateCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
+        
         HttpSession session = request.getSession();
-        Cookie cookie = null;
+        Cookie cookie;
+        
         if (cookies == null) {
-            cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate() + "?" + session.getAttribute("user_id"));
-            cookie.setMaxAge(604800);
+            cookie = new Cookie("ultimo_login?" + session.getAttribute("user_id"), CurrentDate.getCurrentDate());
+            cookie.setMaxAge(60*60);
+            
             response.addCookie(cookie);
         } else {
             for (int i = 0; i < cookies.length; i++) {
                 cookie = cookies[i];
-                if (cookie.getName().equals("ultimo_login") && CookiesManager.getIdFromCookie(cookie.getValue()).equals(session.getAttribute("user_id").toString())) {
-                    CookiesManager.createOldDateCookie(cookie.getValue(), response);
+                System.out.println(cookies.length + cookie.getName() + "ultimo_login?" + session.getAttribute("user_id").toString());
+                if (cookie.getName().equals("ultimo_login?"+session.getAttribute("user_id").toString())) {
+                    CookiesManager.createOldDateCookie(cookie.getValue(), response, request);
                     cookie.setMaxAge(0);
-                    cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate() + "?" + session.getAttribute("user_id"));
+                    cookie = new Cookie("ultimo_login?" + session.getAttribute("user_id"), CurrentDate.getCurrentDate());
                     cookie.setMaxAge(604800);
                     response.addCookie(cookie);
                 } else {
-                    
-                    cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate() + "?" + session.getAttribute("user_id"));
+                    System.out.println("ciao");
+                    cookie = new Cookie("ultimo_login?" + session.getAttribute("user_id"), CurrentDate.getCurrentDate());
                     cookie.setMaxAge(604800);
                     response.addCookie(cookie);
                 }
@@ -43,28 +47,29 @@ public class CookiesManager {
         }
     }
 
-    public static void createOldDateCookie(String date, HttpServletResponse response) {
-
-        Cookie cookie = new Cookie("old_cookie", date);
+    public static void createOldDateCookie(String date, HttpServletResponse response, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Cookie cookie = new Cookie("old_cookie?" + session.getAttribute("user_id"), date);
         cookie.setMaxAge(604800);
         response.addCookie(cookie);
     }
 
     public static String getOldDateCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
+        HttpSession session = request.getSession();
         Cookie cookie = null;
         String res = null;
         for (int i = 0; i < cookies.length; i++) {
             cookie = cookies[i];
-            if (cookie.getName().equals("old_cookie")) {
+            if (cookie.getName().equals("old_cookie?" + session.getAttribute("user_id"))) {
                 res = cookie.getValue();
             }
         }
         return res;
     }
 
-    public static String getIdFromCookie(String value) {
+    /*public static String getIdFromCookie(String value) {
         String result = value.substring(value.indexOf("?") + 1, value.length());
         return result;
-    }
+    }*/
 }
