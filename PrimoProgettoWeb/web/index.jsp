@@ -8,13 +8,11 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta HTTP-EQUIV="REFRESH" content="0;url=/PrimoProgettoWeb/login">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+     
     </head>
     <body>
-        <h1>Hello World!</h1>
-        <h2>Test</h2>
-        <h3>Test</h3>
-        <h4>Test2</h4>
+        
     </body>
 </html>

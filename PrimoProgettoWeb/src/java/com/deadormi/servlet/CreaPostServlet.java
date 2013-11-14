@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.deadormi.servlet;
 
 import com.deadormi.layout.MainLayout;
@@ -21,8 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 public class CreaPostServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -33,26 +33,29 @@ public class CreaPostServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        Integer id_gruppo = (Integer)request.getAttribute("id_gruppo");
+        Integer id_gruppo = (Integer) request.getAttribute("id_gruppo");
         try {
             /* TODO output your page here. You may use following sample code. */
-           MainLayout.printHeader(out);
-           out.println("<h1>Crea Post da gruppo: "+ id_gruppo +"</h1>");
-           out.println("<form method='POST' enctype='multipart/form-data'>");
-           out.println("<textarea name='testo'></textarea>");
-           out.println("Which file to upload?<input type='file' name='file'>");
-           out.println("<input type='submit' name='POSTA'>");
-           out.println("</form>");
-           out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo="+ id_gruppo +"'>Indietro</a>");
-           MainLayout.printFooter(out);
-        } finally  {
+            MainLayout.printHeader(out);
+            out.println("<h1>Crea Post da gruppo: " + id_gruppo + "</h1>");
+            out.println("<form method='POST' enctype='multipart/form-data'>");
+            out.println("<textarea name='testo'></textarea>");
+            out.println("Which file to upload? <INPUT TYPE=FILE NAME=file1> <BR>");
+            out.println("Which file to upload? <INPUT TYPE=FILE NAME=file2> <BR>");
+            out.println("Which file to upload? <INPUT TYPE=FILE NAME=file3> <BR>");
+            out.println("<input type='submit' name='POSTA'>");
+            out.println("</form>");
+            out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + id_gruppo + "'>Indietro</a>");
+            MainLayout.printFooter(out);
+        } finally {
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -63,27 +66,11 @@ public class CreaPostServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<meta http-equiv='refresh' content='0; URL=\"home\" '>");
-            out.println("<title>Servlet CreaPostServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
-            out.close();
-        }
-        
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -93,7 +80,8 @@ public class CreaPostServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+    //    PostController.creaPost(request);
     }
 
     /**
@@ -105,5 +93,4 @@ public class CreaPostServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
