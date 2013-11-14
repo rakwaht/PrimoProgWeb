@@ -36,6 +36,10 @@
         <servlet-name>CreaPostServlet</servlet-name>
         <servlet-class>com.deadormi.servlet.CreaPostServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ModificaGruppoServlet</servlet-name>
+        <servlet-class>com.deadormi.servlet.ModificaGruppoServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/secure/home</url-pattern>
@@ -68,6 +72,10 @@
         <servlet-name>CreaPostServlet</servlet-name>
         <url-pattern>/secure/nuovo_post</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModificaGruppoServlet</servlet-name>
+        <url-pattern>/secure/modifica_gruppo</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -77,6 +85,14 @@
         <filter-name>CreaPostFilter</filter-name>
         <filter-class>com.deadormi.util.CreaPostFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>ModificaGruppoFilter</filter-name>
+        <filter-class>com.deadormi.util.ModificaGruppoFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ModificaGruppoFilter</filter-name>
+        <servlet-name>ModificaGruppoServlet</servlet-name>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>CreaPostFilter</filter-name>
         <servlet-name>CreaPostServlet</servlet-name>
@@ -97,11 +113,11 @@
         <param-name>dburl</param-name>
         <param-value>jdbc:derby://localhost:1527/PrimoProgetto_Local;user=root;password=root;</param-value>
     </context-param>
-    <context-param> 
-        <description>Location to store uploaded file</description> 
-        <param-name>file-upload</param-name> 
+    <context-param>
+        <description>Location to store uploaded file</description>
+        <param-name>file-upload</param-name>
         <param-value>
             c:/file_progetto/
-        </param-value> 
+        </param-value>
     </context-param>
 </web-app>

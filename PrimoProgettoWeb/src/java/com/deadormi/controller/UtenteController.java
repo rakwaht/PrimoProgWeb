@@ -28,7 +28,7 @@ public class UtenteController {
         String password = request.getParameter("password");
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
-         HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.UTENTE WHERE username = ? AND password = ?");
         try {
             stm.setString(1, username);
@@ -39,13 +39,13 @@ public class UtenteController {
                     Utente utente = new Utente();
                     utente.setUsername(username);
                     utente.setId_utente(Integer.parseInt(rs.getString("id_utente")));
-                   
+
                     Boolean logged = true;
                     session.setAttribute("logged", logged);
                     session.setAttribute("user_id", utente.getId_utente());
-                    
+
                     CookiesManager.createNewDateCookie(request, response);
-                    
+
                     return utente;
                 } else {
                     return null;
@@ -88,6 +88,30 @@ public class UtenteController {
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.UTENTE WHERE utente_abilitato=true");
         List<Utente> list = new ArrayList<Utente>();
         try {
+            ResultSet rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    Utente utente = new Utente();
+                    utente.setUsername(rs.getString("username"));
+                    utente.setId_utente(Integer.parseInt(rs.getString("id_utente")));
+                    list.add(utente);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return list;
+    }
+
+    public static List<Utente> getUserByGroupId(HttpServletRequest request, Integer gruppo_id) throws SQLException {
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.GRUPPO_UTENTE NATURAL JOIN ROOT.UTENTE WHERE utente_abilitato=true AND id_gruppo=?");
+        List<Utente> list = new ArrayList<Utente>();
+        try {
+            stm.setInt(1, gruppo_id);
             ResultSet rs = stm.executeQuery();
             try {
                 while (rs.next()) {
