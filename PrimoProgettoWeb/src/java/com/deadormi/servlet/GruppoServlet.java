@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +42,8 @@ public class GruppoServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         Integer id_gruppo = Integer.parseInt(request.getParameter("id_gruppo"));
+        
+        
         List<Post> posts = null;
         Post post = null;
         Utente utente = null;
@@ -76,7 +79,9 @@ public class GruppoServlet extends HttpServlet {
             else{
                 out.println("<p>Non vi sono posts nel db!</p>");
             }
-            out.println("<a href=#>CREA POSTO DI LAVORO</a>");
+            out.println("<form method='post' >");
+            out.println("<input type='submit' value='NUOVO POST'/>");
+            out.println("</form>");
             MainLayout.printFooter(out);
         } finally {            
             out.close();
@@ -111,7 +116,10 @@ public class GruppoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+            Integer id = Integer.parseInt(request.getParameter("id_gruppo"));
+            request.setAttribute("id_gruppo", id);
+            RequestDispatcher rd = request.getRequestDispatcher("/secure/nuovo_post");
+            rd.forward(request, response);
     }
 
     /**

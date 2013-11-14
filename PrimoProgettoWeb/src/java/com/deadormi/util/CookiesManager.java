@@ -27,7 +27,7 @@ public class CookiesManager {
         } else {
             for (int i = 0; i < cookies.length; i++) {
                 cookie = cookies[i];
-                if (cookie.getName().equals("ultimo_login") && CookiesManager.getIdFromCookie(cookie.getValue()).equals(session.getAttribute("user_id"))) {
+                if (cookie.getName().equals("ultimo_login") && CookiesManager.getIdFromCookie(cookie.getValue()).equals(session.getAttribute("user_id").toString())) {
                     CookiesManager.createOldDateCookie(cookie.getValue(), response);
                     cookie.setMaxAge(0);
                     cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate() + "?" + session.getAttribute("user_id"));
@@ -64,7 +64,6 @@ public class CookiesManager {
 
     public static String getIdFromCookie(String value) {
         String result = value.substring(value.indexOf("?") + 1, value.length());
-        System.out.println(result);
         return result;
     }
 }

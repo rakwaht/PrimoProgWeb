@@ -6,6 +6,7 @@
 
 package com.deadormi.servlet;
 
+import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -32,18 +33,19 @@ public class CreaPostServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        Integer id_gruppo = (Integer)request.getAttribute("id_gruppo");
         try {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreaPostServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>GET " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
+           MainLayout.printHeader(out);
+           out.println("<h1>Crea Post da gruppo: "+ id_gruppo +"</h1>");
+           out.println("<form method='POST' enctype='multipart/form-data'>");
+           out.println("<textarea name='testo'></textarea>");
+           out.println("Which file to upload?<input type='file' name='file'>");
+           out.println("<input type='submit' name='POSTA'>");
+           out.println("</form>");
+           out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo="+ id_gruppo +"'>Indietro</a>");
+           MainLayout.printFooter(out);
+        } finally  {
             out.close();
         }
     }

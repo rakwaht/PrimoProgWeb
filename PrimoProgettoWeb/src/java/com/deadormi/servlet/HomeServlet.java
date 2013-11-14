@@ -37,19 +37,23 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        Utente utente = null;  
+        Utente utente = null;
         String ultimo_login = CookiesManager.getOldDateCookie(request, response);
-        
+
         try {
-            utente = UtenteController.getUserById(request,(Integer) request.getSession().getAttribute("user_id"));
+            utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
         } catch (SQLException ex) {
             Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             MainLayout.printHeader(out);
             out.println("<h1>HOME at " + request.getContextPath() + "</h1>");
-            out.println("<h2> Bentornato " + utente.getUsername() + "!</h2>");
-            out.println("<h2>" + ultimo_login + "</h2>");
+            if (ultimo_login != null) {
+                out.println("<h2> Bentornato " + utente.getUsername() + "!</h2>");
+                out.println("<h2>" + ultimo_login + "</h2>");
+            } else {
+                out.println("<h2> Benvenuto " + utente.getUsername() + "!</h2>");
+            }
             out.println("<a href='inviti'>Inviti</a><br />");
             out.println("<a href='tuoi_gruppi'>Gruppi</a><br />");
             out.println("<a href='crea'>Crea Gruppo</a><br />");

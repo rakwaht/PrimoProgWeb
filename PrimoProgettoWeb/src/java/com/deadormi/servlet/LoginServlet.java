@@ -6,6 +6,7 @@ package com.deadormi.servlet;
 
 import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Utente;
+import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -43,7 +44,7 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
+            out.println("<title>Servlet HomeServlet cul</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
@@ -53,8 +54,7 @@ public class LoginServlet extends HttpServlet {
             out.println("Password:<input type=\"password\" name=\"password\" placeholder=\"Password\" />");
             out.println("<input type=\"submit\" value=\"Login\" />");
             out.println("</form>");
-            out.println("</body>");
-            out.println("</html>");
+            MainLayout.printFooter(out);
         } finally {
             out.close();
         }
