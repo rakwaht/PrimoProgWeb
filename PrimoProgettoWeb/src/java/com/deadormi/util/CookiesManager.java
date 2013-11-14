@@ -34,6 +34,7 @@ public class CookiesManager {
                     cookie.setMaxAge(604800);
                     response.addCookie(cookie);
                 } else {
+                    
                     cookie = new Cookie("ultimo_login", CurrentDate.getCurrentDate() + "?" + session.getAttribute("user_id"));
                     cookie.setMaxAge(604800);
                     response.addCookie(cookie);
