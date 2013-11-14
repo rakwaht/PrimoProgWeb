@@ -4,10 +4,10 @@
         <filter-name>LoggedFilter</filter-name>
         <filter-class>com.deadormi.util.LoggedFilter</filter-class>
     </filter>
-    <filter-mapping>
-        <filter-name>LoggedFilter</filter-name>
-        <url-pattern>/secure/*</url-pattern>
-    </filter-mapping>
+    <filter>
+        <filter-name>GroupFilter</filter-name>
+        <filter-class>com.deadormi.util.GroupFilter</filter-class>
+    </filter>
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
         <servlet-class>com.deadormi.servlet.HomeServlet</servlet-class>
@@ -73,6 +73,14 @@
             30
         </session-timeout>
     </session-config>
+    <filter-mapping>
+        <filter-name>GroupFilter</filter-name>
+        <servlet-name>GruppoServlet</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoggedFilter</filter-name>
+        <url-pattern>/secure/*</url-pattern>
+    </filter-mapping>
     <listener>
         <description>listener</description>
         <listener-class>com.deadormi.dbmanager.WebappContextListener</listener-class>

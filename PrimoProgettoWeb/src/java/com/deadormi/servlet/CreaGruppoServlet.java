@@ -117,8 +117,8 @@ public class CreaGruppoServlet extends HttpServlet {
         try {
             Integer id_gruppo = GruppoController.creaGruppo(request);
             if(id_gruppo>0){
-            RequestDispatcher rd = request.getRequestDispatcher("/secure/gruppo/show?id_gruppo=" + id_gruppo);
-            rd.forward(request, response);
+            response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + id_gruppo);
+            
             }
             else{
                 processRequest(request,response);

@@ -66,4 +66,26 @@ public class Gruppo_UtenteController {
         return miei_gruppi;
     }
 
+    public static Boolean checkUser_Group(HttpServletRequest request, Integer user_id, Integer gruppo_id) throws SQLException {
+       DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+       Connection connection = dbmanager.getConnection();
+       PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.GRUPPO_UTENTE WHERE id_utente=? AND id_gruppo=?");
+       ResultSet rs; 
+       try {
+            stm.setInt(1, (Integer)user_id);
+            stm.setInt(2, (Integer)gruppo_id);
+            rs = stm.executeQuery();
+            try {
+                if(rs.next()) {
+                    return true;
+                }
+            } finally {
+                   rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return false;
+    }
+
 }
