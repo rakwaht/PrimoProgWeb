@@ -116,8 +116,12 @@ public class CreaPostFilter implements Filter {
         String url = req.getQueryString();
         Integer gruppo_id = (Integer)request.getAttribute("id_gruppo");
         System.out.println(gruppo_id + "dsfsdlkhsdòkjfhsdkjdhskljfhfkljh");
+        System.out.println(request.getParameter("creapost"));
         try {
-            if(Gruppo_UtenteController.checkUser_Group(req,user_id,gruppo_id)){
+            if(request.getParameter("creapost") != null){
+                chain.doFilter(request, response);
+            }
+            else if(Gruppo_UtenteController.checkUser_Group(req,user_id,gruppo_id)){
                 chain.doFilter(request, response);
             }
             else{

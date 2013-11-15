@@ -30,7 +30,6 @@ public class CookiesManager {
         } else {
             for (int i = 0; i < cookies.length; i++) {
                 cookie = cookies[i];
-                System.out.println(cookies.length + cookie.getName() + "ultimo_login" + session.getAttribute("user_id").toString());
                 if (cookie.getName().equals("ultimo_login"+session.getAttribute("user_id").toString())) {
                     CookiesManager.createOldDateCookie(cookie.getValue(), response, request);
                     cookie.setMaxAge(0);
@@ -39,7 +38,6 @@ public class CookiesManager {
                     cookie.setMaxAge(604800);
                     response.addCookie(cookie);
                 } else {
-                    System.out.println("ciao");
                     cookie = new Cookie("ultimo_login" + session.getAttribute("user_id"), CurrentDate.getCurrentDate());
                     cookie.setMaxAge(604800);
                      cookie.setPath("/PrimoProgettoWeb/");

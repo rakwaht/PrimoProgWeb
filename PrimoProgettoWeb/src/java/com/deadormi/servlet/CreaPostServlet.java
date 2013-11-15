@@ -12,12 +12,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  *
  * @author Timbu
  */
 public class CreaPostServlet extends HttpServlet {
+
+    private String filePath;
+
+    @Override
+    public void init() {
+        // Get the file location where it would be stored.
+        filePath = getServletContext().getInitParameter("file-upload");
+    }
 
     /**
      * Processes requests for both HTTP
@@ -38,12 +47,12 @@ public class CreaPostServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
             out.println("<h1>Crea Post da gruppo: " + id_gruppo + "</h1>");
-            out.println("<form method='POST' enctype='multipart/form-data'>");
+            out.println("<form method='POST' action='/PrimoProgettoWeb/secure/nuovo_post' enctype='multipart/form-data'>");
             out.println("<textarea name='testo'></textarea>");
-            out.println("Which file to upload? <INPUT TYPE=FILE NAME=file1> <BR>");
-            out.println("Which file to upload? <INPUT TYPE=FILE NAME=file2> <BR>");
-            out.println("Which file to upload? <INPUT TYPE=FILE NAME=file3> <BR>");
-            out.println("<input type='submit' name='POSTA'>");
+            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file1'> <BR>");
+            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file2'> <BR>");
+            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file3'> <BR>");
+            out.println("<input type='submit' name='creapost' value='dio maiale crea il post' />");
             out.println("</form>");
             out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + id_gruppo + "'>Indietro</a>");
             MainLayout.printFooter(out);
@@ -80,8 +89,10 @@ public class CreaPostServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-    //    PostController.creaPost(request);
+        boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        System.out.println(isMultipart);
+        processRequest(request, response);
+        //    PostController.creaPost(request);
     }
 
     /**

@@ -113,11 +113,11 @@
         <param-name>dburl</param-name>
         <param-value>jdbc:derby://localhost:1527/PrimoProgetto_Local;user=root;password=root;</param-value>
     </context-param>
-    <context-param>
-        <description>Location to store uploaded file</description>
-        <param-name>file-upload</param-name>
-        <param-value>
-            c:/file_progetto/
-        </param-value>
-    </context-param>
+    <context-param> 
+    <description>Location to store uploaded file</description> 
+    <param-name>file-upload</param-name> 
+    <param-value>
+         c:/file_progetto
+     </param-value> 
+</context-param>
 </web-app>
