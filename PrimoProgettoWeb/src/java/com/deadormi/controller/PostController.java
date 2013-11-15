@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -63,13 +64,15 @@ public class PostController {
         return posts;
     }
 
-    public static Integer salvaPost(HttpServletRequest request, String group_id) throws FileUploadException, SQLException {
+    public static void creaPost(HttpServletRequest request) throws SQLException, FileUploadException {
+        String group_id = request.getParameter("id_gruppo");
         HttpSession session = request.getSession();
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
         PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.POST (id_scrivente,id_gruppo,testo,data_creazione) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
         //preparo l'estrazione del testo dal form
         String testo = null;
+        Integer post_id;
         int maxFileSize = 4 * 1024 * 1024;
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // maximum size that will be stored in memory
@@ -95,20 +98,6 @@ public class PostController {
             FileItem fi = (FileItem) i.next();
             if (fi.isFormField() && fi.getFieldName().equals("testo")) {
                 testo = fi.getString();
-            } else if (fi.getFieldName().equals("file") && fi.getSize()>0) {
-                // Get the uploaded file parameters
-                String fieldName = fi.getFieldName();
-                String fileName = fi.getName();
-                String contentType = fi.getContentType();
-                boolean isInMemory = fi.isInMemory();
-                long sizeInBytes = fi.getSize();
-                // Write the file
-                file = new File(filePath + "/" + sizeInBytes + fileName);
-                try {
-                    fi.write(file);
-                } catch (Exception ex) {
-                    Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         }
         try {
@@ -118,40 +107,33 @@ public class PostController {
             stm.setString(4, CurrentDate.getCurrentDate());
             stm.executeUpdate();
             if (stm.getGeneratedKeys().next()) {
-                return stm.getGeneratedKeys().getInt(1);
+                 post_id = stm.getGeneratedKeys().getInt(1);
             } else {
-                return -1;
+               post_id =  -1;
             }
         } finally {
             stm.close();
         }
-    }
-
-    public static void creaPost(HttpServletRequest request) throws SQLException, FileUploadException {
-        String id_gruppo = request.getParameter("id_gruppo");
-        //salvo il post
-        Integer post_id = PostController.salvaPost(request, id_gruppo);
-        /*
-         //salvo i file relativi al post appena creato
-         int maxFileSize = 4 * 1024;
-         DiskFileItemFactory factory = new DiskFileItemFactory();
-         // maximum size that will be stored in memory
-         factory.setSizeThreshold(maxFileSize); //max file size 4 mega
-         // Location to save data that is larger than maxMemSize.
-         factory.setRepository(new File("c:\\temp"));
-         // Create a new file upload handler
-         ServletFileUpload upload = new ServletFileUpload(factory);
-         // maximum file size to be uploaded.
-         upload.setSizeMax(maxFileSize);
-         List fileItems = upload.parseRequest(request);
-         // Create a new file upload handler
-         Iterator i = fileItems.iterator();
-         // cerco il path in cui mettere il file nel web.xml
-         Context env;
-        
-         //se non esiste creo la directory
-        
-         //itero i file
-         */
+        ListIterator i2 = fileItems.listIterator();
+        // Create a new file upload handler
+         while (i2.hasNext()) {
+            FileItem fi = (FileItem) i2.next();
+            if (fi.getFieldName().equals("file") && fi.getSize()>0) {
+                // Get the uploaded file parameters
+                String fieldName = fi.getFieldName();
+                String fileName = fi.getName();
+                String contentType = fi.getContentType();
+                boolean isInMemory = fi.isInMemory();
+                long sizeInBytes = fi.getSize();
+                // Write the file
+                Integer file_id = FileController.salvaFile(request,fileName,post_id);
+                file = new File(filePath + "/" + file_id + "-" + fileName);
+                try {
+                    fi.write(file);
+                } catch (Exception ex) {
+                    Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+         }
     }
 }
