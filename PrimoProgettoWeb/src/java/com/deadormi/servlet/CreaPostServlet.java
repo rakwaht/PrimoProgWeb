@@ -5,18 +5,18 @@
  */
 package com.deadormi.servlet;
 
-import com.deadormi.controller.FileController;
 import com.deadormi.controller.PostController;
 import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 /**
@@ -44,7 +44,7 @@ public class CreaPostServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
             out.println("<h1>Crea Post da gruppo: " + id_gruppo + "</h1>");
-            out.println("<form method='POST' action='/PrimoProgettoWeb/secure/nuovo_post' enctype='multipart/form-data'>");
+            out.println("<form method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo="+ id_gruppo+ "' enctype='multipart/form-data'>");
             out.println("<textarea name='testo'></textarea>");
             out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file1'> <BR>");
             out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file2'> <BR>");
@@ -89,12 +89,14 @@ public class CreaPostServlet extends HttpServlet {
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (isMultipart) {
             try {
-                Integer post_id=0;
-                //Integer post_id = PostController.creaPost(request);
-                FileController.inserisciFiles(request,post_id);
-            } catch (NamingException ex) {
+                PostController.creaPost(request);
+                 //FileController.inserisciFiles(request,post_id);
+            } catch (SQLException ex) {
+                Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (FileUploadException ex) {
                 Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         } else {
             processRequest(request, response);
         }
