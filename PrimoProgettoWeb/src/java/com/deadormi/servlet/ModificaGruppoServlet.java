@@ -53,21 +53,21 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>Servlet ModificaGruppoServlet at " + gruppo.getNome() + "</h1>");
-                out.println("<form method='POST' action='action='/PrimoProgettoWeb/secure/modifica_gruppo?id_gruppo="+ id_gruppo+ "''>");
+                out.println("<form method='POST' action='/PrimoProgettoWeb/secure/modifica_gruppo?id_gruppo=" + id_gruppo + "''>");
                 out.println("Titolo:<input type='text' value='" + gruppo.getNome() + "' name='titolo'  /><br />");
                 out.println("Descrizione:<textarea type='text' name='descrizione' >" + gruppo.getDescrizione() + "</textarea><br />");
-                if(iscritti.size()>1){
+                if (iscritti.size() > 1) {
                     out.println("<p>ELIMINA UTENTI:</p>");
-                for (int i = 0; i < iscritti.size(); i++) {
-                    if (!iscritti.get(i).getId_utente().equals(user_id)) {
-                        out.println(iscritti.get(i).getUsername() + "<input type='checkbox' name='utenti_selezionati' value='" + iscritti.get(i).getId_utente() + "'/><br />");
+                    for (int i = 0; i < iscritti.size(); i++) {
+                        if (!iscritti.get(i).getId_utente().equals(user_id)) {
+                            out.println(iscritti.get(i).getUsername() + "<input type='checkbox' name='utenti_selezionati' value='" + iscritti.get(i).getId_utente() + "'/><br />");
+                        }
                     }
                 }
-                }
-                out.println("<input type='submit' value='MODIFICA'/>");
+                out.println("<input type='submit' name='modifica' value='MODIFICA'/>");
                 out.println("</form>");
-                out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo="+ gruppo.getId_gruppo() +"'>Indietro</a><br />");
-                
+                out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "'>Indietro</a><br />");
+
                 out.println("</body>");
                 out.println("</html>");
             } finally {
@@ -104,7 +104,28 @@ public class ModificaGruppoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        if (request.getParameter("modifica") != null) {
+            Integer user_id = (Integer) request.getSession().getAttribute("user_id");
+            String url = request.getQueryString();
+            String titolo = request.getParameter("titolo");
+            String descrizione = request.getParameter("descrizione");
+            Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
+            try {
+                GruppoController.modificaGruppo(request, gruppo_id);
+                response.sendRedirect("/PrimoProgettoWeb/secure/tuoi_gruppi");
+            } catch (SQLException ex) {
+                Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else{
+            processRequest(request,response);
+        }
+        /*try {
+         GruppoController.modificaGruppo(request,gruppo_id);
+         } catch (SQLException ex) {
+         Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+         }*/
+
     }
 
     /**

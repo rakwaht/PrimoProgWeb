@@ -85,4 +85,23 @@ public class GruppoController {
         }
         return gruppo;
     }
+
+    public static void modificaGruppo(HttpServletRequest request, Integer gruppo_id) throws SQLException {
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        String titolo = request.getParameter("titolo");
+        String descrizione = request.getParameter("descrizione");
+        System.out.println(titolo + "    " +descrizione);
+        PreparedStatement stm = connection.prepareStatement("UPDATE ROOT.GRUPPO SET nome=?, descrizione=? WHERE id_gruppo=?");
+        ResultSet rs;
+        try {
+            stm.setString(1, titolo);
+            stm.setString(2, descrizione);
+            stm.setInt(3, gruppo_id);
+            stm.executeUpdate();
+            
+        } finally {
+            stm.close();
+        }
+    }
 }

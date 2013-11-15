@@ -136,10 +136,11 @@ public class GruppoServlet extends HttpServlet {
             rd = request.getRequestDispatcher("/secure/nuovo_post");
             rd.forward(request, response);
         }
-        else if(request.getParameter("bottone")!=null){
-            rd = request.getRequestDispatcher("/secure/modifica_gruppo");
+        else if(request.getParameter("modifica_gruppo")!=null){
+            rd = request.getRequestDispatcher("/secure/modifica_gruppo?="+ id);
             rd.forward(request, response);
         }
+        
     }
 
     /**

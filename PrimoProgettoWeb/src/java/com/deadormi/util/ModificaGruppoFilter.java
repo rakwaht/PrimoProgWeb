@@ -6,16 +6,22 @@
 
 package com.deadormi.util;
 
+import com.deadormi.controller.Gruppo_UtenteController;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -106,9 +112,24 @@ public class ModificaGruppoFilter implements Filter {
         doBeforeProcessing(request, response);
         
         Throwable problem = null;
+        System.out.println("entro nel filtro");
+        HttpServletRequest req= (HttpServletRequest) request;
+        Integer user_id = (Integer)((HttpServletRequest)request).getSession().getAttribute("user_id");
+        String url = req.getQueryString();
+        Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
         
         
         
+        try {
+            if(Gruppo_UtenteController.checkUser_Group(req,user_id,gruppo_id)){
+                chain.doFilter(request, response);
+            }
+            else{
+                ((HttpServletResponse)response).sendRedirect(((HttpServletRequest)request).getContextPath()+ "/secure/tuoi_gruppi");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupFilter.class.getName()).log(Level.SEVERE, null, ex);
+        }
         doAfterProcessing(request, response);
 
 	// If there was a problem, we want to rethrow it if it is
