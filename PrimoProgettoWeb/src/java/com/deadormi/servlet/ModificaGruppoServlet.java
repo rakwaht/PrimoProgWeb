@@ -68,7 +68,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                         }
                     }
                 }
-                if (non_iscritti.size() > 1) {
+                if (non_iscritti.size() > 0) {
                     out.println("<p>INVITA UTENTI:</p>");
                     for (int i = 0; i < non_iscritti.size(); i++) {
 
