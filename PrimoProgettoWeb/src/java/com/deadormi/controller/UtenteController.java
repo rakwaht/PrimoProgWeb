@@ -108,7 +108,7 @@ public class UtenteController {
     public static List<Utente> getUserByGroupId(HttpServletRequest request, Integer gruppo_id) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
-        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.GRUPPO_UTENTE NATURAL JOIN ROOT.UTENTE WHERE utente_abilitato=true AND id_gruppo=?");
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.GRUPPO_UTENTE NATURAL JOIN ROOT.UTENTE WHERE utente_abilitato=true AND id_gruppo=? AND gruppo_utente_abilitato='true'");
         List<Utente> list = new ArrayList<Utente>();
         try {
             stm.setInt(1, gruppo_id);

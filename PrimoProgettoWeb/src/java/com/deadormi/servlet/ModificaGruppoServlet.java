@@ -6,6 +6,7 @@
 package com.deadormi.servlet;
 
 import com.deadormi.controller.GruppoController;
+import com.deadormi.controller.Gruppo_UtenteController;
 import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Utente;
@@ -107,12 +108,11 @@ public class ModificaGruppoServlet extends HttpServlet {
         if (request.getParameter("modifica") != null) {
             Integer user_id = (Integer) request.getSession().getAttribute("user_id");
             String url = request.getQueryString();
-            String titolo = request.getParameter("titolo");
-            String descrizione = request.getParameter("descrizione");
             Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
             try {
                 GruppoController.modificaGruppo(request, gruppo_id);
-                response.sendRedirect("/PrimoProgettoWeb/secure/tuoi_gruppi");
+                Gruppo_UtenteController.eliminaUser(request, gruppo_id);
+                response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id);
             } catch (SQLException ex) {
                 Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
