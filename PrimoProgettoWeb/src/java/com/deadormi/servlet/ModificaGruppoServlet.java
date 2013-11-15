@@ -53,7 +53,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>Servlet ModificaGruppoServlet at " + gruppo.getNome() + "</h1>");
-                out.println("<form method='POST'>");
+                out.println("<form method='POST' action='/PrimoProgettoWeb/secure/modifica_gruppo'>");
                 out.println("Titolo:<input type='text' value='" + gruppo.getNome() + "' name='titolo'  /><br />");
                 out.println("Descrizione:<textarea type='text' name='descrizione' >" + gruppo.getDescrizione() + "</textarea><br />");
                 if(iscritti.size()>1){
