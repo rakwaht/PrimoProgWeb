@@ -7,6 +7,7 @@ package com.deadormi.servlet;
 
 import com.deadormi.controller.GruppoController;
 import com.deadormi.controller.Gruppo_UtenteController;
+import com.deadormi.controller.InvitoController;
 import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Utente;
@@ -45,6 +46,8 @@ public class ModificaGruppoServlet extends HttpServlet {
             Integer user_id = (Integer) request.getSession().getAttribute("user_id");
             Gruppo gruppo = GruppoController.getGruppoById(request, id_gruppo);
             List<Utente> iscritti = UtenteController.getUserByGroupId(request, id_gruppo);
+            List<Utente> non_iscritti = UtenteController.getUserNotInGroupByGroupId(request, id_gruppo);
+            System.out.println(non_iscritti.size());
             try {
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<!DOCTYPE html>");
@@ -63,6 +66,12 @@ public class ModificaGruppoServlet extends HttpServlet {
                         if (!iscritti.get(i).getId_utente().equals(user_id)) {
                             out.println(iscritti.get(i).getUsername() + "<input type='checkbox' name='utenti_selezionati' value='" + iscritti.get(i).getId_utente() + "'/><br />");
                         }
+                    }
+                }
+                if (non_iscritti.size() > 1) {
+                    out.println("<p>INVITA UTENTI:</p>");
+                    for (int i = 0; i < non_iscritti.size(); i++) {
+                            out.println(non_iscritti.get(i).getUsername() + "<input type='checkbox' name='non_utenti_selezionati' value='" + non_iscritti.get(i).getId_utente() + "'/><br />");
                     }
                 }
                 out.println("<input type='submit' name='modifica' value='MODIFICA'/>");
@@ -112,6 +121,7 @@ public class ModificaGruppoServlet extends HttpServlet {
             try {
                 GruppoController.modificaGruppo(request, gruppo_id);
                 Gruppo_UtenteController.eliminaUser(request, gruppo_id);
+                InvitoController.processaRe_Inviti(request,gruppo_id);
                 response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id);
             } catch (SQLException ex) {
                 Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);

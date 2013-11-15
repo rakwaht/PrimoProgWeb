@@ -102,4 +102,63 @@ public class InvitoController {
             stm.close();
         }
     }
+
+    public static void processaRe_Inviti(HttpServletRequest request, Integer gruppo_id) throws SQLException {
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        String[] utenti_selezionati = request.getParameterValues("non_utenti_selezionati");
+        HttpSession session = request.getSession();
+
+        if (utenti_selezionati != null) {
+            for (int i = 0; i < utenti_selezionati.length; i++) {
+                if (!InvitoController.checkInvitoByUserId(request, Integer.parseInt(utenti_selezionati[i]), gruppo_id)) {
+                    PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.INVITO (id_invitato,id_invitante,id_gruppo) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                    try {
+                        stm.setInt(1, Integer.parseInt(utenti_selezionati[i]));
+                        stm.setInt(2, (Integer) session.getAttribute("user_id"));
+                        stm.setInt(3, gruppo_id);
+                        stm.executeUpdate();
+                    } finally {
+                        stm.close();
+
+                    }
+                } else {
+                    PreparedStatement stm = connection.prepareStatement("UPDATE ROOT.INVITO SET invito_abilitato='true' WHERE id_invitato=? AND id_gruppo=?", Statement.RETURN_GENERATED_KEYS);
+                    try {
+                        stm.setInt(1, Integer.parseInt(utenti_selezionati[i]));
+                        stm.setInt(2, gruppo_id);
+                        
+                        stm.executeUpdate();
+                    } finally {
+                        stm.close();
+
+                    }
+                }
+            }
+        }
+
+    }
+
+    private static boolean checkInvitoByUserId(HttpServletRequest request, Integer user_id, Integer gruppo_id) throws SQLException {
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.INVITO WHERE id_invitato=? AND invito_abilitato='true' AND id_gruppo=?", Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs;
+        try {
+            stm.setInt(1, user_id);
+            stm.setInt(2, gruppo_id);
+            rs = stm.executeQuery();
+            try {
+                if (rs.next()) {
+                    return true;
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+
+        }
+        return false;
+    }
 }

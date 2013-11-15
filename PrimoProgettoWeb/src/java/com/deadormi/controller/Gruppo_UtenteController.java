@@ -27,7 +27,7 @@ public class Gruppo_UtenteController {
         HttpSession session = request.getSession();
         Integer user_id = (Integer) session.getAttribute("user_id");
 
-        if (Gruppo_UtenteController.checkAllUser_Group(request, user_id, Integer.parseInt(id_gruppo))) {
+        if (!Gruppo_UtenteController.checkUserNotInGroup(request, user_id, Integer.parseInt(id_gruppo))) {
             PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.GRUPPO_UTENTE (id_gruppo,id_utente) VALUES (?,?)");
             try {
                 stm.setInt(1, Integer.parseInt(id_gruppo));
@@ -127,10 +127,10 @@ public class Gruppo_UtenteController {
         }
     }
 
-    private static boolean checkAllUser_Group(HttpServletRequest request, Integer user_id, Integer gruppo_id) throws SQLException {
+    private static boolean checkUserNotInGroup(HttpServletRequest request, Integer user_id, Integer gruppo_id) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
-        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.GRUPPO_UTENTE WHERE id_utente=? AND id_gruppo=?");
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.GRUPPO_UTENTE WHERE id_utente=? AND id_gruppo=? AND gruppo_utente_abilitato='false'");
         ResultSet rs;
         try {
             stm.setInt(1, (Integer) user_id);

@@ -128,4 +128,27 @@ public class UtenteController {
         }
         return list;
     }
+
+    public static List<Utente> getUserNotInGroupByGroupId(HttpServletRequest request, Integer id_gruppo) throws SQLException {
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        PreparedStatement stm = connection.prepareStatement("(select id_utente from ROOT.UTENTE) EXCEPT (select id_utente FROM ROOT.GRUPPO_UTENTE WHERE id_gruppo=? AND gruppo_utente_abilitato='true')");
+        List<Utente> list = new ArrayList<Utente>();
+         try {
+            stm.setInt(1, id_gruppo);
+            ResultSet rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    Utente utente = new Utente();
+                    utente = UtenteController.getUserById(request, rs.getInt("id_utente"));
+                    list.add(utente);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return list;
+    }
 }
