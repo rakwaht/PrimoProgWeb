@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.apache.tomcat.util.http.fileupload.RequestContext;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
@@ -83,7 +84,7 @@ public class PostController {
         ServletFileUpload upload = new ServletFileUpload(factory);
         // maximum file size to be uploaded.
         upload.setSizeMax(maxFileSize);
-        List fileItems = upload.parseRequest(request);
+        List fileItems = upload.parseRequest((RequestContext) request);
         // Create a new file upload handler
         Iterator i = fileItems.iterator();
         //preparo le directory
