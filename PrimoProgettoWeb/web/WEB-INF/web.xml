@@ -120,4 +120,9 @@
             c:/file_progetto/
         </param-value> 
     </context-param>
+    <env-entry> 
+        <env-entry-name>file-upload</env-entry-name> 
+        <env-entry-value>c:/file_progetto/</env-entry-value> 
+        <env-entry-type>java.lang.String</env-entry-type> 
+    </env-entry>
 </web-app>

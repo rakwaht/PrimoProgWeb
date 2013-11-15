@@ -7,7 +7,6 @@
 package com.deadormi.controller;
 
 import com.deadormi.dbmanager.DbManager;
-import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Post;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,6 +49,10 @@ public class PostController {
             stm.close();
         }      
         return posts;
+    }
+
+    public static Integer creaPost(HttpServletRequest request) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
