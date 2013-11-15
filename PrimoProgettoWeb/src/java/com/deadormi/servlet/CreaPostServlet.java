@@ -46,9 +46,9 @@ public class CreaPostServlet extends HttpServlet {
             out.println("<h1>Crea Post da gruppo: " + id_gruppo + "</h1>");
             out.println("<form method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo="+ id_gruppo+ "' enctype='multipart/form-data'>");
             out.println("<textarea name='testo'></textarea>");
-            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file1'> <BR>");
-            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file2'> <BR>");
-            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file3'> <BR>");
+            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file'> <BR>");
+            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file'> <BR>");
+            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file'> <BR>");
             out.println("<input type='submit' name='creapost' value='dio maiale crea il post' />");
             out.println("</form>");
             out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + id_gruppo + "'>Indietro</a>");
@@ -90,7 +90,6 @@ public class CreaPostServlet extends HttpServlet {
         if (isMultipart) {
             try {
                 PostController.creaPost(request);
-                 //FileController.inserisciFiles(request,post_id);
             } catch (SQLException ex) {
                 Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
             } catch (FileUploadException ex) {
