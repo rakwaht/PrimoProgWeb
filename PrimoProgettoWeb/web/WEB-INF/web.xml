@@ -40,6 +40,10 @@
         <servlet-name>ModificaGruppoServlet</servlet-name>
         <servlet-class>com.deadormi.servlet.ModificaGruppoServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GeneraPdfServlet</servlet-name>
+        <servlet-class>com.deadormi.servlet.GeneraPdfServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/secure/home</url-pattern>
@@ -75,6 +79,10 @@
     <servlet-mapping>
         <servlet-name>ModificaGruppoServlet</servlet-name>
         <url-pattern>/secure/modifica_gruppo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GeneraPdfServlet</servlet-name>
+        <url-pattern>/secure/genera_pdf</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -113,11 +121,11 @@
         <param-name>dburl</param-name>
         <param-value>jdbc:derby://localhost:1527/PrimoProgetto_Local;user=root;password=root;</param-value>
     </context-param>
-    <context-param> 
-        <description>Location to store uploaded file</description> 
-        <param-name>file-upload</param-name> 
+    <context-param>
+        <description>Location to store uploaded file</description>
+        <param-name>file-upload</param-name>
         <param-value>
             c:/file_progetto/
-        </param-value> 
+        </param-value>
     </context-param>
 </web-app>

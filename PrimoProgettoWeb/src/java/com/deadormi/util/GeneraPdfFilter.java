@@ -20,14 +20,17 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.codec.binary.StringUtils;
 
 /**
  *
  * @author Timbu
  */
-public class ModificaGruppoFilter implements Filter {
+@WebFilter(filterName = "GeneraPdfFilter", servletNames = {"GeneraPdfServlet"})
+public class GeneraPdfFilter implements Filter {
     
     private static final boolean debug = true;
 
@@ -36,13 +39,13 @@ public class ModificaGruppoFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public ModificaGruppoFilter() {
+    public GeneraPdfFilter() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("ModificaGruppoFilter:DoBeforeProcessing");
+            log("GeneraPdfFilter:DoBeforeProcessing");
         }
 
 	// Write code here to process the request and/or response before
@@ -70,7 +73,7 @@ public class ModificaGruppoFilter implements Filter {
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("ModificaGruppoFilter:DoAfterProcessing");
+            log("GeneraPdfFilter:DoAfterProcessing");
         }
 
 	// Write code here to process the request and/or response after
@@ -106,26 +109,27 @@ public class ModificaGruppoFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("ModificaGruppoFilter:doFilter()");
+            log("GeneraPdfFilter:doFilter()");
         }
         
         doBeforeProcessing(request, response);
         
         Throwable problem = null;
         
+        
         HttpServletRequest req= (HttpServletRequest) request;
         Integer user_id = (Integer)((HttpServletRequest)request).getSession().getAttribute("user_id");
         String url = req.getQueryString();
+        
+        
         if(url==null || "".equals(url)){
            
-            ((HttpServletResponse)response).sendRedirect("/PrimoProgettoWeb/secure/tuoi_gruppi");
+            ((HttpServletResponse)response).sendRedirect("/PrimoProgettoWeb/secure/home");
         }
         else{
         Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
         
-        
-        
-        try {
+       try {
             if(Gruppo_UtenteController.checkUser_Group(req,user_id,gruppo_id)){
                 chain.doFilter(request, response);
             }
@@ -180,7 +184,7 @@ public class ModificaGruppoFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("ModificaGruppoFilter:Initializing filter");
+                log("GeneraPdfFilter:Initializing filter");
             }
         }
     }
@@ -191,9 +195,9 @@ public class ModificaGruppoFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("ModificaGruppoFilter()");
+            return ("GeneraPdfFilter()");
         }
-        StringBuffer sb = new StringBuffer("ModificaGruppoFilter(");
+        StringBuffer sb = new StringBuffer("GeneraPdfFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

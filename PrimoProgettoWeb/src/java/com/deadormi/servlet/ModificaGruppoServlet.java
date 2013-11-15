@@ -80,6 +80,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                         }
                     }
                 }
+                out.println("<input type='submit' name='generapdf' value='GENERA PDF'/>");
                 out.println("<input type='submit' name='modifica' value='MODIFICA'/>");
                 out.println("</form>");
                 out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "'>Indietro</a><br />");
@@ -132,6 +133,11 @@ public class ModificaGruppoServlet extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
+
+        } else if (request.getParameter("generapdf") != null) {
+            String url = request.getQueryString();
+            Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
+            response.sendRedirect("/PrimoProgettoWeb/secure/genera_pdf?id_gruppo=" + gruppo_id);
         } else {
             processRequest(request, response);
         }

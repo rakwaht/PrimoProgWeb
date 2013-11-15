@@ -115,6 +115,11 @@ public class CreaPostFilter implements Filter {
         HttpServletRequest req= (HttpServletRequest) request;
         Integer user_id = (Integer)((HttpServletRequest)request).getSession().getAttribute("user_id");
         String url = req.getQueryString();
+        if(url==null || "".equals(url)){
+           
+            ((HttpServletResponse)response).sendRedirect("/PrimoProgettoWeb/secure/home");
+        }
+        else{
         Integer gruppo_id = (Integer)request.getAttribute("id_gruppo");
         boolean isMultipart = ServletFileUpload.isMultipartContent((HttpServletRequest) request);
         try {
@@ -130,7 +135,7 @@ public class CreaPostFilter implements Filter {
         } catch (SQLException ex) {
             Logger.getLogger(GroupFilter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        }
         doAfterProcessing(request, response);
 
 	// If there was a problem, we want to rethrow it if it is
