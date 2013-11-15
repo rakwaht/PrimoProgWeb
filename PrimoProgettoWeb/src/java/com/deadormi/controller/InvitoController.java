@@ -139,7 +139,7 @@ public class InvitoController {
 
     }
 
-    private static boolean checkInvitoByUserId(HttpServletRequest request, Integer user_id, Integer gruppo_id) throws SQLException {
+    public static boolean checkInvitoByUserId(HttpServletRequest request, Integer user_id, Integer gruppo_id) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.INVITO WHERE id_invitato=? AND invito_abilitato='true' AND id_gruppo=?", Statement.RETURN_GENERATED_KEYS);
