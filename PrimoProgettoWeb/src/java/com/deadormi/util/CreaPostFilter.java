@@ -22,6 +22,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 /**
  *
@@ -115,10 +116,9 @@ public class CreaPostFilter implements Filter {
         Integer user_id = (Integer)((HttpServletRequest)request).getSession().getAttribute("user_id");
         String url = req.getQueryString();
         Integer gruppo_id = (Integer)request.getAttribute("id_gruppo");
-        System.out.println(gruppo_id + "dsfsdlkhsdòkjfhsdkjdhskljfhfkljh");
-        System.out.println(request.getParameter("creapost"));
+        boolean isMultipart = ServletFileUpload.isMultipartContent((HttpServletRequest) request);
         try {
-            if(request.getParameter("creapost") != null){
+            if(isMultipart){
                 chain.doFilter(request, response);
             }
             else if(Gruppo_UtenteController.checkUser_Group(req,user_id,gruppo_id)){

@@ -6,12 +6,19 @@
 package com.deadormi.servlet;
 
 import com.deadormi.layout.MainLayout;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 /**
@@ -90,9 +97,63 @@ public class CreaPostServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-        System.out.println(isMultipart);
-        processRequest(request, response);
-        //    PostController.creaPost(request);
+        if (isMultipart) {
+            int maxFileSize = 4 * 1024;
+            DiskFileItemFactory factory = new DiskFileItemFactory();
+            // maximum size that will be stored in memory
+            factory.setSizeThreshold(maxFileSize); //max file size 4 mega
+            // Location to save data that is larger than maxMemSize.
+            factory.setRepository(new File("c:\\temp"));
+            // Create a new file upload handler
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            // maximum file size to be uploaded.
+            upload.setSizeMax(maxFileSize);
+            // Create a new file upload handler
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            try {
+                File file;
+                // Parse the request to get file items.
+                List fileItems = upload.parseRequest(request);
+
+                // Process the uploaded file items
+                Iterator i = fileItems.iterator();
+
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>Servlet upload</title>");
+                out.println("</head>");
+                out.println("<body>");
+                while (i.hasNext()) {
+                    FileItem fi = (FileItem) i.next();
+                    if (!fi.isFormField()) {
+                        System.out.println("Qui arrivo dio cane");
+                        // Get the uploaded file parameters
+                        //String fieldName = fi.getFieldName();
+                        String fileName = fi.getName();
+                        String contentType = fi.getContentType();
+                        //boolean isInMemory = fi.isInMemory();
+                        //long sizeInBytes = fi.getSize();
+                        // Write the file
+                        if (fileName.lastIndexOf("\\") >= 0) {
+                            file = new File(filePath
+                                    + fileName.substring(fileName.lastIndexOf("\\")));
+                        } else {
+                            file = new File(filePath
+                                    + fileName.substring(fileName.lastIndexOf("\\") + 1));
+                        }
+                        fi.write(file);
+                        out.println("Uploaded Filename: " + fileName + "<br>");
+                    }
+                }
+                out.println("</body>");
+                out.println("</html>");
+            } catch (Exception ex) {
+                Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            processRequest(request, response);
+        }
     }
 
     /**
