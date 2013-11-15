@@ -40,10 +40,10 @@ public class ModificaGruppoServlet extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             PrintWriter out = response.getWriter();
-            Integer gruppo_id = (Integer) request.getAttribute("id_gruppo");
+            Integer id_gruppo = (Integer) request.getAttribute("id_gruppo");
             Integer user_id = (Integer) request.getSession().getAttribute("user_id");
-            Gruppo gruppo = GruppoController.getGruppoById(request, gruppo_id);
-            List<Utente> iscritti = UtenteController.getUserByGroupId(request, gruppo_id);
+            Gruppo gruppo = GruppoController.getGruppoById(request, id_gruppo);
+            List<Utente> iscritti = UtenteController.getUserByGroupId(request, id_gruppo);
             try {
                 /* TODO output your page here. You may use following sample code. */
                 out.println("<!DOCTYPE html>");
@@ -53,7 +53,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>Servlet ModificaGruppoServlet at " + gruppo.getNome() + "</h1>");
-                out.println("<form method='POST' action='/PrimoProgettoWeb/secure/modifica_gruppo'>");
+                out.println("<form method='POST' action='action='/PrimoProgettoWeb/secure/modifica_gruppo?id_gruppo="+ id_gruppo+ "''>");
                 out.println("Titolo:<input type='text' value='" + gruppo.getNome() + "' name='titolo'  /><br />");
                 out.println("Descrizione:<textarea type='text' name='descrizione' >" + gruppo.getDescrizione() + "</textarea><br />");
                 if(iscritti.size()>1){

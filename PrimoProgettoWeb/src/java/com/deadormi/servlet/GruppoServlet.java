@@ -89,10 +89,10 @@ public class GruppoServlet extends HttpServlet {
                 out.println("<p>Non vi sono posts nel db!</p>");
             }
             out.println("<form method='POST'>");
-            out.println("<input type='submit' name='bottone' value='NUOVOPOST'/>");
+            out.println("<input type='submit' name='nuovo_post' value='NUOVO POST'/>");
             
             if (proprietario.getId_utente().equals(session.getAttribute("user_id"))) {
-                out.println("<input type='submit' name='bottone' value='MODIFICAGRUPPO'/>");
+                out.println("<input type='submit' name='modifica_gruppo' value='MODIFICA GRUPPO'/>");
             }
             out.println("</form>");
             MainLayout.printFooter(out);
@@ -132,11 +132,11 @@ public class GruppoServlet extends HttpServlet {
         Integer id = Integer.parseInt(request.getParameter("id_gruppo"));
         request.setAttribute("id_gruppo", id);
         RequestDispatcher rd;
-        if (request.getParameter("bottone").equals("NUOVOPOST")) {
+        if (request.getParameter("nuovo_post")!=null) {
             rd = request.getRequestDispatcher("/secure/nuovo_post");
             rd.forward(request, response);
         }
-        else if(request.getParameter("bottone").equals("MODIFICAGRUPPO")){
+        else if(request.getParameter("bottone")!=null){
             rd = request.getRequestDispatcher("/secure/modifica_gruppo");
             rd.forward(request, response);
         }
