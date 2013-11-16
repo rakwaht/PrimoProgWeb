@@ -84,7 +84,7 @@ public class PostController {
         ServletFileUpload upload = new ServletFileUpload(factory);
         // maximum file size to be uploaded.
         upload.setSizeMax(maxFileSize);
-        List fileItems = upload.parseRequest((RequestContext) request);
+        List fileItems = upload.parseRequest(request);
         // Create a new file upload handler
         Iterator i = fileItems.iterator();
         //preparo le directory
