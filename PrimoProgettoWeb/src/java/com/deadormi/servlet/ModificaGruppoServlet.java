@@ -151,21 +151,18 @@ public class ModificaGruppoServlet extends HttpServlet {
         } else if (request.getParameter("generapdf") != null) {
             try {
                 Document document = new Document();
-
-                ServletContext context = request.getServletContext();
-                String OutputUrl = context.getRealPath("/");
                 String url = request.getQueryString();
                 Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
+                response.setContentType("application/pdf");
+                response.setHeader("Content-Disposition"," attachment; filename='gruppo_" + gruppo_id + "_report.pdf'");
                 List<Utente> iscritti = null;
                 List<Post> posts = null;
                 try {
                     iscritti = UtenteController.getUserByGroupId(request, gruppo_id);
-
                 } catch (SQLException ex) {
                     Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
-                PdfWriter.getInstance(document, new FileOutputStream(OutputUrl + "/resource/pdf/" + gruppo_id + "_report.pdf"));
+                PdfWriter.getInstance(document, response.getOutputStream());
                 document.open();
                 Paragraph p = new Paragraph("REPORT", FontFactory.getFont(FontFactory.HELVETICA, 20));
                 p.setAlignment(Element.ALIGN_CENTER);
@@ -195,9 +192,8 @@ public class ModificaGruppoServlet extends HttpServlet {
                 }
                 document.add(table);
                 document.close();
-                response.setContentType("application/pdf");
-                response.setHeader("Content-Disposition"," attachment; filename='"+ OutputUrl + "/resource/pdf/" + gruppo_id + "_report.pdf'");
                 
+               
             } catch (DocumentException ex) {
                 Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
