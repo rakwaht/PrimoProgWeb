@@ -45,11 +45,11 @@ public class CreaPostServlet extends HttpServlet {
             MainLayout.printHeader(out);
             out.println("<h1>Crea Post da gruppo: " + id_gruppo + "</h1>");
             out.println("<form method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo="+ id_gruppo+ "' enctype='multipart/form-data'>");
-            out.println("<textarea name='testo'></textarea>");
-            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file'> <BR>");
-            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file'> <BR>");
-            out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file'> <BR>");
-            out.println("<input type='submit' name='creapost' value='dio maiale crea il post' />");
+            out.println("<textarea name='testo'></textarea><br />");
+            out.println("Aggiungi file?<INPUT TYPE='FILE' NAME='file'> <BR />");
+            //out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file'> <BR>");
+            //out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file'> <BR>");
+            out.println("<input type='submit' name='creapost' value='CREA POST' />");
             out.println("</form>");
             out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + id_gruppo + "'>Indietro</a>");
             MainLayout.printFooter(out);
@@ -88,6 +88,8 @@ public class CreaPostServlet extends HttpServlet {
             throws ServletException, IOException {
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (isMultipart) {
+            String url = request.getQueryString();
+            Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
             try {
                 PostController.creaPost(request);
             } catch (SQLException ex) {
@@ -95,7 +97,7 @@ public class CreaPostServlet extends HttpServlet {
             } catch (org.apache.commons.fileupload.FileUploadException ex) {
                 Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+            response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id );
         } else {
             processRequest(request, response);
         }

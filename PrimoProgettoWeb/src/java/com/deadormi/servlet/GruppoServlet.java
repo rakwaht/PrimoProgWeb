@@ -70,8 +70,8 @@ public class GruppoServlet extends HttpServlet {
             }
             if (posts != null && posts.size() != 0) {
                 out.println("<table>");
-                for (int i = 0; i < posts.size(); i++) {
-
+                for (int i = posts.size()-1; i >= 0; i--) {
+                    System.out.println(i);
                     post = posts.get(i);
                     try {
                         utente = UtenteController.getUserById(request, post.getId_scrivente());
@@ -79,7 +79,7 @@ public class GruppoServlet extends HttpServlet {
                         Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     out.println("<tr>");
-                    out.println("TESTO:<td>" + post.getTesto() + "</td>");
+                    out.println("<td>" + post.getTesto() + "</td>");
                     out.println("<td> scritto il " + post.getData_creazione() + "</td>");
                     out.println("<td> da: " + utente.getUsername() + "</td>");
                     out.println("</tr>");

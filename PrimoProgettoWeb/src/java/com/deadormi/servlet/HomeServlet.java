@@ -4,13 +4,16 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.controller.InvitoController;
 import com.deadormi.controller.UtenteController;
+import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
 import com.deadormi.util.CookiesManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -39,8 +42,13 @@ public class HomeServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         Utente utente = null;
+        List<Invito> inviti = null;
         String ultimo_login = CookiesManager.getOldDateCookie(request, response);
-
+        try {
+            inviti = InvitoController.getInvitiByUserId(request);
+        } catch (SQLException ex) {
+            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
         } catch (SQLException ex) {
@@ -56,7 +64,7 @@ public class HomeServlet extends HttpServlet {
             } else {
                 out.println("<h2> Benvenuto " + utente.getUsername() + "!</h2>");
             }
-            out.println("<a href='inviti'>Inviti</a><br />");
+            out.println("<a href='inviti'>Inviti </a>"+inviti.size()+"<br />");
             out.println("<a href='tuoi_gruppi'>Gruppi</a><br />");
             out.println("<a href='crea'>Crea Gruppo</a><br />");
             MainLayout.printFooter(out);

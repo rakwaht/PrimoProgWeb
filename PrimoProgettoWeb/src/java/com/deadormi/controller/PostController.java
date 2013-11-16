@@ -52,7 +52,7 @@ public class PostController {
                     post.setId_scrivente(rs.getInt("id_scrivente"));
                     post.setId_gruppo(rs.getInt("id_gruppo"));
                     post.setData_creazione(rs.getString("data_creazione"));
-                    post.setTesto("testo");
+                    post.setTesto(rs.getString("testo"));
                     posts.add(post);
                 }
             } finally {

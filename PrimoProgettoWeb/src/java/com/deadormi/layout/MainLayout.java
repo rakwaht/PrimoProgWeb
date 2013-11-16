@@ -22,7 +22,7 @@ public class MainLayout {
             out.println("<title>Servlet HomeServlet cul</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<form method='POST' action='logout'>");
+            out.println("<form method='POST' action='/PrimoProgettoWeb/secure/logout'>");
             out.println("<button type='submit'>Logout</button>");
             out.println("</form>");
     }
