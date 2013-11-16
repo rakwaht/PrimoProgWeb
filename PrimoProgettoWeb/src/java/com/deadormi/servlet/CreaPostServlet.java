@@ -92,7 +92,7 @@ public class CreaPostServlet extends HttpServlet {
                 PostController.creaPost(request);
             } catch (SQLException ex) {
                 Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileUploadException ex) {
+            } catch (org.apache.commons.fileupload.FileUploadException ex) {
                 Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
             
@@ -109,9 +109,5 @@ public class CreaPostServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
-    private void creaPost(HttpServletRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }// </editor-fold
 }
