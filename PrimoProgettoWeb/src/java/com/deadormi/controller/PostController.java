@@ -81,7 +81,7 @@ public class PostController {
         // Location to save data that is larger than maxMemSize.
         factory.setRepository(new File("c:\\temp"));
         // Create a new file upload handler
-        ServletFileUpload upload = new ServletFileUpload(factory);
+        org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload upload = new ServletFileUpload(factory);
         // maximum file size to be uploaded.
         upload.setSizeMax(maxFileSize);
         List fileItems = upload.parseRequest(request);
