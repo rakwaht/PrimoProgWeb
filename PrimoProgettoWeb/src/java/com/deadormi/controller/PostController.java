@@ -40,7 +40,7 @@ public class PostController {
         Post post = null;
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
-        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo=?");
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo=? ORDER BY data_creazione");
         ResultSet rs;
         try {
             stm.setInt(1, id_gruppo);
@@ -107,18 +107,18 @@ public class PostController {
             stm.setString(4, CurrentDate.getCurrentDate());
             stm.executeUpdate();
             if (stm.getGeneratedKeys().next()) {
-                 post_id = stm.getGeneratedKeys().getInt(1);
+                post_id = stm.getGeneratedKeys().getInt(1);
             } else {
-               post_id =  -1;
+                post_id = -1;
             }
         } finally {
             stm.close();
         }
         ListIterator i2 = fileItems.listIterator();
         // Create a new file upload handler
-         while (i2.hasNext()) {
+        while (i2.hasNext()) {
             FileItem fi = (FileItem) i2.next();
-            if (fi.getFieldName().equals("file") && fi.getSize()>0) {
+            if (fi.getFieldName().equals("file") && fi.getSize() > 0) {
                 // Get the uploaded file parameters
                 String fieldName = fi.getFieldName();
                 String fileName = fi.getName();
@@ -126,7 +126,7 @@ public class PostController {
                 boolean isInMemory = fi.isInMemory();
                 long sizeInBytes = fi.getSize();
                 // Write the file
-                Integer file_id = FileController.salvaFile(request,fileName,post_id);
+                Integer file_id = FileController.salvaFile(request, fileName, post_id);
                 file = new File(filePath + "/" + file_id + "-" + fileName);
                 try {
                     fi.write(file);
@@ -134,6 +134,36 @@ public class PostController {
                     Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-         }
+        }
+    }
+
+    public static List<Post> getPostByGruppoIdAndUserId(HttpServletRequest request, Integer gruppo_id, Integer id_utente) throws SQLException {
+        List<Post> posts = new ArrayList<Post>();
+        Post post = null;
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo=? AND id_scrivente=? ORDER BY data_creazione");
+        ResultSet rs;
+        try {
+            stm.setInt(1, gruppo_id);
+            stm.setInt(2, id_utente);
+            rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    post = new Post();
+                    post.setId_post(rs.getInt("id_post"));
+                    post.setId_scrivente(rs.getInt("id_scrivente"));
+                    post.setId_gruppo(rs.getInt("id_gruppo"));
+                    post.setData_creazione(rs.getString("data_creazione"));
+                    post.setTesto("testo");
+                    posts.add(post);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return posts;
     }
 }

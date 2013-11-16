@@ -8,15 +8,29 @@ package com.deadormi.servlet;
 import com.deadormi.controller.GruppoController;
 import com.deadormi.controller.Gruppo_UtenteController;
 import com.deadormi.controller.InvitoController;
+import com.deadormi.controller.PostController;
 import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Gruppo;
+import com.deadormi.entity.Post;
 import com.deadormi.entity.Utente;
+import com.deadormi.util.CurrentDate;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -135,9 +149,58 @@ public class ModificaGruppoServlet extends HttpServlet {
             }
 
         } else if (request.getParameter("generapdf") != null) {
-            String url = request.getQueryString();
-            Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
-            response.sendRedirect("/PrimoProgettoWeb/secure/genera_pdf?id_gruppo=" + gruppo_id);
+            try {
+                Document document = new Document();
+
+                ServletContext context = request.getServletContext();
+                String OutputUrl = context.getRealPath("/");
+                String url = request.getQueryString();
+                Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
+                List<Utente> iscritti = null;
+                List<Post> posts = null;
+                try {
+                    iscritti = UtenteController.getUserByGroupId(request, gruppo_id);
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                PdfWriter.getInstance(document, new FileOutputStream(OutputUrl + "/resource/pdf/" + gruppo_id + "_report.pdf"));
+                document.open();
+                Paragraph p = new Paragraph("REPORT", FontFactory.getFont(FontFactory.HELVETICA, 20));
+                p.setAlignment(Element.ALIGN_CENTER);
+                document.add(p);
+                PdfPTable table = new PdfPTable(2);
+                for (int i = 0; i < iscritti.size(); i++) {
+                    Utente utente = iscritti.get(i);
+                    try {
+                        posts = PostController.getPostByGruppoIdAndUserId(request, gruppo_id, utente.getId_utente());
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    table.addCell("Username");
+                    table.addCell(utente.getUsername());
+                    table.addCell("Data Ultimo Post");
+                    if (posts.isEmpty()) {
+                        table.addCell("N/A");
+                    } else {
+                        //L'ultimo è sempre il piu recente siccome la query è ORDER BY data_creazione
+                        table.addCell(posts.get(posts.size() - 1).getData_creazione());
+                    }
+                    table.addCell("Numero post");
+                    table.addCell(posts.size() + "");
+                    table.addCell("Avatar");
+                    table.addCell("WORK IN PROGRESS");
+
+                }
+                document.add(table);
+                document.close();
+                response.setContentType("application/pdf");
+                response.setHeader("Content-Disposition"," attachment; filename='"+ OutputUrl + "/resource/pdf/" + gruppo_id + "_report.pdf'");
+                
+            } catch (DocumentException ex) {
+                Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             processRequest(request, response);
         }
