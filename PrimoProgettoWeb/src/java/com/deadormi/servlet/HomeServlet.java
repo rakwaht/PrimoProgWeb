@@ -63,7 +63,7 @@ public class HomeServlet extends HttpServlet {
             if (ultimo_login != null) {
                 out.println("<h2> Bentornato " + utente.getUsername() + "!</h2>");
                 out.println("<h2>" + ultimo_login + "</h2>");
-                out.println("<a href='cambia_avatar'>Cambia Avatar</a><br />");
+                
                 if(utente.getNome_avatar() == null){
                     out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
                 }
@@ -73,6 +73,7 @@ public class HomeServlet extends HttpServlet {
             } else {
                 out.println("<h2> Benvenuto " + utente.getUsername() + "!</h2>");
             }
+            out.println("<a href='cambia_avatar'>Cambia Avatar</a><br />");
             out.println("<a href='inviti'>Inviti </a>"+inviti.size()+"<br />");
             out.println("<a href='tuoi_gruppi'>Gruppi</a><br />");
             out.println("<a href='crea'>Crea Gruppo</a><br />");
