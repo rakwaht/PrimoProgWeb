@@ -7,6 +7,7 @@ package com.deadormi.servlet;
 import com.deadormi.controller.FileController;
 import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Utente;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -24,6 +25,8 @@ import javax.servlet.http.HttpSession;
  */
 public class AvatarServlet extends HttpServlet {
 
+    final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
+
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -36,10 +39,13 @@ public class AvatarServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
+        String user_id = session.getAttribute("user_id").toString();
+        response.setContentType("text/html;charset=UTF-8");
+        String avatar_path = request.getServletContext().getRealPath(AVATAR_RESOURCE_PATH + "/" + user_id);
+        PrintWriter out = response.getWriter();
         Utente utente = null;
+        File f = new File(avatar_path);
         try {
             utente = UtenteController.getUserById(request, (Integer) session.getAttribute("user_id"));
         } catch (SQLException ex) {
@@ -54,12 +60,13 @@ public class AvatarServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AvatarServlet at " + request.getContextPath() + "</h1>");
-            if (utente.getNome_avatar() == null) {
-                out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
+
+            if (f.exists()) {
+                out.println("<img src='" + avatar_path + "' alt='Smiley face' height='100' width='100' /><br />");
             } else {
-                out.println("<img src='" + utente.getNome_avatar() + "' alt='Smiley face' height='100' width='100' /><br />");
+                out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
             }
-            out.println("<form method=''POST enctype='multipart/form-data'>");
+            out.println("<form method='POST' enctype='multipart/form-data'>");
             out.println("Immagine<INPUT TYPE='FILE' NAME='avatar'> <BR />");
             out.println("<input type='submit' name='Cambia Immagine' value='Cambia Immagine' />");
             out.println("</form>");
@@ -98,12 +105,8 @@ public class AvatarServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-             System.out.println("cazzo");
-            FileController.cambiaAvatar(request);
-        } catch (SQLException ex) {
-            Logger.getLogger(AvatarServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        System.out.println("ciao");
+        FileController.cambiaAvatar(request);
         processRequest(request, response);
     }
 

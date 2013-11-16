@@ -51,9 +51,10 @@ public class FileController {
         }
     }
 
-    public static void cambiaAvatar(HttpServletRequest request) throws SQLException {
+    public static void cambiaAvatar(HttpServletRequest request) {
         String avatar_path = request.getServletContext().getRealPath(AVATAR_RESOURCE_PATH + "/");
         HttpSession session = request.getSession();
+        String user_id = session.getAttribute("user_id").toString();
         Integer post_id;
         int maxFileSize = 4 * 1024 * 1024;
         DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -75,8 +76,7 @@ public class FileController {
         Iterator i = fileItems.iterator();
         //preparo le directory
         File file;
-        String filePath = request.getServletContext().getRealPath(FILE_RESOURCE_PATH + "/" + session.getAttribute("user_id"));
-        File directory = new File(filePath);
+        File directory = new File(avatar_path);
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -91,8 +91,8 @@ public class FileController {
                 boolean isInMemory = fi.isInMemory();
                 long sizeInBytes = fi.getSize();
                 // Write the file
-                Integer file_id = FileController.salvaAvatar(request, fileName,(Integer) session.getAttribute("user_id"));
-                file = new File(filePath + "/" + file_id + "-" + fileName);
+                //Integer file_id = FileController.salvaAvatar(request, fileName,(Integer) session.getAttribute("user_id"));
+                file = new File(avatar_path + "/" + user_id );
                 try {
                     fi.write(file);
                 } catch (Exception ex) {
