@@ -70,6 +70,7 @@ public class AvatarServlet extends HttpServlet {
             out.println("Immagine<INPUT TYPE='FILE' NAME='avatar'> <BR />");
             out.println("<input type='submit' name='Cambia Immagine' value='Cambia Immagine' />");
             out.println("</form>");
+            out.println("<a href='/PrimoProgettoWeb/secure/home'>INDIETRO</a>");
             out.println("</body>");
             out.println("</html>");
         } finally {
