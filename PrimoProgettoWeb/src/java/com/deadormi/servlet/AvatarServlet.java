@@ -4,34 +4,30 @@
  */
 package com.deadormi.servlet;
 
-import com.deadormi.controller.InvitoController;
+import com.deadormi.controller.FileController;
 import com.deadormi.controller.UtenteController;
-import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
-import com.deadormi.layout.MainLayout;
-import com.deadormi.util.CookiesManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Davide
  */
-public class HomeServlet extends HttpServlet {
+public class AvatarServlet extends HttpServlet {
 
-    final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
-    
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -41,51 +37,43 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String avatar_path = request.getServletContext().getRealPath(AVATAR_RESOURCE_PATH + "/");
         PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession();
         Utente utente = null;
-        List<Invito> inviti = null;
-        String ultimo_login = CookiesManager.getOldDateCookie(request, response);
         try {
-            inviti = InvitoController.getInvitiByUserId(request);
+            utente = UtenteController.getUserById(request, (Integer) session.getAttribute("user_id"));
         } catch (SQLException ex) {
-            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AvatarServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
-        } catch (SQLException ex) {
-            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        try {
-            MainLayout.printHeader(out);
-            out.println("<h1>HOME at " + request.getContextPath() + "</h1>");
-            if (ultimo_login != null) {
-                out.println("<h2> Bentornato " + utente.getUsername() + "!</h2>");
-                out.println("<h2>" + ultimo_login + "</h2>");
-                out.println("<a href='cambia_avatar'>Cambia Avatar</a><br />");
-                if(utente.getNome_avatar() == null){
-                    out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
-                }
-                else{
-                    out.println("<img src='"+ utente.getNome_avatar() +"' alt='Smiley face' height='100' width='100' /><br />");
-                }
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet AvatarServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet AvatarServlet at " + request.getContextPath() + "</h1>");
+            if (utente.getNome_avatar() == null) {
+                out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
             } else {
-                out.println("<h2> Benvenuto " + utente.getUsername() + "!</h2>");
+                out.println("<img src='" + utente.getNome_avatar() + "' alt='Smiley face' height='100' width='100' /><br />");
             }
-            out.println("<a href='inviti'>Inviti </a>"+inviti.size()+"<br />");
-            out.println("<a href='tuoi_gruppi'>Gruppi</a><br />");
-            out.println("<a href='crea'>Crea Gruppo</a><br />");
-            MainLayout.printFooter(out);
+            out.println("<form method=''POST enctype='multipart/form-data'>");
+            out.println("Immagine<INPUT TYPE='FILE' NAME='avatar'> <BR />");
+            out.println("<input type='submit' name='Cambia Immagine' value='Cambia Immagine' />");
+            out.println("</form>");
+            out.println("</body>");
+            out.println("</html>");
         } finally {
             out.close();
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -99,7 +87,8 @@ public class HomeServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -109,6 +98,12 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+             System.out.println("cazzo");
+            FileController.cambiaAvatar(request);
+        } catch (SQLException ex) {
+            Logger.getLogger(AvatarServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
         processRequest(request, response);
     }
 

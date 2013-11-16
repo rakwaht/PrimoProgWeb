@@ -44,6 +44,10 @@
         <servlet-name>GeneraPdfServlet</servlet-name>
         <servlet-class>com.deadormi.servlet.GeneraPdfServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AvatarServlet</servlet-name>
+        <servlet-class>com.deadormi.servlet.AvatarServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/secure/home</url-pattern>
@@ -83,6 +87,10 @@
     <servlet-mapping>
         <servlet-name>GeneraPdfServlet</servlet-name>
         <url-pattern>/secure/genera_pdf</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AvatarServlet</servlet-name>
+        <url-pattern>/secure/cambia_avatar</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
