@@ -4,8 +4,8 @@
  */
 package com.deadormi.controller;
 
-import static com.deadormi.controller.PostController.FILE_RESOURCE_PATH;
 import com.deadormi.dbmanager.DbManager;
+import com.deadormi.entity.Utente;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +35,7 @@ public class FileController {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
         HttpSession session = request.getSession();
-        PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.FILE (nome_file,id_associato) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.FILE (nome_file,id_post) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
         try {
             stm.setString(1, fileName);
             stm.setInt(2, post_id);
@@ -51,11 +51,11 @@ public class FileController {
         }
     }
 
-    public static void cambiaAvatar(HttpServletRequest request) {
+    public static void cambiaAvatar(HttpServletRequest request) throws SQLException {
         String avatar_path = request.getServletContext().getRealPath(AVATAR_RESOURCE_PATH + "/");
         HttpSession session = request.getSession();
         String user_id = session.getAttribute("user_id").toString();
-        Integer post_id;
+        Utente utente = UtenteController.getUserById(request, Integer.parseInt(user_id));
         int maxFileSize = 4 * 1024 * 1024;
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // maximum size that will be stored in memory
@@ -91,35 +91,15 @@ public class FileController {
                 boolean isInMemory = fi.isInMemory();
                 long sizeInBytes = fi.getSize();
                 // Write the file
-                //Integer file_id = FileController.salvaAvatar(request, fileName,(Integer) session.getAttribute("user_id"));
-                file = new File(avatar_path + "/" + user_id );
+                System.out.println("Ciao cazzo");
+                UtenteController.updateAvatar(request,fileName);
+                file = new File(avatar_path + "/" + user_id + "_" + fi.getName());
                 try {
                     fi.write(file);
                 } catch (Exception ex) {
                     Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }
-    }
-
-    private static Integer salvaAvatar(HttpServletRequest request, String fileName, Integer user_id) throws SQLException {
-        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
-        Connection connection = dbmanager.getConnection();
-        HttpSession session = request.getSession();
-        PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.FILE (nome_file,id_associato,avatar) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-        try {
-            stm.setString(1, fileName);
-            stm.setInt(2, user_id);
-            stm.setBoolean(3, true);
-            stm.executeUpdate();
-            ResultSet generated_keys = stm.getGeneratedKeys();
-            if (generated_keys.next()) {
-                return generated_keys.getInt(1);
-            } else {
-                return -1;
-            }
-        } finally {
-            stm.close();
         }
     }
 }

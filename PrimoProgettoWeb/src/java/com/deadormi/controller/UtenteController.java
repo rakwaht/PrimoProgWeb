@@ -72,6 +72,7 @@ public class UtenteController {
                     utente = new Utente();
                     utente.setUsername(rs.getString("username"));
                     utente.setId_utente(user_id);
+                    utente.setNome_avatar(rs.getString("nome_avatar"));
                 }
             } finally {
                 rs.close();
@@ -94,6 +95,7 @@ public class UtenteController {
                     Utente utente = new Utente();
                     utente.setUsername(rs.getString("username"));
                     utente.setId_utente(Integer.parseInt(rs.getString("id_utente")));
+                    utente.setNome_avatar(rs.getString("nome_avatar"));
                     list.add(utente);
                 }
             } finally {
@@ -118,6 +120,7 @@ public class UtenteController {
                     Utente utente = new Utente();
                     utente.setUsername(rs.getString("username"));
                     utente.setId_utente(Integer.parseInt(rs.getString("id_utente")));
+                    utente.setNome_avatar(rs.getString("nome_avatar"));
                     list.add(utente);
                 }
             } finally {
@@ -134,7 +137,7 @@ public class UtenteController {
         Connection connection = dbmanager.getConnection();
         PreparedStatement stm = connection.prepareStatement("(select id_utente from ROOT.UTENTE) EXCEPT (select id_utente FROM ROOT.GRUPPO_UTENTE WHERE id_gruppo=? AND gruppo_utente_abilitato='true')");
         List<Utente> list = new ArrayList<Utente>();
-         try {
+        try {
             stm.setInt(1, id_gruppo);
             ResultSet rs = stm.executeQuery();
             try {
@@ -150,5 +153,20 @@ public class UtenteController {
             stm.close();
         }
         return list;
+    }
+
+    static void updateAvatar(HttpServletRequest request, String fileName) throws SQLException {
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        HttpSession session = request.getSession();
+        Integer user_id = (Integer) session.getAttribute("user_id");
+        PreparedStatement stm = connection.prepareStatement("UPDATE ROOT.UTENTE SET nome_avatar=? WHERE id_utente = ?");
+        try {
+            stm.setString(1, fileName);
+            stm.setInt(2, user_id);
+            stm.executeUpdate();
+        } finally {
+            stm.close();
+        }
     }
 }

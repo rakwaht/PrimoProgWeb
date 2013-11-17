@@ -5,13 +5,13 @@
 package com.deadormi.entity;
 
 import java.io.Serializable;
-import java.sql.Blob;
+
 
 /**
  *
  * @author Davide
  */
-public class File implements Serializable{
+public class FileApp implements Serializable{
     
     private Integer id_file;
     private String nome_file;

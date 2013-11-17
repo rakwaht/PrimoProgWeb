@@ -42,15 +42,18 @@ public class AvatarServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String user_id = session.getAttribute("user_id").toString();
         response.setContentType("text/html;charset=UTF-8");
-        String avatar_path = request.getServletContext().getRealPath(AVATAR_RESOURCE_PATH + "/" + user_id);
         PrintWriter out = response.getWriter();
         Utente utente = null;
-        File f = new File(avatar_path);
+
         try {
             utente = UtenteController.getUserById(request, (Integer) session.getAttribute("user_id"));
         } catch (SQLException ex) {
             Logger.getLogger(AvatarServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+         String avatar_path = null;
+         if (utente.getNome_avatar() != null) {
+            avatar_path = request.getServletContext().getRealPath(AVATAR_RESOURCE_PATH + "/" + user_id + "_" + utente.getNome_avatar());
+          }
         try {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
@@ -61,7 +64,7 @@ public class AvatarServlet extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet AvatarServlet at " + request.getContextPath() + "</h1>");
 
-            if (f.exists()) {
+            if (utente.getNome_avatar() != null) {
                 out.println("<img src='" + avatar_path + "' alt='Smiley face' height='100' width='100' /><br />");
             } else {
                 out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
@@ -106,8 +109,11 @@ public class AvatarServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("ciao");
-        FileController.cambiaAvatar(request);
+        try {
+            FileController.cambiaAvatar(request);
+        } catch (SQLException ex) {
+            Logger.getLogger(AvatarServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
         processRequest(request, response);
     }
 
