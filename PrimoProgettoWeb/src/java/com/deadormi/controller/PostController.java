@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
@@ -198,28 +199,45 @@ public class PostController {
     public static List<Post> getMyGroupsPosts(HttpServletRequest request) throws SQLException {
         List<Post> posts = new ArrayList<Post>();
         Post post = null;
-        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
-        Connection connection = dbmanager.getConnection();
-        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo IN (SELECT id_gruppo FROM ROOT.GRUPPO_UTENTE WHERE id_utente=? AND gruppo_utente_abilitato='true') ORDER BY data_creazione");
-        ResultSet rs;
-        try {
-              stm.setInt(1, (Integer)request.getSession().getAttribute("user_id"));
-            rs = stm.executeQuery();
+        Cookie[] cookies = request.getCookies();
+        Cookie old_cookie = null;
+        Cookie ultimo_login = null;
+        Integer user_id = (Integer) request.getSession().getAttribute("user_id");
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName().equals("old_cookie" + user_id)) {
+                    old_cookie = cookies[i];
+                } else if (cookies[i].getName().equals("ultimo_login" + user_id)) {
+                    ultimo_login = cookies[i];
+                }
+            }
+        }
+        if (cookies != null && old_cookie != null && ultimo_login != null) {
+            DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+            Connection connection = dbmanager.getConnection();
+            PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo IN (SELECT id_gruppo FROM ROOT.GRUPPO_UTENTE WHERE id_utente=? AND gruppo_utente_abilitato='true') AND data_creazione>=?  AND data_creazione<=? ORDER BY data_creazione");
+            ResultSet rs;
             try {
-                while (rs.next()) {
-                    post = new Post();
-                    post.setId_post(rs.getInt("id_post"));
-                    post.setId_scrivente(rs.getInt("id_scrivente"));
-                    post.setId_gruppo(rs.getInt("id_gruppo"));
-                    post.setData_creazione(rs.getString("data_creazione"));
-                    post.setTesto(rs.getString("testo"));
-                    posts.add(post);
+                stm.setInt(1, user_id);
+                stm.setString(2, old_cookie.getValue());
+                stm.setString(3, ultimo_login.getValue());
+                rs = stm.executeQuery();
+                try {
+                    while (rs.next()) {
+                        post = new Post();
+                        post.setId_post(rs.getInt("id_post"));
+                        post.setId_scrivente(rs.getInt("id_scrivente"));
+                        post.setId_gruppo(rs.getInt("id_gruppo"));
+                        post.setData_creazione(rs.getString("data_creazione"));
+                        post.setTesto(rs.getString("testo"));
+                        posts.add(post);
+                    }
+                } finally {
+                    rs.close();
                 }
             } finally {
-                rs.close();
+                stm.close();
             }
-        } finally {
-            stm.close();
         }
         return posts;
     }
