@@ -67,7 +67,7 @@ public class HomeServlet extends HttpServlet {
                     out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
                 }
                 else{
-                    out.println("<img src='"+ avatar_path +"' alt='Smiley face' height='100' width='100' /><br />");
+                    out.println("<img src='"+ AVATAR_RESOURCE_PATH +"/"+utente.getId_utente() + "_" + utente.getNome_avatar() + "' alt='Smiley face' height='100' width='100' /><br />");
                 }
             } else {
                 out.println("<h2> Benvenuto " + utente.getUsername() + "!</h2>");
