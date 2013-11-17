@@ -166,4 +166,61 @@ public class PostController {
         }
         return posts;
     }
+
+    public static List<Post> getAllPosts(HttpServletRequest request) throws SQLException {
+        List<Post> posts = new ArrayList<Post>();
+        Post post = null;
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST ORDER BY data_creazione");
+        ResultSet rs;
+        try {
+            rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    post = new Post();
+                    post.setId_post(rs.getInt("id_post"));
+                    post.setId_scrivente(rs.getInt("id_scrivente"));
+                    post.setId_gruppo(rs.getInt("id_gruppo"));
+                    post.setData_creazione(rs.getString("data_creazione"));
+                    post.setTesto(rs.getString("testo"));
+                    posts.add(post);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return posts;
+    }
+
+    public static List<Post> getMyGroupsPosts(HttpServletRequest request) throws SQLException {
+        List<Post> posts = new ArrayList<Post>();
+        Post post = null;
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo IN (SELECT id_gruppo FROM ROOT.GRUPPO_UTENTE WHERE id_utente=? AND gruppo_utente_abilitato='true') ORDER BY data_creazione");
+        ResultSet rs;
+        try {
+              stm.setInt(1, (Integer)request.getSession().getAttribute("user_id"));
+            rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    post = new Post();
+                    post.setId_post(rs.getInt("id_post"));
+                    post.setId_scrivente(rs.getInt("id_scrivente"));
+                    post.setId_gruppo(rs.getInt("id_gruppo"));
+                    post.setData_creazione(rs.getString("data_creazione"));
+                    post.setTesto(rs.getString("testo"));
+                    posts.add(post);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return posts;
+    }
 }
