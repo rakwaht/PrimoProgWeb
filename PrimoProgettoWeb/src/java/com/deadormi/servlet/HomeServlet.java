@@ -84,7 +84,8 @@ public class HomeServlet extends HttpServlet {
             out.println("<a href='crea'>Crea Gruppo</a><br />");
             if(posts.size()>0 && ultimo_login!=null){
             out.println("<h3>Nuovi post dall'ultimo login</h3>");
-            for(int i = 0; i<posts.size(); i++){
+            Integer POST_SIZE = posts.size();
+            for(int i = 0; i<POST_SIZE; i++){
                 Post post = posts.get(posts.size()-1);
                 Utente scrivente = null;
                 Gruppo gruppo_post = null;
