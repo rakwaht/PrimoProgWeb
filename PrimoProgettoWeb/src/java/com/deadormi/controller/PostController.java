@@ -201,18 +201,16 @@ public class PostController {
         Post post = null;
         Cookie[] cookies = request.getCookies();
         Cookie old_cookie = null;
-        Cookie ultimo_login = null;
+        
         Integer user_id = (Integer) request.getSession().getAttribute("user_id");
         if (cookies != null) {
             for (int i = 0; i < cookies.length; i++) {
                 if (cookies[i].getName().equals("old_cookie" + user_id)) {
                     old_cookie = cookies[i];
-                } else if (cookies[i].getName().equals("ultimo_login" + user_id)) {
-                    ultimo_login = cookies[i];
                 }
             }
         }
-        if (cookies != null && old_cookie != null && ultimo_login != null) {
+        if (cookies != null && old_cookie != null ) {
             DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
             Connection connection = dbmanager.getConnection();
             PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo IN (SELECT id_gruppo FROM ROOT.GRUPPO_UTENTE WHERE id_utente=? AND gruppo_utente_abilitato='true') AND data_creazione>=?  AND data_creazione<=? ORDER BY data_creazione");
@@ -220,7 +218,7 @@ public class PostController {
             try {
                 stm.setInt(1, user_id);
                 stm.setString(2, old_cookie.getValue());
-                stm.setString(3, ultimo_login.getValue());
+                stm.setString(3, CurrentDate.getCurrentDate());
                 rs = stm.executeQuery();
                 try {
                     while (rs.next()) {
