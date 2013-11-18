@@ -92,14 +92,19 @@ public class FileController {
                 String contentType = fi.getContentType();
                 boolean isInMemory = fi.isInMemory();
                 long sizeInBytes = fi.getSize();
-                // Write the file
-                System.out.println("Ciao cazzo");
-                UtenteController.updateAvatar(request,fileName);
-                file = new File(avatar_path + "/" + user_id + "_" + fi.getName());
+                //check if is an image
+                String mimeType = request.getServletContext().getMimeType(fileName);
+                if (mimeType.startsWith("image")) {
+                    UtenteController.updateAvatar(request, fileName);
+                    file = new File(avatar_path + "/" + user_id + "_" + fi.getName());
                 try {
                     fi.write(file);
                 } catch (Exception ex) {
                     Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                }
+                else{
+                    //non è un immagine non faccio niente
                 }
             }
         }
@@ -107,16 +112,16 @@ public class FileController {
 
     public static List<FileApp> getFilesByPostId(HttpServletRequest request, Integer id_post) throws SQLException {
         List<FileApp> files = new ArrayList<FileApp>();
-         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
         ResultSet rs;
         FileApp file;
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.FILE NATURAL JOIN ROOT.POST WHERE id_post=?");
         try {
             stm.setInt(1, id_post);
-           
+
             rs = stm.executeQuery();
-            
+
             try {
                 while (rs.next()) {
                     file = new FileApp();
@@ -127,7 +132,7 @@ public class FileController {
                 }
             } finally {
                 rs.close();
-            } 
+            }
         } finally {
             stm.close();
         }
