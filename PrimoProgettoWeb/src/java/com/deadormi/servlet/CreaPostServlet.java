@@ -5,11 +5,14 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.controller.FileController;
 import com.deadormi.controller.PostController;
+import com.deadormi.entity.FileApp;
 import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -39,17 +42,34 @@ public class CreaPostServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         Integer id_gruppo = (Integer) request.getAttribute("id_gruppo");
+        List<FileApp> files = null;
+        try {
+            files = FileController.getFilesByGroupId(request, id_gruppo);
+        } catch (SQLException ex) {
+            Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
             out.println("<h1>Crea Post da gruppo: " + id_gruppo + "</h1>");
-            out.println("<form method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo="+ id_gruppo+ "' enctype='multipart/form-data'>");
+            out.println("<form method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo=" + id_gruppo + "' enctype='multipart/form-data'>");
             out.println("<textarea name='testo'></textarea><br />");
             out.println("Aggiungi file?<INPUT TYPE='FILE' NAME='file'> <BR />");
-            //out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file'> <BR>");
-            //out.println("Which file to upload? <INPUT TYPE='FILE' NAME='file'> <BR>");
             out.println("<input type='submit' name='creapost' value='CREA POST' />");
             out.println("</form>");
+            if(files != null && files.size()>0){
+            out.println("<div>");
+            for(int i = 0; i<files.size(); i++){
+                out.println("<input type='checkbox' name='"+ files.get(i).getId_file() + "' value='linka'>");
+                out.println(files.get(i).getNome_file() + ", del post" + files.get(i).getId_post() +"<br>");
+                
+            }
+            out.println("<input type='button' value='Linka Selezionati' onclick='linka_selezionati()' />");
+            out.println("</div>");
+            }
+            else{
+                out.println("<p>Non ci sono files in questo gruppo</p>");
+            }
             out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + id_gruppo + "'>Indietro</a>");
             MainLayout.printFooter(out);
         } finally {
@@ -96,7 +116,7 @@ public class CreaPostServlet extends HttpServlet {
             } catch (org.apache.commons.fileupload.FileUploadException ex) {
                 Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
-            response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id );
+            response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id);
         } else {
             processRequest(request, response);
         }

@@ -97,13 +97,12 @@ public class FileController {
                 if (mimeType.startsWith("image")) {
                     UtenteController.updateAvatar(request, fileName);
                     file = new File(avatar_path + "/" + user_id + "_" + fi.getName());
-                try {
-                    fi.write(file);
-                } catch (Exception ex) {
-                    Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                }
-                else{
+                    try {
+                        fi.write(file);
+                    } catch (Exception ex) {
+                        Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
                     //non è un immagine non faccio niente
                 }
             }
@@ -119,9 +118,7 @@ public class FileController {
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.FILE NATURAL JOIN ROOT.POST WHERE id_post=?");
         try {
             stm.setInt(1, id_post);
-
             rs = stm.executeQuery();
-
             try {
                 while (rs.next()) {
                     file = new FileApp();
@@ -137,5 +134,33 @@ public class FileController {
             stm.close();
         }
         return files;
+    }
+
+    public static List<FileApp> getFilesByGroupId(HttpServletRequest request,Integer id_gruppo) throws SQLException {
+        List<FileApp> files = new ArrayList<FileApp>();
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        ResultSet rs;
+        FileApp file;
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.FILE NATURAL JOIN ROOT.GRUPPO WHERE id_gruppo=?");
+        try {
+            stm.setInt(1, id_gruppo);
+            rs = stm.executeQuery();
+            try {
+                while (rs.next()) {
+                    file = new FileApp();
+                    file.setId_file(rs.getInt("id_file"));
+                    file.setId_post(rs.getInt("id_post"));
+                    file.setNome_file(rs.getString("nome_file"));
+                    files.add(file);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return files;
+
     }
 }
