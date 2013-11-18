@@ -20,7 +20,7 @@ public class MainLayout {
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet HomeServlet cul</title>");
-            out.println("<meta charset='utf-8'>");
+            out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
             out.println("</head>");
             out.println("<body>");
             out.println("<form method='POST' action='/PrimoProgettoWeb/secure/logout'>");
