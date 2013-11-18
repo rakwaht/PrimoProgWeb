@@ -56,7 +56,7 @@ public class PostController {
                     post.setId_scrivente(rs.getInt("id_scrivente"));
                     post.setId_gruppo(rs.getInt("id_gruppo"));
                     post.setData_creazione(rs.getString("data_creazione"));
-                    post.setTesto(PostController.checkTesto(rs.getString("testo")));
+                    post.setTesto(rs.getString("testo"));
                     posts.add(post);
                 }
             } finally {
@@ -109,7 +109,7 @@ public class PostController {
                 }
             }
         }
-        testo = PostController.checkTesto(testo);
+        testo = PostController.checkTesto(request, testo, Integer.parseInt(group_id));
         try {
 
             stm.setInt(1, (Integer) session.getAttribute("user_id"));
@@ -250,22 +250,44 @@ public class PostController {
         return posts;
     }
 
-    private static String checkTesto(String testo) {
-        System.out.println("testo 1: " + testo);
+    private static String checkTesto(HttpServletRequest request, String testo, Integer id_gruppo) throws SQLException {
+        System.out.println("TESTO ORIGINALE: " + testo);
         testo = testo.replaceAll("<[^>]*>", "");
-
+        System.out.println("TESTO NO - HTML: " + testo);
         Pattern p = Pattern.compile("\\$\\$(.*?)\\$\\$");
         Matcher m = p.matcher(testo);
+        String inizio;
+        String trovata;
+        String target = testo;
         while (m.find()) {
-            String inizio = testo.substring(m.start(), m.end());
-            String trovata = testo.substring(m.start() + 2, m.end() - 2);
-            System.out.println(trovata);
-            System.out.println(inizio);
-            testo = testo.replace(inizio, "<a>" + trovata + "</a>");
+            inizio = testo.substring(m.start(), m.end());
+            trovata = testo.substring(m.start() + 2, m.end() - 2);
+            System.out.println("trivata:" + trovata);
+            String website = PostController.checkWeb(trovata);
+            System.out.println("website:" + website);
+            if (website != null) {
+                target = target.replace(inizio, "<a href='" + website + "' target='_blank'>" + trovata + "</a>");
+            } else if (FileController.isFile(request, trovata, id_gruppo)) {
+                target = target.replace(inizio, "<a href='" + request.getContextPath()+ "/resource/files/" + id_gruppo + "/" + trovata + "'> "+ trovata +"</a>");
+            } else {
+                target = target.replace(inizio,trovata);
+
+            }
 
         }
+        System.out.println("TARGET:" + target);
 
-        System.out.println("testo 2: " + testo);
-        return testo;
+        return target;
+    }
+
+    private static String checkWeb(String trovata) {
+        if (trovata != null) {
+            if (trovata.length() >= 7 && trovata.substring(0, 7).equals("http://")) {
+                return trovata;
+            } else if (trovata.length() >= 4 && trovata.substring(0, 4).equals("www.") && trovata.length() > 5) {
+                return "http://" + trovata;
+            }
+        }
+        return null;
     }
 }

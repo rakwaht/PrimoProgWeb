@@ -163,4 +163,32 @@ public class FileController {
         return files;
 
     }
+
+    static boolean isFile(HttpServletRequest request, String trovata, Integer id_gruppo) throws SQLException {
+        DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST NATURAL JOIN ROOT.FILE WHERE id_gruppo=? AND nome_file=? AND id_file=?");
+        ResultSet rs;
+        
+        String nome_file = trovata.substring(trovata.indexOf("-") + 1, trovata.length());
+        String id_file = trovata.substring(0, trovata.indexOf("-"));
+        
+        try {
+            stm.setInt(1, id_gruppo);
+            stm.setString(2,nome_file);
+            stm.setInt(3,Integer.parseInt(id_file) );
+            rs = stm.executeQuery();
+            try {
+                if(rs.next()) {
+                    return true;
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+        return false;
+        
+    }
 }
