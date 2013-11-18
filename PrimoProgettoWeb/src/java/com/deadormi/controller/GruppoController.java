@@ -28,6 +28,11 @@ public class GruppoController {
     public static Integer creaGruppo(HttpServletRequest request) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(GruppoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String titolo = request.getParameter("titolo");
         String descrizione = request.getParameter("descrizione");
         if (!titolo.equals("") && !descrizione.equals("")) {
@@ -91,11 +96,6 @@ public class GruppoController {
     public static void modificaGruppo(HttpServletRequest request, Integer gruppo_id) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
-        try {
-            request.setCharacterEncoding("UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(GruppoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
         String titolo = request.getParameter("titolo");
         String descrizione = request.getParameter("descrizione");
         System.out.println(titolo + "    " + descrizione);
