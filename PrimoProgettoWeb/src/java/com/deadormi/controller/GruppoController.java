@@ -28,14 +28,9 @@ public class GruppoController {
     public static Integer creaGruppo(HttpServletRequest request) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
-        try {
-            request.setCharacterEncoding("UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(GruppoController.class.getName()).log(Level.SEVERE, null, ex);
-        }
         String titolo = request.getParameter("titolo");
         String descrizione = request.getParameter("descrizione");
-        if (titolo != "" && descrizione != "") {
+        if (!titolo.equals("") && !descrizione.equals("")) {
             PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.GRUPPO (nome,id_proprietario,data_creazione,descrizione) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ResultSet generated_keys;
             HttpSession session = request.getSession();
@@ -61,8 +56,7 @@ public class GruppoController {
                 stm.close();
 
             }
-        }
-        else{
+        } else {
             return 0;
         }
     }
@@ -97,9 +91,14 @@ public class GruppoController {
     public static void modificaGruppo(HttpServletRequest request, Integer gruppo_id) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(GruppoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String titolo = request.getParameter("titolo");
         String descrizione = request.getParameter("descrizione");
-        System.out.println(titolo + "    " +descrizione);
+        System.out.println(titolo + "    " + descrizione);
         PreparedStatement stm = connection.prepareStatement("UPDATE ROOT.GRUPPO SET nome=?, descrizione=? WHERE id_gruppo=?");
         ResultSet rs;
         try {
@@ -107,7 +106,7 @@ public class GruppoController {
             stm.setString(2, descrizione);
             stm.setInt(3, gruppo_id);
             stm.executeUpdate();
-            
+
         } finally {
             stm.close();
         }

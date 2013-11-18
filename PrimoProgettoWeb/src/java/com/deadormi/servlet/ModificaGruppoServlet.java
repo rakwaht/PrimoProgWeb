@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -135,6 +136,11 @@ public class ModificaGruppoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+            try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(GruppoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if (request.getParameter("modifica") != null) {
             Integer user_id = (Integer) request.getSession().getAttribute("user_id");
             String url = request.getQueryString();
