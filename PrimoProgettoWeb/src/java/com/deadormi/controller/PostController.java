@@ -110,39 +110,42 @@ public class PostController {
             }
         }
         testo = PostController.checkTesto(request, testo, Integer.parseInt(group_id));
-        try {
 
-            stm.setInt(1, (Integer) session.getAttribute("user_id"));
-            stm.setInt(2, Integer.parseInt(group_id));
-            stm.setString(3, testo);
-            stm.setString(4, CurrentDate.getCurrentDate());
-            stm.executeUpdate();
-            if (stm.getGeneratedKeys().next()) {
-                post_id = stm.getGeneratedKeys().getInt(1);
-            } else {
-                post_id = -1;
+        if (!testo.trim().equals("")) {
+            try {
+
+                stm.setInt(1, (Integer) session.getAttribute("user_id"));
+                stm.setInt(2, Integer.parseInt(group_id));
+                stm.setString(3, testo);
+                stm.setString(4, CurrentDate.getCurrentDate());
+                stm.executeUpdate();
+                if (stm.getGeneratedKeys().next()) {
+                    post_id = stm.getGeneratedKeys().getInt(1);
+                } else {
+                    post_id = -1;
+                }
+            } finally {
+                stm.close();
             }
-        } finally {
-            stm.close();
-        }
-        ListIterator i2 = fileItems.listIterator();
-        // Create a new file upload handler
-        while (i2.hasNext()) {
-            FileItem fi = (FileItem) i2.next();
-            if (fi.getFieldName().equals("file") && fi.getSize() > 0) {
-                // Get the uploaded file parameters
-                String fieldName = fi.getFieldName();
-                String fileName = fi.getName();
-                String contentType = fi.getContentType();
-                boolean isInMemory = fi.isInMemory();
-                long sizeInBytes = fi.getSize();
-                // Write the file
-                Integer file_id = FileController.salvaFile(request, fileName, post_id);
-                file = new File(filePath + "/" + file_id + "-" + fileName);
-                try {
-                    fi.write(file);
-                } catch (Exception ex) {
-                    Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
+            ListIterator i2 = fileItems.listIterator();
+            // Create a new file upload handler
+            while (i2.hasNext()) {
+                FileItem fi = (FileItem) i2.next();
+                if (fi.getFieldName().equals("file") && fi.getSize() > 0) {
+                    // Get the uploaded file parameters
+                    String fieldName = fi.getFieldName();
+                    String fileName = fi.getName();
+                    String contentType = fi.getContentType();
+                    boolean isInMemory = fi.isInMemory();
+                    long sizeInBytes = fi.getSize();
+                    // Write the file
+                    Integer file_id = FileController.salvaFile(request, fileName, post_id);
+                    file = new File(filePath + "/" + file_id + "-" + fileName);
+                    try {
+                        fi.write(file);
+                    } catch (Exception ex) {
+                        Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }
@@ -262,15 +265,15 @@ public class PostController {
         while (m.find()) {
             inizio = testo.substring(m.start(), m.end());
             trovata = testo.substring(m.start() + 2, m.end() - 2);
-            System.out.println("trivata:" + trovata);
+
             String website = PostController.checkWeb(trovata);
-            System.out.println("website:" + website);
+
             if (website != null) {
                 target = target.replace(inizio, "<a href='" + website + "' target='_blank'>" + trovata + "</a>");
             } else if (FileController.isFile(request, trovata, id_gruppo)) {
-                target = target.replace(inizio, "<a href='" + request.getContextPath()+ "/resource/files/" + id_gruppo + "/" + trovata + "'> "+ trovata +"</a>");
+                target = target.replace(inizio, "<a href='" + request.getContextPath() + "/resource/files/" + id_gruppo + "/" + trovata + "' target='_blank'> " + trovata + "</a>");
             } else {
-                target = target.replace(inizio,trovata);
+                target = target.replace(inizio, trovata);
 
             }
 

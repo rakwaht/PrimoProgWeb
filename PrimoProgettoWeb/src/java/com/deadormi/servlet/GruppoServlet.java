@@ -90,7 +90,7 @@ public class GruppoServlet extends HttpServlet {
                         for (int j = 0; j < files.size(); j++) {
                             FileApp file = files.get(j);
 
-                            out.println("<td> FILE: " + file.getNome_file() + "</td>");
+                            out.println("<td> FILE:<a href='"+request.getContextPath() + "/resource/files/" + id_gruppo + "/" +file.getId_file()+ "-" + file.getNome_file() +"' target='_blank'>"+file.getNome_file()+"</a></td>");
                         }
                     }
                     out.println("</tr>");

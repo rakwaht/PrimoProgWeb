@@ -136,7 +136,7 @@ public class FileController {
         return files;
     }
 
-    public static List<FileApp> getFilesByGroupId(HttpServletRequest request,Integer id_gruppo) throws SQLException {
+    public static List<FileApp> getFilesByGroupId(HttpServletRequest request, Integer id_gruppo) throws SQLException {
         List<FileApp> files = new ArrayList<FileApp>();
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
@@ -169,26 +169,35 @@ public class FileController {
         Connection connection = dbmanager.getConnection();
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST NATURAL JOIN ROOT.FILE WHERE id_gruppo=? AND nome_file=? AND id_file=?");
         ResultSet rs;
-        
-        String nome_file = trovata.substring(trovata.indexOf("-") + 1, trovata.length());
-        String id_file = trovata.substring(0, trovata.indexOf("-"));
-        
-        try {
-            stm.setInt(1, id_gruppo);
-            stm.setString(2,nome_file);
-            stm.setInt(3,Integer.parseInt(id_file) );
-            rs = stm.executeQuery();
+        if (!trovata.contains("-")) {
+            return false;
+        } else {
+            String nome_file = trovata.substring(trovata.indexOf("-") + 1, trovata.length());
+            String id_file = trovata.substring(0, trovata.indexOf("-"));
             try {
-                if(rs.next()) {
-                    return true;
+                Integer.parseInt(id_file);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+            // only got here if we didn't return false
+           
+
+            try {
+                stm.setInt(1, id_gruppo);
+                stm.setString(2, nome_file);
+                stm.setInt(3, Integer.parseInt(id_file));
+                rs = stm.executeQuery();
+                try {
+                    if (rs.next()) {
+                        return true;
+                    }
+                } finally {
+                    rs.close();
                 }
             } finally {
-                rs.close();
+                stm.close();
             }
-        } finally {
-            stm.close();
+            return false;
         }
-        return false;
-        
     }
 }
