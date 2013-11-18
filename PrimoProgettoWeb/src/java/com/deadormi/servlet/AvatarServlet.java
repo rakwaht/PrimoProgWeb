@@ -7,7 +7,6 @@ package com.deadormi.servlet;
 import com.deadormi.controller.FileController;
 import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Utente;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -50,10 +49,10 @@ public class AvatarServlet extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(AvatarServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-         String avatar_path = null;
-         if (utente.getNome_avatar() != null) {
-            avatar_path = request.getServletContext().getRealPath(AVATAR_RESOURCE_PATH + "/" + user_id + "_" + utente.getNome_avatar());
-          }
+        String avatar_path = null;
+        if (utente.getNome_avatar() != null) {
+            avatar_path = request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();
+        }
         try {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
@@ -63,7 +62,6 @@ public class AvatarServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AvatarServlet at " + request.getContextPath() + "</h1>");
-
             if (utente.getNome_avatar() != null) {
                 out.println("<img src='" + avatar_path + "' alt='Smiley face' height='100' width='100' /><br />");
             } else {
