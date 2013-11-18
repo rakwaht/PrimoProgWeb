@@ -66,7 +66,7 @@ public class HomeServlet extends HttpServlet {
             if (ultimo_login != null) {
                 out.println("<h2> Bentornato " + utente.getUsername() + "!</h2>");
                 out.println("<h2>" + ultimo_login + "</h2>");
-                
+                out.println("<h3 id='test'></h3>");
                 if(utente.getNome_avatar() == null){
                     out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
                 }
