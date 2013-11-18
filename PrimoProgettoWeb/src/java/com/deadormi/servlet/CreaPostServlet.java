@@ -53,14 +53,14 @@ public class CreaPostServlet extends HttpServlet {
             MainLayout.printHeader(out);
             out.println("<h1>Crea Post da gruppo: " + id_gruppo + "</h1>");
             out.println("<form method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo=" + id_gruppo + "' enctype='multipart/form-data'>");
-            out.println("<textarea name='testo'></textarea><br />");
-            out.println("Aggiungi file?<INPUT TYPE='FILE' NAME='file'> <BR />");
+            out.println("<textarea id='testo_post' name='testo'></textarea><br />");
+            out.println("Aggiungi file?<INPUT TYPE='FILE' NAME='file' onchange='add_upload_file();'> <BR />");
             out.println("<input type='submit' name='creapost' value='CREA POST' />");
             out.println("</form>");
             if(files != null && files.size()>0){
-            out.println("<div>");
+            out.println("<div id='scelte'>");
             for(int i = 0; i<files.size(); i++){
-                out.println("<input type='checkbox' name='"+ files.get(i).getId_file() + "' value='linka'>");
+                out.println("<input type='checkbox' name='file' value='" + files.get(i).getId_file() + "_" + files.get(i).getNome_file() + "'>");
                 out.println(files.get(i).getNome_file() + ", del post" + files.get(i).getId_post() +"<br>");
                 
             }
