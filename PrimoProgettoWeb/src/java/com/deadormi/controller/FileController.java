@@ -5,6 +5,7 @@
 package com.deadormi.controller;
 
 import com.deadormi.dbmanager.DbManager;
+import com.deadormi.entity.FileApp;
 import com.deadormi.entity.Utente;
 import java.io.File;
 import java.sql.Connection;
@@ -12,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -101,5 +103,34 @@ public class FileController {
                 }
             }
         }
+    }
+
+    public static List<FileApp> getFilesByPostId(HttpServletRequest request, Integer id_post) throws SQLException {
+        List<FileApp> files = new ArrayList<FileApp>();
+         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        Connection connection = dbmanager.getConnection();
+        ResultSet rs;
+        FileApp file;
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.FILE NATURAL JOIN ROOT.POST WHERE id_post=?");
+        try {
+            stm.setInt(1, id_post);
+           
+            rs = stm.executeQuery();
+            
+            try {
+                while (rs.next()) {
+                    file = new FileApp();
+                    file.setId_file(rs.getInt("id_file"));
+                    file.setId_post(rs.getInt("id_post"));
+                    file.setNome_file(rs.getString("nome_file"));
+                    files.add(file);
+                }
+            } finally {
+                rs.close();
+            } 
+        } finally {
+            stm.close();
+        }
+        return files;
     }
 }

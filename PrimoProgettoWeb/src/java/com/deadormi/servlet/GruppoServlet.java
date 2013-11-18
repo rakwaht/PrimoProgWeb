@@ -4,9 +4,11 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.controller.FileController;
 import com.deadormi.controller.GruppoController;
 import com.deadormi.controller.PostController;
 import com.deadormi.controller.UtenteController;
+import com.deadormi.entity.FileApp;
 import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Post;
 import com.deadormi.entity.Utente;
@@ -57,6 +59,7 @@ public class GruppoServlet extends HttpServlet {
         List<Post> posts = null;
         Post post = null;
         Utente utente = null;
+        List<FileApp> files= null;
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
@@ -75,6 +78,7 @@ public class GruppoServlet extends HttpServlet {
                     post = posts.get(i);
                     try {
                         utente = UtenteController.getUserById(request, post.getId_scrivente());
+                        files = FileController.getFilesByPostId(request, post.getId_post());
                     } catch (SQLException ex) {
                         Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -82,6 +86,13 @@ public class GruppoServlet extends HttpServlet {
                     out.println("<td>" + post.getTesto() + "</td>");
                     out.println("<td> scritto il " + post.getData_creazione() + "</td>");
                     out.println("<td> da: " + utente.getUsername() + "</td>");
+                    if(files.size()>0){
+                        for (int j = 0; j < files.size(); j++) {
+                          FileApp file = files.get(j); 
+                            
+                        out.println("<td> FILE: " + file.getNome_file() + "</td>");
+                        }
+                    }
                     out.println("</tr>");
                 }
                 out.println("</table>");
