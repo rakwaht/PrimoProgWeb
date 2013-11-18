@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -54,7 +56,7 @@ public class PostController {
                     post.setId_scrivente(rs.getInt("id_scrivente"));
                     post.setId_gruppo(rs.getInt("id_gruppo"));
                     post.setData_creazione(rs.getString("data_creazione"));
-                    post.setTesto(rs.getString("testo"));
+                    post.setTesto(PostController.checkTesto(rs.getString("testo")));
                     posts.add(post);
                 }
             } finally {
@@ -83,7 +85,7 @@ public class PostController {
         factory.setRepository(new File("c:\\temp"));
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload(factory);
-        upload.setHeaderEncoding("UTF-8"); 
+        upload.setHeaderEncoding("UTF-8");
         // maximum file size to be uploaded.
         upload.setSizeMax(maxFileSize);
         List fileItems = upload.parseRequest(request);
@@ -107,7 +109,9 @@ public class PostController {
                 }
             }
         }
+        testo = PostController.checkTesto(testo);
         try {
+
             stm.setInt(1, (Integer) session.getAttribute("user_id"));
             stm.setInt(2, Integer.parseInt(group_id));
             stm.setString(3, testo);
@@ -162,7 +166,7 @@ public class PostController {
                     post.setId_scrivente(rs.getInt("id_scrivente"));
                     post.setId_gruppo(rs.getInt("id_gruppo"));
                     post.setData_creazione(rs.getString("data_creazione"));
-                    post.setTesto("testo");
+                    post.setTesto(rs.getString("testo"));
                     posts.add(post);
                 }
             } finally {
@@ -207,7 +211,7 @@ public class PostController {
         Post post = null;
         Cookie[] cookies = request.getCookies();
         Cookie old_cookie = null;
-        
+
         Integer user_id = (Integer) request.getSession().getAttribute("user_id");
         if (cookies != null) {
             for (int i = 0; i < cookies.length; i++) {
@@ -216,7 +220,7 @@ public class PostController {
                 }
             }
         }
-        if (cookies != null && old_cookie != null ) {
+        if (cookies != null && old_cookie != null) {
             DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
             Connection connection = dbmanager.getConnection();
             PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo IN (SELECT id_gruppo FROM ROOT.GRUPPO_UTENTE WHERE id_utente=? AND gruppo_utente_abilitato='true') AND data_creazione>=?  AND data_creazione<=? ORDER BY data_creazione");
@@ -244,5 +248,24 @@ public class PostController {
             }
         }
         return posts;
+    }
+
+    private static String checkTesto(String testo) {
+        System.out.println("testo 1: " + testo);
+        testo = testo.replaceAll("<[^>]*>", "");
+
+        Pattern p = Pattern.compile("\\$\\$(.*?)\\$\\$");
+        Matcher m = p.matcher(testo);
+        while (m.find()) {
+            String inizio = testo.substring(m.start(), m.end());
+            String trovata = testo.substring(m.start() + 2, m.end() - 2);
+            System.out.println(trovata);
+            System.out.println(inizio);
+            testo = testo.replace(inizio, "<a>" + trovata + "</a>");
+
+        }
+
+        System.out.println("testo 2: " + testo);
+        return testo;
     }
 }

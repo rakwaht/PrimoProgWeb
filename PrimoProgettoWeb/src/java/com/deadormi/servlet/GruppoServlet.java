@@ -42,7 +42,7 @@ public class GruppoServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         Integer id_gruppo = Integer.parseInt(request.getParameter("id_gruppo"));
@@ -54,12 +54,12 @@ public class GruppoServlet extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         HttpSession session = request.getSession();
         List<Post> posts = null;
         Post post = null;
         Utente utente = null;
-        List<FileApp> files= null;
+        List<FileApp> files = null;
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
@@ -73,8 +73,8 @@ public class GruppoServlet extends HttpServlet {
             }
             if (posts != null && posts.size() != 0) {
                 out.println("<table>");
-                for (int i = posts.size()-1; i >= 0; i--) {
-                    System.out.println(i);
+                for (int i = posts.size() - 1; i >= 0; i--) {
+
                     post = posts.get(i);
                     try {
                         utente = UtenteController.getUserById(request, post.getId_scrivente());
@@ -86,11 +86,11 @@ public class GruppoServlet extends HttpServlet {
                     out.println("<td>" + post.getTesto() + "</td>");
                     out.println("<td> scritto il " + post.getData_creazione() + "</td>");
                     out.println("<td> da: " + utente.getUsername() + "</td>");
-                    if(files.size()>0){
+                    if (files.size() > 0) {
                         for (int j = 0; j < files.size(); j++) {
-                          FileApp file = files.get(j); 
-                            
-                        out.println("<td> FILE: " + file.getNome_file() + "</td>");
+                            FileApp file = files.get(j);
+
+                            out.println("<td> FILE: " + file.getNome_file() + "</td>");
                         }
                     }
                     out.println("</tr>");
@@ -101,7 +101,7 @@ public class GruppoServlet extends HttpServlet {
             }
             out.println("<form method='POST'>");
             out.println("<input type='submit' name='nuovo_post' value='NUOVO POST'/>");
-            
+
             if (proprietario.getId_utente().equals(session.getAttribute("user_id"))) {
                 out.println("<input type='submit' name='modifica_gruppo' value='MODIFICA GRUPPO'/>");
             }
@@ -124,9 +124,9 @@ public class GruppoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-            processRequest(request, response);
-        
+
+        processRequest(request, response);
+
     }
 
     /**
@@ -143,15 +143,14 @@ public class GruppoServlet extends HttpServlet {
         Integer id = Integer.parseInt(request.getParameter("id_gruppo"));
         request.setAttribute("id_gruppo", id);
         RequestDispatcher rd;
-        if (request.getParameter("nuovo_post")!=null) {
+        if (request.getParameter("nuovo_post") != null) {
             rd = request.getRequestDispatcher("/secure/nuovo_post");
             rd.forward(request, response);
-        }
-        else if(request.getParameter("modifica_gruppo")!=null){
-            rd = request.getRequestDispatcher("/secure/modifica_gruppo?="+ id);
+        } else if (request.getParameter("modifica_gruppo") != null) {
+            rd = request.getRequestDispatcher("/secure/modifica_gruppo?=" + id);
             rd.forward(request, response);
         }
-        
+
     }
 
     /**
