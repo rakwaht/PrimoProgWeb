@@ -9,6 +9,7 @@ import com.deadormi.dbmanager.DbManager;
 import com.deadormi.entity.Post;
 import com.deadormi.util.CurrentDate;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -82,6 +83,7 @@ public class PostController {
         factory.setRepository(new File("c:\\temp"));
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload(factory);
+        upload.setHeaderEncoding("UTF-8"); 
         // maximum file size to be uploaded.
         upload.setSizeMax(maxFileSize);
         List fileItems = upload.parseRequest(request);
@@ -98,7 +100,11 @@ public class PostController {
         while (i.hasNext()) {
             FileItem fi = (FileItem) i.next();
             if (fi.isFormField() && fi.getFieldName().equals("testo")) {
-                testo = fi.getString();
+                try {
+                    testo = fi.getString("UTF-8");
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         try {

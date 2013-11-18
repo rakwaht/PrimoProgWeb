@@ -8,11 +8,14 @@ import com.deadormi.dbmanager.DbManager;
 import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Invito;
 import com.deadormi.util.CurrentDate;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -25,6 +28,11 @@ public class GruppoController {
     public static Integer creaGruppo(HttpServletRequest request) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(GruppoController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String titolo = request.getParameter("titolo");
         String descrizione = request.getParameter("descrizione");
         if (titolo != "" && descrizione != "") {
