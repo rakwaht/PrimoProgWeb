@@ -60,7 +60,7 @@ public class CreaPostServlet extends HttpServlet {
             if(files != null && files.size()>0){
             out.println("<div id='scelte'>");
             for(int i = 0; i<files.size(); i++){
-                out.println("<input type='checkbox' name='file' value='" + files.get(i).getId_file() + "_" + files.get(i).getNome_file() + "'>");
+                out.println("<input type='checkbox' name='file' value='" + files.get(i).getId_file() + "-" + files.get(i).getNome_file() + "'>");
                 out.println(files.get(i).getNome_file() + ", del post" + files.get(i).getId_post() +"<br>");
                 
             }
