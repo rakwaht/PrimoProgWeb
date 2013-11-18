@@ -4,9 +4,14 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.controller.GruppoController;
+import com.deadormi.controller.Gruppo_UtenteController;
 import com.deadormi.controller.InvitoController;
+import com.deadormi.controller.PostController;
 import com.deadormi.controller.UtenteController;
+import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Invito;
+import com.deadormi.entity.Post;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
 import com.deadormi.util.CookiesManager;
@@ -44,14 +49,14 @@ public class HomeServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         Utente utente = null;
         List<Invito> inviti = null;
+        List<Post> posts = null;
+        Integer MAX_NUM_POST = 10;
         String ultimo_login = CookiesManager.getOldDateCookie(request, response);
         try {
             inviti = InvitoController.getInvitiByUserId(request);
-        } catch (SQLException ex) {
-            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
             utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
+            posts = PostController.getMyGroupsPosts(request);
+            
         } catch (SQLException ex) {
             Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,6 +81,23 @@ public class HomeServlet extends HttpServlet {
             out.println("<a href='inviti'>Inviti </a>"+inviti.size()+"<br />");
             out.println("<a href='tuoi_gruppi'>Gruppi</a><br />");
             out.println("<a href='crea'>Crea Gruppo</a><br />");
+            if(posts.size()>0 && ultimo_login!=null){
+            out.println("<h3>Nuovi post dall'ultimo login</h3>");
+            Integer POST_SIZE = posts.size();
+            for(int i = 0; i<POST_SIZE; i++){
+                Post post = posts.get(posts.size()-1);
+                Utente scrivente = null;
+                Gruppo gruppo_post = null;
+                try {
+                    scrivente = UtenteController.getUserById(request, post.getId_scrivente());
+                    gruppo_post = GruppoController.getGruppoById(request, post.getId_gruppo());
+                } catch (SQLException ex) {
+                    Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                out.println("<p>" + post.getTesto() +  " scritto da " + scrivente.getUsername()  +" nel gruppo " +  gruppo_post.getNome()   + " il " +  post.getData_creazione() + "</p>");
+                posts.remove(post);
+            }
+            }
             MainLayout.printFooter(out);
         } finally {
             out.close();
