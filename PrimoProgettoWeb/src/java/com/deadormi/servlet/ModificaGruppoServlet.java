@@ -13,25 +13,22 @@ import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Post;
 import com.deadormi.entity.Utente;
-import com.deadormi.util.CurrentDate;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,9 +40,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ModificaGruppoServlet extends HttpServlet {
 
+    final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
+    
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -112,7 +112,8 @@ public class ModificaGruppoServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -126,7 +127,8 @@ public class ModificaGruppoServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -136,7 +138,7 @@ public class ModificaGruppoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            try {
+        try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(GruppoController.class.getName()).log(Level.SEVERE, null, ex);
@@ -160,7 +162,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 String url = request.getQueryString();
                 Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
                 response.setContentType("application/pdf");
-                response.setHeader("Content-Disposition"," attachment; filename='gruppo_" + gruppo_id + "_report.pdf'");
+                response.setHeader("Content-Disposition", " attachment; filename='gruppo_" + gruppo_id + "_report.pdf'");
                 List<Utente> iscritti = null;
                 List<Post> posts = null;
                 try {
@@ -192,26 +194,32 @@ public class ModificaGruppoServlet extends HttpServlet {
                     }
                     table.addCell("Numero post");
                     table.addCell(posts.size() + "");
+                    //inserisco avatar
+                    String imageUrl;
+                    if(utente.getNome_avatar() != null){
+                        String baseUrl = request.getScheme() + "://" + request.getServerName()  + ":"+ request.getServerPort();
+                        imageUrl = baseUrl + request.getContextPath()+AVATAR_RESOURCE_PATH+"/"+utente.getId_utente() + "_" + utente.getNome_avatar();;
+                    }
+                    else{
+                        imageUrl = "http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y";
+                    }
+                    Image image = Image.getInstance(new URL(imageUrl));
+                    image.scaleToFit(50, 50);
                     table.addCell("Avatar");
-                    table.addCell("WORK IN PROGRESS");
+                    table.addCell(image);
+                    
 
                 }
                 document.add(table);
                 document.close();
-                
-               
+
+
             } catch (DocumentException ex) {
                 Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             processRequest(request, response);
         }
-        /*try {
-         GruppoController.modificaGruppo(request,gruppo_id);
-         } catch (SQLException ex) {
-         Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
-
     }
 
     /**
@@ -223,5 +231,4 @@ public class ModificaGruppoServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

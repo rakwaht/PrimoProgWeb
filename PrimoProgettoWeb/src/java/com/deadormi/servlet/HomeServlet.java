@@ -5,7 +5,6 @@
 package com.deadormi.servlet;
 
 import com.deadormi.controller.GruppoController;
-import com.deadormi.controller.Gruppo_UtenteController;
 import com.deadormi.controller.InvitoController;
 import com.deadormi.controller.PostController;
 import com.deadormi.controller.UtenteController;
@@ -52,8 +51,6 @@ public class HomeServlet extends HttpServlet {
         List<Post> posts = null;
         Integer MAX_NUM_POST = 10;
         String ultimo_login = CookiesManager.getOldDateCookie(request, response);
-       
-        System.out.println(System.getProperty("file.encoding"));
         try {
             inviti = InvitoController.getInvitiByUserId(request);
             utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
