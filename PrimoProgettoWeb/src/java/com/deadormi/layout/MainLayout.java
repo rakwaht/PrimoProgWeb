@@ -22,7 +22,7 @@ public class MainLayout {
             out.println("<link rel='stylesheet' type='text/css' href='/PrimoProgettoWeb/res/css/application.css' />");
             out.println("<link rel='stylesheet' type='text/css' href='/PrimoProgettoWeb/res/css/semantic.min.css' />");
             out.println("<script type='text/javascript' src='/PrimoProgettoWeb/res/js/jquery_v2.0.3.js'></script>");
-            out.println("<script type='text/javascript' src='/PrimoProgettoWeb/res/js/semantic.min.js'></script>");         
+            out.println("<script type='text/javascript' src='/PrimoProgettoWeb/res/js/semantic.js'></script>");         
             out.println("<script type='text/javascript' src='/PrimoProgettoWeb/res/js/application.js'></script>");
             out.println("<title>Servlet HomeServlet cul</title>");
             out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
