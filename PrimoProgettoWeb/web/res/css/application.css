@@ -5,11 +5,19 @@
     Description:
         Purpose of the stylesheet follows.
 */
-body{
+body, html{
     font-family: 'Source Sans Pro', sans-serif;
     color:#555555;
     background-image:url('shattered.png');
     margin:0px;
+    height: 100%;
+}
+
+.home-menu{
+    height:100%;
+    min-height:100%;
+    border-radius:0px;
+    
 }
 
 .login-input{
@@ -21,13 +29,24 @@ body{
 }
 
 .center{
-   text-align: center; 
+    text-align: center; 
 }
 
 .user-image{
     border: solid 20px #555555;
+    
 }
+
+
 
 .menu-item{
     padding: 50px;
+}
+
+#null-item:hover{
+    cursor:default;
+}
+
+.scrivente-image{
+    border: solid 10px #6ECFF5;
 }
