@@ -5,7 +5,20 @@
     Description:
         Purpose of the stylesheet follows.
 */
+body{
+    font-family: 'Source Sans Pro', sans-serif;
+    color:#555555;
+    background-image:url('shattered.png');
+}
 
-root { 
-    display: block;
+.login-input{
+    margin-top: 8px;
+}
+
+#login-title{
+    color:#6ECFF5;
+}
+
+.center{
+   text-align: center; 
 }
