@@ -18,12 +18,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -31,11 +30,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class HomeServlet extends HttpServlet {
 
+    //initializing the logger
+    static Logger log = Logger.getLogger(HomeServlet.class.getName());
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
-    
+
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -55,11 +57,11 @@ public class HomeServlet extends HttpServlet {
             inviti = InvitoController.getInvitiByUserId(request);
             utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
             posts = PostController.getMyGroupsPosts(request);
-            
+
         } catch (SQLException ex) {
-            Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String avatar_path = request.getContextPath()+AVATAR_RESOURCE_PATH+"/"+utente.getId_utente() + "_" + utente.getNome_avatar();
+        String avatar_path = request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();
         try {
             MainLayout.printHeader(out);
             out.println("<h1>HOME at " + request.getContextPath() + "</h1>");
@@ -67,35 +69,34 @@ public class HomeServlet extends HttpServlet {
                 out.println("<h2> Bentornato " + utente.getUsername() + "!</h2>");
                 out.println("<h2>" + ultimo_login + "</h2>");
                 out.println("<h3 id='test'></h3>");
-                if(utente.getNome_avatar() == null){
+                if (utente.getNome_avatar() == null) {
                     out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
-                }
-                else{
+                } else {
                     out.println("<img src='" + avatar_path + "' alt='Smiley face' height='100' width='100' /><br />");
                 }
             } else {
                 out.println("<h2> Benvenuto " + utente.getUsername() + "!</h2>");
             }
             out.println("<a href='cambia_avatar'>Cambia Avatar</a><br />");
-            out.println("<a href='inviti'>Inviti </a>"+inviti.size()+"<br />");
+            out.println("<a href='inviti'>Inviti </a>" + inviti.size() + "<br />");
             out.println("<a href='tuoi_gruppi'>Gruppi</a><br />");
             out.println("<a href='crea'>Crea Gruppo</a><br />");
-            if(posts.size()>0 && ultimo_login!=null){
-            out.println("<h3>Nuovi post dall'ultimo login</h3>");
-            Integer POST_SIZE = posts.size();
-            for(int i = 0; i<POST_SIZE; i++){
-                Post post = posts.get(posts.size()-1);
-                Utente scrivente = null;
-                Gruppo gruppo_post = null;
-                try {
-                    scrivente = UtenteController.getUserById(request, post.getId_scrivente());
-                    gruppo_post = GruppoController.getGruppoById(request, post.getId_gruppo());
-                } catch (SQLException ex) {
-                    Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+            if (posts.size() > 0 && ultimo_login != null) {
+                out.println("<h3>Nuovi post dall'ultimo login</h3>");
+                Integer POST_SIZE = posts.size();
+                for (int i = 0; i < POST_SIZE; i++) {
+                    Post post = posts.get(posts.size() - 1);
+                    Utente scrivente = null;
+                    Gruppo gruppo_post = null;
+                    try {
+                        scrivente = UtenteController.getUserById(request, post.getId_scrivente());
+                        gruppo_post = GruppoController.getGruppoById(request, post.getId_gruppo());
+                    } catch (SQLException ex) {
+                      //  Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    out.println("<p>" + post.getTesto() + " scritto da " + scrivente.getUsername() + " nel gruppo " + gruppo_post.getNome() + " il " + post.getData_creazione() + "</p>");
+                    posts.remove(post);
                 }
-                out.println("<p>" + post.getTesto() +  " scritto da " + scrivente.getUsername()  +" nel gruppo " +  gruppo_post.getNome()   + " il " +  post.getData_creazione() + "</p>");
-                posts.remove(post);
-            }
             }
             MainLayout.printFooter(out);
         } finally {
@@ -106,7 +107,8 @@ public class HomeServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -116,11 +118,18 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        log.trace("This is a Trace");
+        log.debug("This is a Debug");
+        log.info("This is an Info");
+        log.warn("This is a Warn");
+        log.error("This is an Error");
+        log.fatal("This is a Fatal");
         processRequest(request, response);
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -130,6 +139,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        log.info("HomeServlet doPost");
         processRequest(request, response);
     }
 
