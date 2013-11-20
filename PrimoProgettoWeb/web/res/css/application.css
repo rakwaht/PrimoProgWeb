@@ -9,6 +9,7 @@ body{
     font-family: 'Source Sans Pro', sans-serif;
     color:#555555;
     background-image:url('shattered.png');
+    margin:0px;
 }
 
 .login-input{
@@ -21,4 +22,12 @@ body{
 
 .center{
    text-align: center; 
+}
+
+.user-image{
+    border: solid 20px #555555;
+}
+
+.menu-item{
+    padding: 50px;
 }

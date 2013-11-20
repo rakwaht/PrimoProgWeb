@@ -35,9 +35,8 @@ public class HomeServlet extends HttpServlet {
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -64,23 +63,56 @@ public class HomeServlet extends HttpServlet {
         String avatar_path = request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();
         try {
             MainLayout.printHeader(out);
-            out.println("<h1>HOME at " + request.getContextPath() + "</h1>");
+            out.println("<div class='ui grid'>");
+            out.println("<div class='five wide column' style='padding-left:0px'>");
+            out.println("<div class='ui inverted vertical menu fluid' style='heigth:100%' >");
+
+            out.println("<a href='#' class='item center'>");
+            if (utente.getNome_avatar() == null) {
+                out.println("<img class='circular ui image user-image' src='' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' /><br />");
+            } else {
+                out.println("<img class='circular ui image user-image' src='" + avatar_path + "' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;'><br />");
+            }
+            out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
+            out.println("</a>");
+            
+            out.println("<a href='cambia_avatar' class='item'>");
+            out.println("<i class='home icon'></i>");
+            out.println("Cambia Avatar");
+            
+            out.println("</a>");
+
+            out.println("<a href='inviti' class='item'>");
+            out.println("<div class='ui blue label'>" + inviti.size() + "</div>");
+            out.println("Inviti");
+            out.println("</a>");
+
+            out.println("<a href='tuoi_gruppi' class='item'>");
+            out.println("Gruppi");
+            out.println("</a>");
+
+            out.println("<a href='crea' class='item'>");
+            out.println("Crea Gruppo");
+            out.println("</a>");
+
+            out.println("<a href='logout' class='item'>");
+            out.println("Logout");
+            out.println("</a>");
+
+            out.println("</div>");
+
+            out.println("</div>");
+            out.println("<div class='eleven wide column' style='padding-left:0px'>");
+            out.println("<h1>LandingPage</h1>");
             if (ultimo_login != null) {
                 out.println("<h2> Bentornato " + utente.getUsername() + "!</h2>");
                 out.println("<h2>" + ultimo_login + "</h2>");
                 out.println("<h3 id='test'></h3>");
-                if (utente.getNome_avatar() == null) {
-                    out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
-                } else {
-                    out.println("<img src='" + avatar_path + "' alt='Smiley face' height='100' width='100' /><br />");
-                }
+
             } else {
                 out.println("<h2> Benvenuto " + utente.getUsername() + "!</h2>");
             }
-            out.println("<a href='cambia_avatar'>Cambia Avatar</a><br />");
-            out.println("<a href='inviti'>Inviti </a>" + inviti.size() + "<br />");
-            out.println("<a href='tuoi_gruppi'>Gruppi</a><br />");
-            out.println("<a href='crea'>Crea Gruppo</a><br />");
+
             if (posts.size() > 0 && ultimo_login != null) {
                 out.println("<h3>Nuovi post dall'ultimo login</h3>");
                 Integer POST_SIZE = posts.size();
@@ -92,12 +124,13 @@ public class HomeServlet extends HttpServlet {
                         scrivente = UtenteController.getUserById(request, post.getId_scrivente());
                         gruppo_post = GruppoController.getGruppoById(request, post.getId_gruppo());
                     } catch (SQLException ex) {
-                      //  Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        //  Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     out.println("<p>" + post.getTesto() + " scritto da " + scrivente.getUsername() + " nel gruppo " + gruppo_post.getNome() + " il " + post.getData_creazione() + "</p>");
                     posts.remove(post);
                 }
             }
+            out.println("</div>");
             MainLayout.printFooter(out);
         } finally {
             out.close();
@@ -107,8 +140,7 @@ public class HomeServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -128,8 +160,7 @@ public class HomeServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
