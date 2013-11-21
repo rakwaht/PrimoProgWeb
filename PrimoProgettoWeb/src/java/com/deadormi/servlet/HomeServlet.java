@@ -4,10 +4,12 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.controller.FileController;
 import com.deadormi.controller.GruppoController;
 import com.deadormi.controller.InvitoController;
 import com.deadormi.controller.PostController;
 import com.deadormi.controller.UtenteController;
+import com.deadormi.entity.FileApp;
 import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Invito;
 import com.deadormi.entity.Post;
@@ -63,14 +65,14 @@ public class HomeServlet extends HttpServlet {
         String avatar_path = request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();
         try {
             MainLayout.printHeader(out);
-            
+
             out.println("<div class='ui inverted large vertical left menu fixed home-menu'>");
-            
+
             out.println("<a href='#' class='item center'>");
             if (utente.getNome_avatar() == null) {
                 out.println("<img class='circular ui image user-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
             } else {
-                out.println("<img class='circular ui image user-image' src='" + avatar_path + "' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;'>");
+                out.println("<img class='circular ui image user-image' src='" + avatar_path + "' alt='Smiley face' style='margin:0 auto; width:100px; height:100px'>");
             }
             out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
             out.println("</a>");
@@ -120,65 +122,91 @@ public class HomeServlet extends HttpServlet {
             }
 
             if (posts.size() > 0 && ultimo_login != null) {
-                out.println("<h3 class='center'><i class='list layout icon'></i> Nuovi post dall'ultimo login</h3>");
+                out.println("<h2 class='center ui header'><i class='list layout icon'></i> Nuovi post dall'ultimo login</h2>");
                 Integer POST_SIZE = posts.size();
                 out.println("<div class='ui grid'>");
                 for (int i = 0; i < POST_SIZE; i++) {
                     Post post = posts.get(posts.size() - 1);
                     Utente scrivente = null;
                     Gruppo gruppo_post = null;
+                    List<FileApp> files = null;
                     try {
                         scrivente = UtenteController.getUserById(request, post.getId_scrivente());
                         gruppo_post = GruppoController.getGruppoById(request, post.getId_gruppo());
+                        files = FileController.getFilesByPostId(request, post.getId_post());
                     } catch (SQLException ex) {
                         //  Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     if (i % 2 == 0) {
-                        out.println("<div class='three wide column' >");
-                        if(scrivente.getNome_avatar()!=null){
-                        out.println("<img style='margin-top:30px;margin-left:30px;height:100px;width:100px;' class='circular ui image scrivente-image' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
-                        }else{
-                         out.println("<img style='margin-top:30px;margin-left:30px;height:100px;width:100px;' class='circular ui image scrivente-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+                        out.println("<div class='three wide column center' >");
+                        if (scrivente.getNome_avatar() != null) {
+                            out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image center' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+                        } else {
+                            out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image center' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; height:100px;' />");
                         }
                         out.println("<h2 style='margin-top:0px;'class='ui header center'>" + scrivente.getUsername() + "</h2>");
                         out.println("</div>");
                         out.println("<div class='thirteen wide column'>");
-                        out.println("<div class='ui tabular top attached menu'>");
 
-                        out.println("<a class='ui blue active item' ><i class='align center icon'></i>Testo</a>");
-                        out.println("<a  class='ui active item' ><i class='save icon'></i>Files</a>");
-                        out.println("</div>");
-                        out.println("<div  class='ui blue fluid bottom attached segment' >");
+                        out.println("<div  class='ui blue fluid top attached segment' >");
                         out.println("<p><i class='quote left icon'></i>" + post.getTesto() + "<i class='quote right icon'></i></p><br/>");
-                        out.println("<p style='text-align:right; color:#ababab; margin-top:0px;'>scritto in: <b> " + gruppo_post.getNome() + "</b> il <i>" + post.getData_creazione() + "</i></p>");
-                        
+
                         posts.remove(post);
                         out.println("</div>");
+                        out.println("<div  class='ui fluid bottom attached segment' >");
+                        if (!files.isEmpty()) {
+                            FileApp file = null;
+                            String filePath = null;
+                            for (int j = 0; j < files.size(); j++) {
+                                file = files.get(j);
+                                filePath = request.getContextPath() + "/resource/files/" + post.getId_gruppo() + "/" + file.getId_file() + "-" + file.getNome_file();
+                                out.println("<i class='icon blue save'></i>");
+                                out.println("<a href='" + filePath + "' target='_blank'>" + file.getId_file() + "-" + file.getNome_file() + "</a>");
+                                if (j!=files.size()-1) out.println("/");
+                            }
+
+                        }
+                        out.println("<p style='text-align:right; color:#ababab; margin-top:0px;'>scritto in: <b> " + gruppo_post.getNome() + "</b> il <i>" + post.getData_creazione() + "</i></p>");
+
+                        out.println("</div>");
+
                         out.println("</div>");
                         out.println("<div class='ui divider'></div>");
-                        //out.println("</div>");
+                        
                     } else {
-
                         out.println("<div class='thirteen wide column'>");
-                        out.println("<div class='ui tabular menu' style='margin-bottom:0px;margin-top:20px'>");
-                        out.println("<a class='ui blue active item'><i class='align center icon'></i>Testo</a>");
-                        out.println("<a class='ui active item'><i class='save icon'></i>Files</a>");
-                        out.println("</div>");
-                        out.println("<div class='ui blue fluid segment' style='margin-top:0px;'>");
+
+                        out.println("<div  class='ui blue fluid top attached segment' >");
                         out.println("<p><i class='quote left icon'></i>" + post.getTesto() + "<i class='quote right icon'></i></p><br/>");
-                        out.println("<p style='text-align:right; color:#ababab; margin-top:0px;'>scritto in: <b> " + gruppo_post.getNome() + "</b> il <i>" + post.getData_creazione() + "</i></p>");
+
                         posts.remove(post);
                         out.println("</div>");
+                        out.println("<div  class='ui fluid bottom attached segment' >");
+                        if (!files.isEmpty()) {
+                            FileApp file = null;
+                            String filePath = null;
+                            for (int j = 0; j < files.size(); j++) {
+                                file = files.get(j);
+                                filePath = request.getContextPath() + "/resource/files/" + post.getId_gruppo() + "/" + file.getId_file() + "-" + file.getNome_file();
+                                out.println("<i class='icon blue save'></i>");
+                                out.println("<a href='" + filePath + "' target='_blank'>" + file.getId_file() + "-" + file.getNome_file() + "</a>");
+                                if (j!=files.size()-1) out.println("/");
+                            }
+
+                        }
+                        out.println("<p style='text-align:right; color:#ababab; margin-top:0px;'>scritto in: <b> " + gruppo_post.getNome() + "</b> il <i>" + post.getData_creazione() + "</i></p>");
+
                         out.println("</div>");
-                        out.println("<div class='three wide column' >");
-                        if(scrivente.getNome_avatar()!=null){
-                        out.println("<img style='margin-top:30px;margin-left:30px;height:100px;width:100px;' class='circular ui image scrivente-image' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
-                        }else{
-                         out.println("<img style='margin-top:30px;margin-left:30px;height:100px;width:100px;' class='circular ui image scrivente-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+
+                        out.println("</div>");
+                        out.println("<div class='three wide column center' >");
+                        if (scrivente.getNome_avatar() != null) {
+                            out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image center' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+                        } else {
+                            out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image center' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
                         }
                         out.println("<h2 style='margin-top:0px;'class='ui header center'>" + scrivente.getUsername() + "</h2>");
                         out.println("</div>");
-
                         out.println("<div class='ui divider'></div>");
 
                     }
