@@ -30,6 +30,7 @@ public class UtenteController {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
+        
         Connection connection = dbmanager.getConnection();
         HttpSession session = request.getSession();
         PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.UTENTE WHERE username = ? AND password = ?");
