@@ -6,6 +6,8 @@ package com.deadormi.dbmanager;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.apache.log4j.PropertyConfigurator;
@@ -29,6 +31,7 @@ public class WebappContextListener implements ServletContextListener {
             DbManager manager = new DbManager(dburl);
             sce.getServletContext().setAttribute("dbmanager", manager);
         } catch (SQLException e) {
+            Logger.getLogger("contextlistener").log(Level.SEVERE, "erorre istanziazione db {0}", e);
         }
     }
 

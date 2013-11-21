@@ -23,7 +23,7 @@ public class DbManager implements Serializable {
     public DbManager(String dburl) throws SQLException {
 
         try {
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver", true, getClass().getClassLoader());
+            Class.forName("org.apache.derby.jdbc.ClientDriver", true, getClass().getClassLoader());
         } catch (Exception e) {
             log.warn(e.toString(), e);
         }
