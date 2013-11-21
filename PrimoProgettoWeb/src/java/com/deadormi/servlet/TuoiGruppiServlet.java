@@ -13,12 +13,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -26,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class TuoiGruppiServlet extends HttpServlet {
 
+    static Logger  log = Logger.getLogger(TuoiGruppiServlet.class);
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,7 +44,7 @@ public class TuoiGruppiServlet extends HttpServlet {
         try {
             gruppi = Gruppo_UtenteController.getGruppiByUserId(request);
         } catch (SQLException ex) {
-            Logger.getLogger(TuoiGruppiServlet.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         try {
             /* TODO output your page here. You may use following sample code. */
@@ -58,7 +59,7 @@ public class TuoiGruppiServlet extends HttpServlet {
                     try {
                         proprietario = UtenteController.getUserById(request, gruppo.getId_proprietario());
                     } catch (SQLException ex) {
-                        Logger.getLogger(TuoiGruppiServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error(ex);
                     }
                     out.println("<tr>");
                     out.println("<td>Nome: "+ gruppo.getNome() + "</td><td>  Autore: "+ proprietario.getUsername() +"</td>");

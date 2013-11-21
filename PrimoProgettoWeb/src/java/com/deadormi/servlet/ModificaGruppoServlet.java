@@ -27,19 +27,19 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Timbu
  */
 public class ModificaGruppoServlet extends HttpServlet {
-
+    
+    static Logger  log = Logger.getLogger(ModificaGruppoServlet.class);
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
     
     /**
@@ -106,7 +106,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.close();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
     }
 
@@ -141,7 +141,7 @@ public class ModificaGruppoServlet extends HttpServlet {
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(GruppoController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         if (request.getParameter("modifica") != null) {
             Integer user_id = (Integer) request.getSession().getAttribute("user_id");
@@ -153,7 +153,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 InvitoController.processaRe_Inviti(request, gruppo_id);
                 response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id);
             } catch (SQLException ex) {
-                Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
 
         } else if (request.getParameter("generapdf") != null) {
@@ -168,7 +168,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 try {
                     iscritti = UtenteController.getUserByGroupId(request, gruppo_id);
                 } catch (SQLException ex) {
-                    Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                   log.error(ex);
                 }
                 PdfWriter.getInstance(document, response.getOutputStream());
                 document.open();
@@ -181,7 +181,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                     try {
                         posts = PostController.getPostByGruppoIdAndUserId(request, gruppo_id, utente.getId_utente());
                     } catch (SQLException ex) {
-                        Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error(ex);
                     }
                     table.addCell("Username");
                     table.addCell(utente.getUsername());
@@ -215,7 +215,7 @@ public class ModificaGruppoServlet extends HttpServlet {
 
 
             } catch (DocumentException ex) {
-                Logger.getLogger(ModificaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
         } else {
             processRequest(request, response);

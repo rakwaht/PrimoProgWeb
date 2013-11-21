@@ -209,12 +209,6 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        log.trace("This is a Trace");
-        log.debug("This is a Debug");
-        log.info("This is an Info");
-        log.warn("This is a Warn");
-        log.error("This is an Error");
-        log.fatal("This is a Fatal");
         processRequest(request, response);
     }
 
@@ -229,7 +223,6 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        log.info("HomeServlet doPost");
         processRequest(request, response);
     }
 

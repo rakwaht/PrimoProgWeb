@@ -6,30 +6,27 @@ package com.deadormi.servlet;
 
 import com.deadormi.controller.GruppoController;
 import com.deadormi.controller.UtenteController;
-import com.deadormi.entity.Gruppo;
-import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
-import com.deadormi.util.CurrentDate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Davide
  */
 public class CreaGruppoServlet extends HttpServlet {
-
+    
+    static Logger  log = Logger.getLogger(CreaGruppoServlet.class);
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -49,7 +46,7 @@ public class CreaGruppoServlet extends HttpServlet {
         try {
             list = UtenteController.getUtenti(request);
         } catch (SQLException ex) {
-            //Logger.getLogger(CreaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+          log.error(ex);
         }
         try {
             /* TODO output your page here. You may use following sample code. */
@@ -120,7 +117,7 @@ public class CreaGruppoServlet extends HttpServlet {
                 processRequest(request, response);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CreaGruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+           log.error(ex);
         }
 
     }

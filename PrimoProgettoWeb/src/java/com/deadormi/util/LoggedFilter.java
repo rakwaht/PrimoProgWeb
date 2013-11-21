@@ -17,6 +17,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -24,7 +25,8 @@ import javax.servlet.http.HttpSession;
  */
 public class LoggedFilter implements Filter {
     
-    private static final boolean debug = true;
+     static Logger  log = Logger.getLogger(LoggedFilter.class);
+    
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
@@ -35,10 +37,8 @@ public class LoggedFilter implements Filter {
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        if (debug) {
-            log("LoggedFilter:DoBeforeProcessing");
-        }
-
+        
+        log.debug("LoggedFilter:DoBeforeProcessing");
         // Write code here to process the request and/or response before
         // the rest of the filter chain is invoked.
 
@@ -64,9 +64,8 @@ public class LoggedFilter implements Filter {
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        if (debug) {
-            log("LoggedFilter:DoAfterProcessing");
-        }
+        
+        log.debug("LoggedFilter:DoAfterProcessing");
 
         // Write code here to process the request and/or response after
         // the rest of the filter chain is invoked.
@@ -103,9 +102,7 @@ public class LoggedFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
         
-        if (debug) {
-            log("LoggedFilter:doFilter()");
-        }
+        log.debug("LoggedFilter:DoFilter");
         
         doBeforeProcessing(request, response);
         
@@ -165,9 +162,7 @@ public class LoggedFilter implements Filter {
     public void init(FilterConfig filterConfig) {        
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
-            if (debug) {                
-                log("LoggedFilter:Initializing filter");
-            }
+            log.debug("LoggedFilter:init");
         }
     }
 

@@ -4,10 +4,12 @@
  */
 package com.deadormi.dbmanager;
 
+import com.deadormi.servlet.LoginServlet;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -16,13 +18,14 @@ import java.sql.SQLException;
 public class DbManager implements Serializable {
 
     private transient Connection connection;
+    static Logger log = Logger.getLogger(LoginServlet.class);
 
     public DbManager(String dburl) throws SQLException {
 
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver", true, getClass().getClassLoader());
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver", true, getClass().getClassLoader());
         } catch (Exception e) {
-            throw new RuntimeException(e.toString(), e);
+            log.warn(e.toString(), e);
         }
 
         Connection con = DriverManager.getConnection(dburl);
@@ -33,7 +36,7 @@ public class DbManager implements Serializable {
         try {
             DriverManager.getConnection("jdbc:derby:;shutdown=true");
         } catch (SQLException ex) {
-            //Logger.getLogger(DBManager.class.getName()).info(ex.getMessage());
+            log.warn("DBManager shutdown"+ ex.toString());
         }
     }
 

@@ -8,6 +8,7 @@ package com.deadormi.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -16,6 +17,8 @@ import java.util.Date;
  */
 public class CurrentDate {
    
+     static Logger  log = Logger.getLogger(CurrentDate.class);
+    
     public static String getCurrentDate () {
         Date date = new Date();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd 'alle' HH:mm:ss");

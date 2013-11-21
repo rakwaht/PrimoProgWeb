@@ -7,18 +7,15 @@ package com.deadormi.servlet;
 import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 /**
  *
@@ -27,8 +24,9 @@ import org.apache.log4j.PropertyConfigurator;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
-    static Logger log = Logger.getLogger(LoginServlet.class);
-
+    static Logger  log = Logger.getLogger(LoginServlet.class);
+    
+    
     @Override
     public void init() throws ServletException {
     }
@@ -45,12 +43,6 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //init logger
-        String homeDir = request.getServletContext().getRealPath("/");
-        File propertiesFile = new File(homeDir, "WEB-INF/log4j.properties");
-        PropertyConfigurator.configure(propertiesFile.toString());
-        //end init logger
-
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -134,7 +126,7 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException {        
         log.debug("richiesta doPost");
         Utente utente = null;
         try {

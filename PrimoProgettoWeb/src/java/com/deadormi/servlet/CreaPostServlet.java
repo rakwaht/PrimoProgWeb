@@ -13,12 +13,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 /**
@@ -27,6 +26,8 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
  */
 public class CreaPostServlet extends HttpServlet {
 
+    static Logger  log = Logger.getLogger(CreaPostServlet.class);
+    
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -46,7 +47,7 @@ public class CreaPostServlet extends HttpServlet {
         try {
             files = FileController.getFilesByGroupId(request, id_gruppo);
         } catch (SQLException ex) {
-            Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+           log.error(ex);
         }
         try {
             /* TODO output your page here. You may use following sample code. */
@@ -112,9 +113,9 @@ public class CreaPostServlet extends HttpServlet {
             try {
                 PostController.creaPost(request);
             } catch (SQLException ex) {
-                Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+               log.error(ex);
             } catch (org.apache.commons.fileupload.FileUploadException ex) {
-                Logger.getLogger(CreaPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
             response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id);
         } else {

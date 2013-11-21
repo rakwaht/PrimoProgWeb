@@ -17,21 +17,21 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Davide
  */
 public class GruppoServlet extends HttpServlet {
-
+    
+    static Logger  log = Logger.getLogger(GruppoServlet.class);
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -52,7 +52,7 @@ public class GruppoServlet extends HttpServlet {
             gruppo = GruppoController.getGruppoById(request, id_gruppo);
             proprietario = UtenteController.getUserById(request, gruppo.getId_proprietario());
         } catch (SQLException ex) {
-            Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
 
         HttpSession session = request.getSession();
@@ -69,7 +69,7 @@ public class GruppoServlet extends HttpServlet {
             try {
                 posts = PostController.getPostByGruppoId(request, id_gruppo);
             } catch (SQLException ex) {
-                Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                log.error(ex);
             }
             if (posts != null && posts.size() != 0) {
                 out.println("<table>");
@@ -80,7 +80,7 @@ public class GruppoServlet extends HttpServlet {
                         utente = UtenteController.getUserById(request, post.getId_scrivente());
                         files = FileController.getFilesByPostId(request, post.getId_post());
                     } catch (SQLException ex) {
-                        Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error(ex);
                     }
                     out.println("<tr>");
                     out.println("<td>" + post.getTesto() + "</td>");

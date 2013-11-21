@@ -14,10 +14,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -25,13 +24,15 @@ import javax.servlet.http.HttpSession;
  */
 public class GruppoController {
 
+    static Logger  log = Logger.getLogger(GruppoController.class);
+    
     public static Integer creaGruppo(HttpServletRequest request) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
         try {
             request.setCharacterEncoding("UTF-8");
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(GruppoController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         String titolo = request.getParameter("titolo");
         String descrizione = request.getParameter("descrizione");
@@ -98,7 +99,6 @@ public class GruppoController {
         Connection connection = dbmanager.getConnection();
         String titolo = request.getParameter("titolo");
         String descrizione = request.getParameter("descrizione");
-        System.out.println(titolo + "    " + descrizione);
         PreparedStatement stm = connection.prepareStatement("UPDATE ROOT.GRUPPO SET nome=?, descrizione=? WHERE id_gruppo=?");
         ResultSet rs;
         try {

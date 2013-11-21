@@ -16,13 +16,16 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Davide
  */
 public class UtenteController {
-
+    
+    static Logger  log = Logger.getLogger(UtenteController.class);
+    
     public static Utente authenticate(HttpServletRequest request, HttpServletResponse response) throws SQLException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");

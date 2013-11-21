@@ -12,8 +12,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -22,6 +20,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -29,8 +28,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ModificaGruppoFilter implements Filter {
     
-    private static final boolean debug = true;
-
+    static Logger  log = Logger.getLogger(ModificaGruppoFilter.class);
+    
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
@@ -41,9 +40,8 @@ public class ModificaGruppoFilter implements Filter {
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        if (debug) {
-            log("ModificaGruppoFilter:DoBeforeProcessing");
-        }
+        
+        log.debug("ModificaGruppoFilter:DoBeforeProcessing");
 
 	// Write code here to process the request and/or response before
         // the rest of the filter chain is invoked.
@@ -69,9 +67,8 @@ public class ModificaGruppoFilter implements Filter {
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        if (debug) {
-            log("ModificaGruppoFilter:DoAfterProcessing");
-        }
+        
+        log.debug("ModificaGruppoFilter:DoAfterProcessing");
 
 	// Write code here to process the request and/or response after
         // the rest of the filter chain is invoked.
@@ -105,9 +102,7 @@ public class ModificaGruppoFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
         
-        if (debug) {
-            log("ModificaGruppoFilter:doFilter()");
-        }
+        log.debug("ModificaGruppoFilter:doFilter()");
         
         doBeforeProcessing(request, response);
         
@@ -133,7 +128,7 @@ public class ModificaGruppoFilter implements Filter {
                 ((HttpServletResponse)response).sendRedirect(((HttpServletRequest)request).getContextPath()+ "/secure/tuoi_gruppi");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(GroupFilter.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         }
         doAfterProcessing(request, response);
@@ -179,9 +174,7 @@ public class ModificaGruppoFilter implements Filter {
     public void init(FilterConfig filterConfig) {        
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
-            if (debug) {                
-                log("ModificaGruppoFilter:Initializing filter");
-            }
+            log.debug("ModificaGruppoFilter:Initializing filter");
         }
     }
 
@@ -239,6 +232,7 @@ public class ModificaGruppoFilter implements Filter {
             sw.close();
             stackTrace = sw.getBuffer().toString();
         } catch (Exception ex) {
+            log.error(ex);
         }
         return stackTrace;
     }

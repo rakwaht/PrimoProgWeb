@@ -16,6 +16,7 @@ import java.util.Enumeration;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -23,6 +24,8 @@ import javax.servlet.http.HttpSession;
  */
 public class InvitoController {
 
+    static Logger  log = Logger.getLogger(InvitoController.class);
+    
     static void creaInvito(HttpServletRequest request) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();

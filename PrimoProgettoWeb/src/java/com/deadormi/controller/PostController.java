@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.http.Cookie;
@@ -30,6 +28,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -37,6 +36,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  */
 public class PostController {
 
+    static Logger  log = Logger.getLogger(PostController.class);
     final static String FILE_RESOURCE_PATH = "/resource/files";
 
     public static List<Post> getPostByGruppoId(HttpServletRequest request, Integer id_gruppo) throws SQLException {
@@ -105,7 +105,7 @@ public class PostController {
                 try {
                     testo = fi.getString("UTF-8");
                 } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
+                    log.error(ex);
                 }
             }
         }
@@ -144,7 +144,7 @@ public class PostController {
                     try {
                         fi.write(file);
                     } catch (Exception ex) {
-                        Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error(ex);
                     }
                 }
             }
@@ -254,9 +254,7 @@ public class PostController {
     }
 
     private static String checkTesto(HttpServletRequest request, String testo, Integer id_gruppo) throws SQLException {
-        System.out.println("TESTO ORIGINALE: " + testo);
         testo = testo.replaceAll("<[^>]*>", "");
-        System.out.println("TESTO NO - HTML: " + testo);
         Pattern p = Pattern.compile("\\$\\$(.*?)\\$\\$");
         Matcher m = p.matcher(testo);
         String inizio;
@@ -278,8 +276,6 @@ public class PostController {
             }
 
         }
-        System.out.println("TARGET:" + target);
-
         return target;
     }
 

@@ -16,21 +16,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Davide
  */
 public class FileController {
-
+    
+    static Logger  log = Logger.getLogger(FileController.class);
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
 
     static Integer salvaFile(HttpServletRequest request, String fileName, Integer post_id) throws SQLException {
@@ -38,6 +38,7 @@ public class FileController {
         Connection connection = dbmanager.getConnection();
         HttpSession session = request.getSession();
         PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.FILE (nome_file,id_post) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS);
+        log.debug("salvo file " + fileName);
         try {
             stm.setString(1, fileName);
             stm.setInt(2, post_id);
@@ -72,7 +73,7 @@ public class FileController {
         try {
             fileItems = upload.parseRequest(request);
         } catch (FileUploadException ex) {
-            Logger.getLogger(FileController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         // Create a new file upload handler
         Iterator i = fileItems.iterator();
@@ -100,7 +101,7 @@ public class FileController {
                     try {
                         fi.write(file);
                     } catch (Exception ex) {
-                        Logger.getLogger(PostController.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error(ex);
                     }
                 } else {
                     //non è un immagine non faccio niente

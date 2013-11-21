@@ -4,9 +4,8 @@
  */
 package com.deadormi.layout;
 
-import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -14,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class MainLayout {
 
+    static Logger  log = Logger.getLogger(MainLayout.class);
+    
     public static void printHeader(PrintWriter out) {
         /* TODO output your page here. You may use following sample code. */
         out.println("<!DOCTYPE html>");

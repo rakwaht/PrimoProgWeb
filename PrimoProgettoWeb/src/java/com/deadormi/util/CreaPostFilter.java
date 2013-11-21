@@ -12,8 +12,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -22,6 +20,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 /**
@@ -30,6 +29,7 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
  */
 public class CreaPostFilter implements Filter {
     
+    static Logger  log = Logger.getLogger(CreaPostFilter.class);
     private static final boolean debug = true;
 
     // The filter configuration object we are associated with.  If
@@ -42,10 +42,7 @@ public class CreaPostFilter implements Filter {
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        if (debug) {
-            log("CreaPostFilter:DoBeforeProcessing");
-        }
-
+        log.debug("CreaPostFilter:DoBeforeProcessing");
 	// Write code here to process the request and/or response before
         // the rest of the filter chain is invoked.
 	// For example, a logging filter might log items on the request object,
@@ -70,9 +67,7 @@ public class CreaPostFilter implements Filter {
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        if (debug) {
-            log("CreaPostFilter:DoAfterProcessing");
-        }
+        log.debug("CreaPostFilter:DoAfterProcessing");
 
 	// Write code here to process the request and/or response after
         // the rest of the filter chain is invoked.
@@ -106,9 +101,7 @@ public class CreaPostFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
         
-        if (debug) {
-            log("CreaPostFilter:doFilter()");
-        }
+        log.debug("CreaPostFilter:doFilter()");
         
         doBeforeProcessing(request, response);
         
@@ -133,7 +126,7 @@ public class CreaPostFilter implements Filter {
                 ((HttpServletResponse)response).sendRedirect(((HttpServletRequest)request).getContextPath()+ "/secure/tuoi_gruppi");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(GroupFilter.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         }
         doAfterProcessing(request, response);

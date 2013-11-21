@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -14,12 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Davide
  */
 public class Gruppo_UtenteController {
+    
+    static Logger  log = Logger.getLogger(Gruppo_UtenteController.class);
 
     public static void creaGruppo_utente(HttpServletRequest request, String id_gruppo) throws SQLException {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");

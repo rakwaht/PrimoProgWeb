@@ -5,7 +5,6 @@
 package com.deadormi.servlet;
 
 import com.deadormi.controller.GruppoController;
-import com.deadormi.controller.Gruppo_UtenteController;
 import com.deadormi.controller.InvitoController;
 import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Gruppo;
@@ -16,12 +15,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -29,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class InvitoServlet extends HttpServlet {
 
+    static Logger  log = Logger.getLogger(InvitoServlet.class);
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -51,7 +51,7 @@ public class InvitoServlet extends HttpServlet {
         try {
             inviti = InvitoController.getInvitiByUserId(request);
         } catch (SQLException ex) {
-            Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         try {
             /* TODO output your page here. You may use following sample code. */
@@ -69,13 +69,13 @@ public class InvitoServlet extends HttpServlet {
                     try {
                         gruppo = GruppoController.getGruppoById(request,id_gruppo);
                     } catch (SQLException ex) {
-                        Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error(ex);
                     }
                     id_invitante = invito.getId_invitante();
                     try {
                         invitante = UtenteController.getUserById(request,id_invitante);
                     } catch (SQLException ex) {
-                        Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error(ex);
                     }
                     
                     out.println("<tr>");
@@ -127,7 +127,7 @@ public class InvitoServlet extends HttpServlet {
         try {
             InvitoController.processaInviti(request);
         } catch (SQLException ex) {
-            Logger.getLogger(InvitoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         processRequest(request, response);
     }

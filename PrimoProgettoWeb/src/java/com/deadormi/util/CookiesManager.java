@@ -9,13 +9,16 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author Davide
  */
 public class CookiesManager {
-
+    
+    static Logger  log = Logger.getLogger(CookiesManager.class);
+    
     public static void createNewDateCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         HttpSession session = request.getSession();
