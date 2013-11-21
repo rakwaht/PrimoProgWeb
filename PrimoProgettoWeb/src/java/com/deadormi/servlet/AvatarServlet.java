@@ -11,13 +11,12 @@ import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -25,6 +24,8 @@ import javax.servlet.http.HttpSession;
  */
 public class AvatarServlet extends HttpServlet {
 
+    
+    static Logger  log = Logger.getLogger(AvatarServlet.class);
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
 
     /**
@@ -47,7 +48,7 @@ public class AvatarServlet extends HttpServlet {
         try {
             utente = UtenteController.getUserById(request, (Integer) session.getAttribute("user_id"));
         } catch (SQLException ex) {
-            Logger.getLogger(AvatarServlet.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         String avatar_path = null;
         if (utente.getNome_avatar() != null) {
@@ -103,7 +104,7 @@ public class AvatarServlet extends HttpServlet {
         try {
             FileController.cambiaAvatar(request);
         } catch (SQLException ex) {
-            Logger.getLogger(AvatarServlet.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
         processRequest(request, response);
     }
