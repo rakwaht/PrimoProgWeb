@@ -47,18 +47,7 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         try {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet HomeServlet</title>");
-            out.println("<link rel='stylesheet' type='text/css' href='/PrimoProgettoWeb/res/css/application.css' />");
-            out.println("<link rel='stylesheet' type='text/css' href='/PrimoProgettoWeb/res/css/semantic.css' />");
-            out.println("<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>");
-            out.println("<script type='text/javascript' src='/PrimoProgettoWeb/res/js/jquery_v2.0.3.js'></script>");
-            out.println("<script type='text/javascript' src='/PrimoProgettoWeb/res/js/semantic.js'></script>");
-            out.println("<script type='text/javascript' src='/PrimoProgettoWeb/res/js/application.js'></script>");
-            out.println("</head>");
-            out.println("<body>");
+            MainLayout.printHeader(out);
 
             out.println("<h1 class='center ui header'>SiteName</h1>");
             out.println("<div class='ui grid'>");
