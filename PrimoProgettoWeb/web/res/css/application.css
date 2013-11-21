@@ -16,8 +16,6 @@ body, html{
 .home-menu{
     height:100%;
     min-height:100%;
-    border-radius:0px;
-    
 }
 
 .login-input{
@@ -33,11 +31,8 @@ body, html{
 }
 
 .user-image{
-    border: solid 20px #555555;
-    
+    border: solid 20px #555555;    
 }
-
-
 
 .menu-item{
     padding: 50px;
@@ -49,4 +44,9 @@ body, html{
 
 .scrivente-image{
     border: solid 10px #6ECFF5;
+}
+
+#main-container {
+    margin-left: 19rem;
+    margin-right: 1rem;
 }

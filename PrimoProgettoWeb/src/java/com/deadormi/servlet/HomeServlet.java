@@ -63,11 +63,9 @@ public class HomeServlet extends HttpServlet {
         String avatar_path = request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();
         try {
             MainLayout.printHeader(out);
-            out.println("<div class='ui grid' style='height:100%;'>");
-
-            out.println("<div class='four wide column' style='padding-left:0px; height:100%; '>");
-            out.println("<div class='ui inverted vertical right menu fluid home-menu'>");
-
+            
+            out.println("<div class='ui inverted large vertical left menu fixed home-menu'>");
+            
             out.println("<a href='#' class='item center'>");
             if (utente.getNome_avatar() == null) {
                 out.println("<img class='circular ui image user-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
@@ -104,8 +102,7 @@ public class HomeServlet extends HttpServlet {
 
             out.println("</div>");
 
-            out.println("</div>");
-            out.println("<div class='twelve wide column' style='padding-left:0px'>");
+            out.println("<div id='main-container' class='main container'>");
             out.println("<h1 class='center'>LandingPage</h1>");
             if (ultimo_login != null) {
                 out.println("<div class='ui icon message'>");
@@ -164,7 +161,6 @@ public class HomeServlet extends HttpServlet {
 
                         out.println("<div class='thirteen wide column'>");
                         out.println("<div class='ui tabular menu' style='margin-bottom:0px;margin-top:20px'>");
-                        out.println("<a class='item' id='null-item'></a>");
                         out.println("<a class='ui blue active item'><i class='align center icon'></i>Testo</a>");
                         out.println("<a class='ui active item'><i class='save icon'></i>Files</a>");
                         out.println("</div>");
@@ -187,7 +183,7 @@ public class HomeServlet extends HttpServlet {
 
                     }
                 }
-                out.println("</div>");
+                //out.println("</div>");
             }
             out.println("</div>");
             MainLayout.printFooter(out);
