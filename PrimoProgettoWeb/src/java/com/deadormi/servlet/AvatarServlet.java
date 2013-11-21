@@ -7,6 +7,7 @@ package com.deadormi.servlet;
 import com.deadormi.controller.FileController;
 import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Utente;
+import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -27,9 +28,8 @@ public class AvatarServlet extends HttpServlet {
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -55,25 +55,20 @@ public class AvatarServlet extends HttpServlet {
         }
         try {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet AvatarServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet AvatarServlet at " + request.getContextPath() + "</h1>");
+            MainLayout.printHeader(out);
+            out.println("<h1 class='center'><i class='settings icon'></i>Cambia avatar</h1>");
             if (utente.getNome_avatar() != null) {
-                out.println("<img src='" + avatar_path + "' alt='Smiley face' height='100' width='100' /><br />");
+                out.println("<img style='height:100px;width:100px;'  class='circular ui image scrivente-image' src='" + avatar_path + "' alt='Smiley face' /><br />");
             } else {
-                out.println("<img src='http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y' alt='Smiley face' height='100' width='100' /><br />");
+                out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+
             }
             out.println("<form method='POST' enctype='multipart/form-data'>");
             out.println("Immagine<INPUT TYPE='FILE' NAME='avatar'> <BR />");
             out.println("<input type='submit' name='Cambia Immagine' value='Cambia Immagine' />");
             out.println("</form>");
             out.println("<a href='/PrimoProgettoWeb/secure/home'>INDIETRO</a>");
-            out.println("</body>");
-            out.println("</html>");
+            MainLayout.printFooter(out);
         } finally {
             out.close();
         }
@@ -81,8 +76,7 @@ public class AvatarServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -96,8 +90,7 @@ public class AvatarServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
