@@ -57,6 +57,30 @@ a {
     margin-right: 1rem;
 }
 
+.tip-l:before {
+  position: absolute;
+  display: block;
+  content: "";
+  border-color: transparent #fff transparent transparent;
+  border-style: solid;
+  border-width: 20px;
+  position: absolute;
+  bottom: 20px;
+  left: -40px;
+}
+
+.tip-r:before {
+  position: absolute;
+  display: block;
+  content: "";
+  border-color: transparent transparent transparent #fff;
+  border-style: solid;
+  border-width: 20px;
+  position: absolute;
+  bottom: 20px;
+  right: -40px;
+}
+
 @media screen and (max-width: 980px) {
     .ui.large.vertical.menu {
       width: 12rem;

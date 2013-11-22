@@ -138,6 +138,7 @@ public class HomeServlet extends HttpServlet {
                         //  Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     if (i % 2 == 0) {
+                        
                         out.println("<div class='three wide column center' >");
                         if (scrivente.getNome_avatar() != null) {
                             out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image center' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
@@ -148,7 +149,7 @@ public class HomeServlet extends HttpServlet {
                         out.println("</div>");
                         out.println("<div class='thirteen wide column'>");
 
-                        out.println("<div  class='ui blue fluid top attached segment' >");
+                        out.println("<div  class='ui blue fluid top attached segment tip-l' >");
                         out.println("<p><i class='quote left icon'></i>" + post.getTesto() + "<i class='quote right icon'></i></p><br/>");
 
                         posts.remove(post);
@@ -176,7 +177,7 @@ public class HomeServlet extends HttpServlet {
                     } else {
                         out.println("<div class='thirteen wide column'>");
 
-                        out.println("<div  class='ui blue fluid top attached segment' >");
+                        out.println("<div  class='ui blue fluid top attached segment tip-r' >");
                         out.println("<p><i class='quote left icon'></i>" + post.getTesto() + "<i class='quote right icon'></i></p><br/>");
 
                         posts.remove(post);
