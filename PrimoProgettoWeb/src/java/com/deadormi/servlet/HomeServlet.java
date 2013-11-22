@@ -137,8 +137,9 @@ public class HomeServlet extends HttpServlet {
                     } catch (SQLException ex) {
                         //  Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    
+                    //Boolean stampa_post = !post.getId_scrivente().equals(request.getSession().getAttribute("user_id"));                    
                     if (i % 2 == 0) {
-                        
                         out.println("<div class='three wide column center' >");
                         if (scrivente.getNome_avatar() != null) {
                             out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image center' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
