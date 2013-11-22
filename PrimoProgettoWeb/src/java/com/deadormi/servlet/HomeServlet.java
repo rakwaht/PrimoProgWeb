@@ -105,7 +105,7 @@ public class HomeServlet extends HttpServlet {
             out.println("</div>");
 
             out.println("<div id='main-container' class='main container'>");
-            out.println("<h1 class='center' style='padding:5px'>HOMEPAGE DI "+ utente.getUsername().toUpperCase() +"</h1>");
+            out.println("<h1 class='center' style='padding:5px'>HOMEPAGE DI " + utente.getUsername().toUpperCase() + "</h1>");
             if (ultimo_login != null) {
                 out.println("<div class='ui icon message'>");
                 out.println("<i class='blue time icon'></i>");
@@ -137,7 +137,7 @@ public class HomeServlet extends HttpServlet {
                     } catch (SQLException ex) {
                         //  Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                     //Boolean stampa_post = !post.getId_scrivente().equals(request.getSession().getAttribute("user_id"));                    
                     if (i % 2 == 0) {
                         out.println("<div class='three wide column center' >");
@@ -164,17 +164,19 @@ public class HomeServlet extends HttpServlet {
                                 filePath = request.getContextPath() + "/resource/files/" + post.getId_gruppo() + "/" + file.getId_file() + "-" + file.getNome_file();
                                 out.println("<i class='icon blue save'></i>");
                                 out.println("<a href='" + filePath + "' target='_blank'>" + file.getId_file() + "-" + file.getNome_file() + "</a>");
-                                if (j!=files.size()-1) out.println("/");
+                                if (j != files.size() - 1) {
+                                    out.println("/");
+                                }
                             }
 
                         }
-                        out.println("<p style='text-align:right; color:#ababab; margin-top:0px;'>scritto in: <b> " + gruppo_post.getNome() + "</b> il <i>" + post.getData_creazione() + "</i></p>");
+                        out.println("<p style='text-align:right; color:#ababab; margin-top:0px;'>scritto in <b> <a href='gruppo/show?id_gruppo=" + gruppo_post.getId_gruppo() + "'>" + gruppo_post.getNome() + "</a></b> il <i>" + post.getData_creazione() + "</i></p>");
 
                         out.println("</div>");
 
                         out.println("</div>");
                         out.println("<div class='ui divider'></div>");
-                        
+
                     } else {
                         out.println("<div class='thirteen wide column'>");
 
@@ -192,11 +194,13 @@ public class HomeServlet extends HttpServlet {
                                 filePath = request.getContextPath() + "/resource/files/" + post.getId_gruppo() + "/" + file.getId_file() + "-" + file.getNome_file();
                                 out.println("<i class='icon blue save'></i>");
                                 out.println("<a href='" + filePath + "' target='_blank'>" + file.getId_file() + "-" + file.getNome_file() + "</a>");
-                                if (j!=files.size()-1) out.println("/");
+                                if (j != files.size() - 1) {
+                                    out.println("/");
+                                }
                             }
 
                         }
-                        out.println("<p style='text-align:right; color:#ababab; margin-top:0px;'>scritto in: <b> " + gruppo_post.getNome() + "</b> il <i>" + post.getData_creazione() + "</i></p>");
+                        out.println("<p style='text-align:right; color:#ababab; margin-top:0px;'>scritto in <b> <a href='gruppo/show?id_gruppo=" + gruppo_post.getId_gruppo() + "'>" + gruppo_post.getNome() + "</a></b> il <i>" + post.getData_creazione() + "</i></p>");
 
                         out.println("</div>");
 

@@ -29,7 +29,6 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
-import org.apache.tomcat.util.codec.binary.StringUtils;
 
 /**
  *
