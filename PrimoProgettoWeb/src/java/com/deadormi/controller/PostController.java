@@ -29,6 +29,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.codec.binary.StringUtils;
 
 /**
  *
@@ -279,11 +280,12 @@ public class PostController {
         return target;
     }
 
-    private static String checkWeb(String trovata) {
+    private static String checkWeb(String trovata) {        
         if (trovata != null) {
-            if (trovata.length() >= 7 && trovata.substring(0, 7).equals("http://")) {
+            int dotOccurences = trovata.length()-trovata.replace(".", "").length();
+            if (trovata.length() >= 12 && trovata.substring(0, 7).equals("http://") && dotOccurences >= 1) {
                 return trovata;
-            } else if (trovata.length() >= 4 && trovata.substring(0, 4).equals("www.") && trovata.length() > 5) {
+            } else if (trovata.length() >= 9 && trovata.substring(0, 4).equals("www.") && dotOccurences >= 2) {
                 return "http://" + trovata;
             }
         }
