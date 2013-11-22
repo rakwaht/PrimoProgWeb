@@ -54,7 +54,7 @@ public class LoginServlet extends HttpServlet {
             out.println("<div class='five wide column'></div>");
 
             out.println("<div class='six wide column'>");
-            out.println("<form class='ui fluid form segment' method='POST'");
+            out.println("<form class='ui fluid form message' method='POST'");
             out.println("<div class='three fields'>");
             out.println("<h2 class='center ui header' id='login-title'><i class='circular inverted blue icon sign in'></i>Login</h2>");
             out.println("<div class='ui divider'></div>");

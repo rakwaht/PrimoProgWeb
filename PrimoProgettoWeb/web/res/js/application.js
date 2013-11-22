@@ -16,9 +16,14 @@ function linka_selezionati() {
 }
 
 
+  
+
+
 //aggiungo dinamicamente input file alla crea post
 function add_upload_file() {
     $('form input:file').last().after($('<br /><input type="file" name="file" class="file" onchange="add_upload_file();" />'));
 }
 ;
+
+
 
