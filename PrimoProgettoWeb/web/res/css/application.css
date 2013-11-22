@@ -56,3 +56,9 @@ a {
     margin-left: 19rem;
     margin-right: 1rem;
 }
+
+@media screen and (max-width: 980px) {
+    .ui.large.vertical.menu {
+      width: 12rem;
+    }
+}
