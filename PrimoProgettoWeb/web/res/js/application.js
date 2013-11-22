@@ -27,3 +27,7 @@ function add_upload_file() {
 
 
 
+$( document ).ready(function() {
+    $('.ui.checkbox').checkbox();
+});
+

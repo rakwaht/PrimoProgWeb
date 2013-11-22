@@ -119,20 +119,18 @@ public class CreaGruppoServlet extends HttpServlet {
             out.println("<textarea type='text' name='descrizione'></textarea>");
             out.println("</div>");
             out.println("</div>");
-            
+
             if (list != null && list.size() != 1) {
                 out.println("<div class='ui blue ribbon label'><i class='icon users '></i>Invita</div><br/>");
                 for (int i = 0; i < list.size(); i++) {
 
                     utente = list.get(i);
                     if (!utente.getId_utente().equals(session.getAttribute("user_id"))) {
-
-                        //out.println("<p>" + utente.getUsername());
-                        //out.println("<input type='checkbox' name='utenti_selezionati' value='" + utente.getId_utente() + "'/></p>");
-                        
-                        out.println("<input style='margin:3px;'type='checkbox' name='utenti_selezionati' value='" + utente.getId_utente() + "'>");
-                        out.println("<label >"+ utente.getUsername() +"</label>");
-                        out.println("<br/>");
+                        out.println("<p>");
+                        out.println("<div class='ui toggle checkbox'>");
+                        out.println("<input type='checkbox' name='utenti_selezionati' value='" + utente.getId_utente() + "'>");
+                        out.println("<label>" + utente.getUsername() + "</label></div>");
+                        out.println("</p>");
                     }
                 }
                 out.println("<div class='ui divider'></div>");
