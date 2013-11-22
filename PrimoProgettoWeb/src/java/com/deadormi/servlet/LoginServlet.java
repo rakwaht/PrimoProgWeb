@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
-
+            
             out.println("<h1 class='center ui header'>SiteName</h1>");
             out.println("<div class='ui grid'>");
             out.println("<div class='five wide column'></div>");

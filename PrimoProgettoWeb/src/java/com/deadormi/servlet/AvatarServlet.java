@@ -5,12 +5,15 @@
 package com.deadormi.servlet;
 
 import com.deadormi.controller.FileController;
+import com.deadormi.controller.InvitoController;
 import com.deadormi.controller.UtenteController;
+import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,9 +47,11 @@ public class AvatarServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         Utente utente = null;
-
+        List<Invito> inviti = null;
         try {
             utente = UtenteController.getUserById(request, (Integer) session.getAttribute("user_id"));
+                        inviti = InvitoController.getInvitiByUserId(request);
+
         } catch (SQLException ex) {
             log.error(ex);
         }
@@ -57,18 +62,67 @@ public class AvatarServlet extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
-            out.println("<h1 class='center'><i class='settings icon'></i>Cambia avatar</h1>");
-            if (utente.getNome_avatar() != null) {
-                out.println("<img style='height:100px;width:100px;'  class='circular ui image scrivente-image' src='" + avatar_path + "' alt='Smiley face' /><br />");
+            out.println("<div class='ui inverted large vertical left menu fixed home-menu'>");
+
+            out.println("<a href='home' class='item center'>");
+            if (utente.getNome_avatar() == null) {
+                out.println("<img class='circular ui image user-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
             } else {
-                out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+                out.println("<img class='circular ui image user-image' src='" + avatar_path + "' alt='Smiley face' style='margin:0 auto; width:100px; height:100px'>");
+            }
+            out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
+            out.println("</a>");
+            
+        
+            
+            out.println("<a href='inviti' class='item active'>");
+            out.println("<div class='ui large blue label'>" + inviti.size() + "</div>");
+            out.println("Inviti");
+            out.println("</a>");
+            
+            
+            out.println("<a href='tuoi_gruppi' class='item '>");
+            out.println("<i class=' users icon'></i>");
+            out.println("Gruppi");
+            out.println("</a>");
+
+            out.println("<a href='crea' class='item active'>");
+            out.println("<i class=' add sign icon'></i>");
+            out.println("Crea Gruppo");
+            out.println("</a>");
+
+            out.println("<a href='home' class='item'>");
+            out.println("<i class=' reply mail icon'></i>");
+            out.println("Indietro");
+            out.println("</a>");
+            
+            out.println("<a href='logout' class='item active'>");
+            out.println("<i class='sign out icon'></i>");
+            out.println("Logout");
+            out.println("</a>");
+
+            out.println("</div>");
+
+            out.println("<div id='main-container' class='main container'>");
+            
+            out.println("<h1 class='center' style='margin-bottom:20px;'><i class='settings icon'></i>Cambia avatar</h1>");
+            if (utente.getNome_avatar() != null) {
+                out.println("<img style='height:100px;width:100px;'  class=' center circular ui image scrivente-image' src='" + avatar_path + "' alt='Smiley face' /><br />");
+            } else {
+                out.println("<img style='height:100px;width:100px; ' class=' center circular ui image scrivente-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
 
             }
-            out.println("<form method='POST' enctype='multipart/form-data'>");
-            out.println("Immagine<INPUT TYPE='FILE' NAME='avatar'> <BR />");
-            out.println("<input type='submit' name='Cambia Immagine' value='Cambia Immagine' />");
+            out.println("<div class='ui grid' style='margin-top:20px;'>");
+            out.println("<div class='five wide column'></div>");
+             out.println("<div class='six wide column'>");
+            out.println("<form class='ui form fluid message center' method='POST' enctype='multipart/form-data' >");
+            out.println("<input type='file' name='avatar' /> <BR />");
+            out.println("<button class='ui button blue' style='margin-top:5px' type='submit' name='Cambia Immagine' value='Cambia Immagine' ><i class='icon photo'></i>Cambia Immagine</button>");
             out.println("</form>");
+             out.println("</div>");
+             out.println("<div class='five wide column'></div>");
             out.println("<a href='/PrimoProgettoWeb/secure/home'>INDIETRO</a>");
+            
             MainLayout.printFooter(out);
         } finally {
             out.close();
