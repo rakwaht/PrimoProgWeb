@@ -29,7 +29,7 @@ public class MainLayout {
         out.println("<title>Primo Progetto Web</title>");
         out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
         out.println("</head>");
-        out.println("<body>");
+        out.println("<body class='pushed'>");
     }
 
     public static void printFooter(PrintWriter out) {

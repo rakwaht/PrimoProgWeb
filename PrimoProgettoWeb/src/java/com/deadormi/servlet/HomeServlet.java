@@ -65,8 +65,7 @@ public class HomeServlet extends HttpServlet {
         String avatar_path = request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();
         try {
             MainLayout.printHeader(out);
-
-            out.println("<div class='ui inverted large vertical left menu fixed home-menu'>");
+            out.println("<div class='ui large inverted vertical demo sidebar menu active fixed'>");
 
             out.println("<a href='#' class='item center'>");
             if (utente.getNome_avatar() == null) {
@@ -94,7 +93,6 @@ public class HomeServlet extends HttpServlet {
             out.println("<a href='crea' class='item'>");
             out.println("<i class=' add sign icon'></i>");
             out.println("Crea Gruppo");
-
             out.println("</a>");
 
             out.println("<a href='logout' class='item active'>");
@@ -103,9 +101,8 @@ public class HomeServlet extends HttpServlet {
             out.println("</a>");
 
             out.println("</div>");
-
             out.println("<div id='main-container' class='main container'>");
-            out.println("<h1 class='center' style='padding:5px'>HOMEPAGE DI " + utente.getUsername().toUpperCase() + "</h1>");
+            out.println(" <div id='buffo' class=\"ui black basic button\"><i class=\"icon list\"></i>MENU</div>");
             if (ultimo_login != null) {
                 out.println("<div class='ui icon message'>");
                 out.println("<i class='blue time icon'></i>");
@@ -220,6 +217,7 @@ public class HomeServlet extends HttpServlet {
                 //out.println("</div>");
             }
             out.println("</div>");
+
             MainLayout.printFooter(out);
         } finally {
             out.close();

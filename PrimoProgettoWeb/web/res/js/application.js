@@ -29,5 +29,12 @@ function add_upload_file() {
 
 $( document ).ready(function() {
     $('.ui.checkbox').checkbox();
+    $('.ui.sidebar').sidebar();
+    
+    $('#buffo').click(function () {
+        $('body').toggleClass('pushed');
+        $('.demo.sidebar').sidebar('toggle');
+    });
+;
 });
 

@@ -11,12 +11,23 @@
     color:#6ECFF5;
 }
 
-body, html{
+body, html {
     font-family: 'Source Sans Pro', sans-serif;
     color:#555555;
     background-image:url('shattered.png');
-    margin:0px;
+    margin: 0px;
+    padding: 0px;
     height: 100%;
+}
+
+.pushed {
+    margin-left: 275px !important;
+}
+
+#main-container {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-top: 20px;
 }
 
 a {
@@ -58,10 +69,6 @@ a {
     border: solid 10px #6ECFF5;
 }
 
-#main-container {
-    margin-left: 19rem;
-    margin-right: 1rem;
-}
 
 .tip-l:before {
   position: absolute;
@@ -85,10 +92,4 @@ a {
   position: absolute;
   bottom: 20px;
   right: -40px;
-}
-
-@media screen and (max-width: 980px) {
-    .ui.large.vertical.menu {
-      width: 12rem;
-    }
 }
