@@ -61,7 +61,7 @@ public class TuoiGruppiServlet extends HttpServlet {
             MainLayout.printHeader(out);
             out.println("<div class='ui large inverted vertical demo sidebar menu active fixed'>");
 
-            out.println("<a href='#' class='item center'>");
+            out.println("<a href='home' class='item center'>");
             if (utente.getNome_avatar() == null) {
                 out.println("<img class='circular ui image user-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
             } else {
