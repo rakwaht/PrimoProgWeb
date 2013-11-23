@@ -167,7 +167,7 @@ public class HomeServlet extends HttpServlet {
                             for (int j = 0; j < files.size(); j++) {
                                 file = files.get(j);
                                 filePath = request.getContextPath() + "/resource/files/" + post.getId_gruppo() + "/" + file.getId_file() + "-" + file.getNome_file();
-                                out.println("<i class='icon blue save'></i>");
+                                out.println("<i class='icon blue attachment'></i>");
                                 out.println("<a href='" + filePath + "' target='_blank'>" + file.getId_file() + "-" + file.getNome_file() + "</a>");
                                 if (j != files.size() - 1) {
                                     out.println("/");
@@ -195,7 +195,7 @@ public class HomeServlet extends HttpServlet {
                             for (int j = 0; j < files.size(); j++) {
                                 file = files.get(j);
                                 filePath = request.getContextPath() + "/resource/files/" + post.getId_gruppo() + "/" + file.getId_file() + "-" + file.getNome_file();
-                                out.println("<i class='icon blue save'></i>");
+                                out.println("<i class='icon blue attachment'></i>");
                                 out.println("<a href='" + filePath + "' target='_blank'>" + file.getId_file() + "-" + file.getNome_file() + "</a>");
                                 if (j != files.size() - 1) {
                                     out.println("/");

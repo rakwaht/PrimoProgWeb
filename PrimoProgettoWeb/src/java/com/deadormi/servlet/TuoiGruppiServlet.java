@@ -57,7 +57,7 @@ public class TuoiGruppiServlet extends HttpServlet {
 
         try {
             /* TODO output your page here. You may use following sample code. */
-            
+
             MainLayout.printHeader(out);
             out.println("<div class='ui large inverted vertical demo sidebar menu active fixed'>");
 
@@ -95,7 +95,7 @@ public class TuoiGruppiServlet extends HttpServlet {
             out.println("</a>");
 
             out.println("</div>");
-            
+
             out.println("<div class=\"ui fixed transparent inverted main menu\">");
             out.println("<div class='container'>");
             out.println("<div id='buffo' class='item' style='cursor: pointer'><i class=\"icon list\"></i></div>");
@@ -103,7 +103,7 @@ public class TuoiGruppiServlet extends HttpServlet {
             out.println("<div class='item'><i class='users icon'></i>Miei Gruppi</div>");
             out.println("</div>");
             out.println("</div>");
-            
+
             out.println("<div id='main-container' class='main container center'>");
             out.println("<div class='ui grid'>");
             out.println("<div class='row'>");
@@ -112,9 +112,9 @@ public class TuoiGruppiServlet extends HttpServlet {
             if (gruppi != null && gruppi.size() > 0) {
                 out.println("<table class='ui blue table segment'>");
                 out.println("<th>Gruppo</th>");
-                    out.println("<th>Amministratore</th>");
-                    out.println("<th>Descrizione</th>");
-                    out.println("<th>Vai</th>");
+                out.println("<th>Descrizione</th>");
+                out.println("<th>Amministratore</th>");
+                out.println("<th>Vai</th>");
                 for (int i = 0; i < gruppi.size(); i++) {
                     Gruppo gruppo = gruppi.get(i);
                     Utente proprietario = null;
@@ -123,10 +123,11 @@ public class TuoiGruppiServlet extends HttpServlet {
                     } catch (SQLException ex) {
                         log.error(ex);
                     }
-                    
+
                     out.println("<tr>");
-                    out.println("<td>" + gruppo.getNome() + "</td><td>" + proprietario.getUsername() + "</td>");
+                    out.println("<td>" + gruppo.getNome() + "</td>");
                     out.println("<td>" + gruppo.getDescrizione() + "</td>");
+                    out.println("<td>" + proprietario.getUsername() + "</td>");
                     out.println("<td><a href='gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "'><i id='tasto' class='forward mail icon' style='font-size:30px'></i></a></td>");
                     out.println("</tr>");
                 }

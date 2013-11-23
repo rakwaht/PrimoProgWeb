@@ -64,7 +64,7 @@ public class Gruppo_UtenteController {
         List<Gruppo> miei_gruppi = new ArrayList<Gruppo>();
         Gruppo gruppo;
         ResultSet rs;
-        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.GRUPPO_UTENTE NATURAL JOIN ROOT.GRUPPO WHERE id_utente=? AND gruppo_utente_abilitato='true' ");
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.GRUPPO_UTENTE NATURAL JOIN ROOT.GRUPPO WHERE id_utente=? AND gruppo_utente_abilitato='true' ORDER BY data_creazione DESC");
         try {
             stm.setInt(1, (Integer) session.getAttribute("user_id"));
             rs = stm.executeQuery();
