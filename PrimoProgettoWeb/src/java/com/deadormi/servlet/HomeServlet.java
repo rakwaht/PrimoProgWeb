@@ -76,7 +76,7 @@ public class HomeServlet extends HttpServlet {
             out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
             out.println("</a>");
 
-            out.println("<a href='cambia_avatar' class='item active'>");
+            out.println("<a href='cambia_avatar' class='item'>");
             out.println("<i class='edit icon'></i>Cambia Avatar");
             out.println("</a>");
 
@@ -85,7 +85,7 @@ public class HomeServlet extends HttpServlet {
             out.println("Inviti");
             out.println("</a>");
 
-            out.println("<a href='tuoi_gruppi' class='item active'>");
+            out.println("<a href='tuoi_gruppi' class='item'>");
             out.println("<i class=' users icon'></i>");
             out.println("Gruppi");
             out.println("</a>");
@@ -95,7 +95,7 @@ public class HomeServlet extends HttpServlet {
             out.println("Crea Gruppo");
             out.println("</a>");
 
-            out.println("<a href='logout' class='item active'>");
+            out.println("<a href='logout' class='item'>");
             out.println("<i class='sign out icon'></i>");
             out.println("Logout");
             out.println("</a>");

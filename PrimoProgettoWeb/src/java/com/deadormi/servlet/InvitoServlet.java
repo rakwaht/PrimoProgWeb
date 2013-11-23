@@ -61,9 +61,10 @@ public class InvitoServlet extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
-            out.println("<div class='ui inverted large vertical left menu fixed home-menu'>");
+            
+            out.println("<div class='ui large inverted vertical demo sidebar menu active fixed'>");
 
-            out.println("<a href='home' class='item center'>");
+            out.println("<a href='#' class='item center'>");
             if (utente.getNome_avatar() == null) {
                 out.println("<img class='circular ui image user-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
             } else {
@@ -72,32 +73,40 @@ public class InvitoServlet extends HttpServlet {
             out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
             out.println("</a>");
 
-            out.println("<a href='cambia_avatar' class='item active'>");
+            out.println("<a href='cambia_avatar' class='item'>");
             out.println("<i class='edit icon'></i>Cambia Avatar");
             out.println("</a>");
 
-            out.println("<a href='tuoi_gruppi' class='item '>");
+            out.println("<a href='inviti' class='item active'>");
+            out.println("<div class='ui large blue label'>" + inviti.size() + "</div>");
+            out.println("Inviti");
+            out.println("</a>");
+
+            out.println("<a href='tuoi_gruppi' class='item'>");
             out.println("<i class=' users icon'></i>");
             out.println("Gruppi");
             out.println("</a>");
 
-            out.println("<a href='crea' class='item active'>");
+            out.println("<a href='crea' class='item'>");
             out.println("<i class=' add sign icon'></i>");
             out.println("Crea Gruppo");
             out.println("</a>");
 
-            out.println("<a href='home' class='item'>");
-            out.println("<i class=' reply mail icon'></i>");
-            out.println("Indietro");
-            out.println("</a>");
-
-            out.println("<a href='logout' class='item active'>");
+            out.println("<a href='logout' class='item'>");
             out.println("<i class='sign out icon'></i>");
             out.println("Logout");
             out.println("</a>");
 
             out.println("</div>");
-
+            
+            out.println("<div class=\"ui fixed transparent inverted main menu\">");
+            out.println("<div class='container'>");
+            out.println("<div id='buffo' class='item' style='cursor: pointer'><i class=\"icon list\"></i></div>");
+            out.println("<a href='home' class='item'><i class=\"left arrow icon\"></i>INDIETRO</a>");
+            out.println("<div class='item'>" + utente.getUsername().toUpperCase() + "</div>");
+            out.println("</div>");
+            out.println("</div>");
+            
             out.println("<div id='main-container' class='main container'>");
             out.println("<h1 class='center' style='margin-bottom:20px;margin-top:20px;'><i class='browser icon'></i>Inviti</h1>");
             out.println("<div class='ui grid' style='margin-top:20px;'>");
