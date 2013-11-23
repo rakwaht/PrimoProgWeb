@@ -110,8 +110,8 @@ public class InvitoServlet extends HttpServlet {
             out.println("<div id='main-container' class='main container center'>");
             out.println("<div class='ui grid'>");
             out.println("<div class='row'>");
-            out.println("<div class='four wide column'></div>");
-            out.println("<div class='eight wide column'>");
+            out.println("<div class='two wide column'></div>");
+            out.println("<div class='twelve wide column'>");
 
             if (inviti != null && inviti.size() > 0) {
 
@@ -119,6 +119,7 @@ public class InvitoServlet extends HttpServlet {
                 out.println("<table class='ui table blue segment'>");
                 out.println("<tr>");
                 out.println("<th>Gruppo</th>");
+                out.println("<th>Descrizione</th>");
                 out.println("<th>Mittente</th>");
                 out.println("<th>Accetti?</th>");
                 out.println("</tr>");
@@ -138,14 +139,14 @@ public class InvitoServlet extends HttpServlet {
                     }
 
                     out.println("<tr>");
-                    out.println("<td>" + gruppo.getNome() + "</td><td>" + invitante.getUsername() + "</td>");
-                    out.println("<div class='ui radio checkbox'>");
-                    out.println("<td><input type='radio' name='" + gruppo.getId_gruppo() + "'  value='true'>Si");
-                    out.println("</div>");
-                    out.println("<input type='radio' name='" + gruppo.getId_gruppo() + "'  value='false'>No</td>");
+                    out.println("<td>" + gruppo.getNome() + "</td><td>" + gruppo.getDescrizione() + "</td><td>" + invitante.getUsername() + "</td>");
+                    out.println("<td>");
+                    out.println("<div class='ui radio checkbox'><input type='radio' name='" + gruppo.getId_gruppo() + "' value='true'><label>Si</label></div>&nbsp;&nbsp;");
+                    out.println("<div class='ui radio checkbox'><input type='radio' name='" + gruppo.getId_gruppo() + "' value='false'><label>No</label></div>");
+                    out.println("</td>");
                     out.println("</tr>");
                 }
-                out.println("<tr><td colspan='3' class='center ' ><button class='ui blue button' type='submit' value='ISCRIVITI'><i class='edit sign icon'></i>ISCRIVITI</button></td></tr>");
+                out.println("<tr><td colspan='4' class='center'><button class='ui blue button' type='submit' value='ISCRIVITI'><i class='edit sign icon'></i>ISCRIVITI</button></td></tr>");
                 out.println("</table>");
 
                 out.println("</form>");
@@ -155,7 +156,7 @@ public class InvitoServlet extends HttpServlet {
 
                 out.println("</div>");
             }
-            out.println("<div class='four wide column'></div>");
+            out.println("<div class='two wide column'></div>");
             out.println("</div>"); //chiude row
             out.println("</div>"); //chiude grid
 
