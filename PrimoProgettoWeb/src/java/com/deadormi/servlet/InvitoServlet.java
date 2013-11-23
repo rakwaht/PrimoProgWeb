@@ -61,7 +61,7 @@ public class InvitoServlet extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
-            
+
             out.println("<div class='ui large inverted vertical demo sidebar menu active fixed'>");
 
             out.println("<a href='#' class='item center'>");
@@ -98,18 +98,18 @@ public class InvitoServlet extends HttpServlet {
             out.println("</a>");
 
             out.println("</div>");
-            
+
             out.println("<div class=\"ui fixed transparent inverted main menu\">");
             out.println("<div class='container'>");
             out.println("<div id='buffo' class='item' style='cursor: pointer'><i class=\"icon list\"></i></div>");
             out.println("<a href='home' class='item'><i class=\"left arrow icon\"></i>INDIETRO</a>");
-            out.println("<div class='item'>" + utente.getUsername().toUpperCase() + "</div>");
+            out.println("<div class='item'><i class='browser icon'></i>Inviti</div>");
             out.println("</div>");
             out.println("</div>");
-            
-            out.println("<div id='main-container' class='main container'>");
-            out.println("<h1 class='center' style='margin-bottom:20px;margin-top:20px;'><i class='browser icon'></i>Inviti</h1>");
-            out.println("<div class='ui grid' style='margin-top:20px;'>");
+
+            out.println("<div id='main-container' class='main container center'>");
+            out.println("<div class='ui grid'>");
+            out.println("<div class='row'>");
             out.println("<div class='four wide column'></div>");
             out.println("<div class='eight wide column'>");
 
@@ -156,6 +156,9 @@ public class InvitoServlet extends HttpServlet {
                 out.println("</div>");
             }
             out.println("<div class='four wide column'></div>");
+            out.println("</div>"); //chiude row
+            out.println("</div>"); //chiude grid
+
             MainLayout.printFooter(out);
         } finally {
             out.close();

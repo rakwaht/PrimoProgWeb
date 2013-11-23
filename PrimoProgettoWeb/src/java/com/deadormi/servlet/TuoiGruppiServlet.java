@@ -100,13 +100,11 @@ public class TuoiGruppiServlet extends HttpServlet {
             out.println("<div class='container'>");
             out.println("<div id='buffo' class='item' style='cursor: pointer'><i class=\"icon list\"></i></div>");
             out.println("<a href='home' class='item'><i class=\"left arrow icon\"></i>INDIETRO</a>");
-            out.println("<div class='item'>" + utente.getUsername().toUpperCase() + "</div>");
+            out.println("<div class='item'><i class='users icon'></i>Miei Gruppi</div>");
             out.println("</div>");
             out.println("</div>");
             
             out.println("<div id='main-container' class='main container center'>");
-
-            out.println("<h1><i class='users icon'></i>Miei Gruppi</h1>");
             out.println("<div class='ui grid'>");
             out.println("<div class='row'>");
             out.println("<div class='two wide column'></div>");

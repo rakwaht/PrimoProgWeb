@@ -27,8 +27,7 @@ import org.apache.log4j.Logger;
  */
 public class AvatarServlet extends HttpServlet {
 
-    
-    static Logger  log = Logger.getLogger(AvatarServlet.class);
+    static Logger log = Logger.getLogger(AvatarServlet.class);
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
 
     /**
@@ -50,7 +49,7 @@ public class AvatarServlet extends HttpServlet {
         List<Invito> inviti = null;
         try {
             utente = UtenteController.getUserById(request, (Integer) session.getAttribute("user_id"));
-                        inviti = InvitoController.getInvitiByUserId(request);
+            inviti = InvitoController.getInvitiByUserId(request);
 
         } catch (SQLException ex) {
             log.error(ex);
@@ -103,14 +102,12 @@ public class AvatarServlet extends HttpServlet {
             out.println("<div class='container'>");
             out.println("<div id='buffo' class='item' style='cursor: pointer'><i class=\"icon list\"></i></div>");
             out.println("<a href='home' class='item'><i class=\"left arrow icon\"></i>INDIETRO</a>");
-            out.println("<div class='item'>" + utente.getUsername().toUpperCase() + "</div>");
+            out.println("<div class='item'><i class='edit icon'></i>Cambia avatar</div>");
 
             out.println("</div>");
             out.println("</div>");
 
             out.println("<div id='main-container' class='main container'>");
-            
-            out.println("<h1 class='center' style='margin-bottom:20px;margin-top:20px;'><i class='edit icon'></i>Cambia avatar</h1>");
             if (utente.getNome_avatar() != null) {
                 out.println("<img style='height:100px;width:100px;'  class=' center circular ui image scrivente-image' src='" + avatar_path + "' alt='Smiley face' /><br />");
             } else {
@@ -119,15 +116,15 @@ public class AvatarServlet extends HttpServlet {
             }
             out.println("<div class='ui grid' style='margin-top:20px;'>");
             out.println("<div class='five wide column'></div>");
-             out.println("<div class='six wide column'>");
+            out.println("<div class='six wide column'>");
             out.println("<form class='ui form fluid message center' method='POST' enctype='multipart/form-data' >");
             out.println("<input type='file' name='avatar'/>");
-             out.println("<div class='ui divider'></div>");
+            out.println("<div class='ui divider'></div>");
             out.println("<button class='ui button blue' style='margin-top:5px' type='submit' name='Cambia Avatar' value='Cambia Immagine' ><i class='icon photo'></i>Cambia Immagine</button>");
             out.println("</form>");
-             out.println("</div>");
-             out.println("<div class='five wide column'></div>");
-            
+            out.println("</div>");
+            out.println("<div class='five wide column'></div>");
+
             MainLayout.printFooter(out);
         } finally {
             out.close();
