@@ -70,7 +70,7 @@ public class TuoiGruppiServlet extends HttpServlet {
             out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
             out.println("</a>");
 
-            out.println("<a href='cambia_avatar' class='item active'>");
+            out.println("<a href='cambia_avatar' class='item'>");
             out.println("<i class='edit icon'></i>Cambia Avatar");
             out.println("</a>");
 
@@ -89,7 +89,7 @@ public class TuoiGruppiServlet extends HttpServlet {
             out.println("Crea Gruppo");
             out.println("</a>");
 
-            out.println("<a href='logout' class='item active'>");
+            out.println("<a href='logout' class='item'>");
             out.println("<i class='sign out icon'></i>");
             out.println("Logout");
             out.println("</a>");
@@ -103,56 +103,18 @@ public class TuoiGruppiServlet extends HttpServlet {
             out.println("<div class='item'>" + utente.getUsername().toUpperCase() + "</div>");
             out.println("</div>");
             out.println("</div>");
-            /*
-            out.println("<div class='ui inverted large vertical left menu fixed home-menu'>");
-
-            out.println("<a href='home' class='item center'>");
-            if (utente.getNome_avatar() == null) {
-                out.println("<img class='circular ui image user-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
-            } else {
-                out.println("<img class='circular ui image user-image' src='" + avatar_path + "' alt='Smiley face' style='margin:0 auto; width:100px; height:100px'>");
-            }
-            out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
-            out.println("</a>");
-
-            out.println("<a href='cambia_avatar' class='item active'>");
-            out.println("<i class='edit icon'></i>Cambia Avatar");
-            out.println("</a>");
-
-            out.println("<a href='inviti' class='item'>");
-            out.println("<div class='ui large blue label'>" + inviti.size() + "</div>");
-            out.println("Inviti");
-            out.println("</a>");
-
-            out.println("<a href='crea' class='item active'>");
-            out.println("<i class=' add sign icon'></i>");
-            out.println("Crea Gruppo");
-
-            out.println("</a>");
-
-            out.println("<a href='home' class='item'>");
-            out.println("<i class=' reply mail icon'></i>");
-            out.println("Indietro");
-            out.println("</a>");
-
-            out.println("<a href='logout' class='item active'>");
-            out.println("<i class='sign out icon'></i>");
-            out.println("Logout");
-            out.println("</a>");
-
-            out.println("</div>");
-            */
-
+            
             out.println("<div id='main-container' class='main container center'>");
 
             out.println("<h1><i class='users icon'></i>Miei Gruppi</h1>");
             out.println("<div class='ui grid'>");
-            out.println("<div class='four wide column'></div>");
-            out.println("<div class='eight wide column'>");
+            out.println("<div class='row'>");
+            out.println("<div class='two wide column'></div>");
+            out.println("<div class='twelve wide column'>");
             if (gruppi != null && gruppi.size() > 0) {
                 out.println("<table class='ui blue table segment'>");
                 out.println("<th>Gruppo</th>");
-                    out.println("<th>Autore</th>");
+                    out.println("<th>Amministratore</th>");
                     out.println("<th>Descrizione</th>");
                     out.println("<th>Vai</th>");
                 for (int i = 0; i < gruppi.size(); i++) {
@@ -175,7 +137,8 @@ public class TuoiGruppiServlet extends HttpServlet {
                 out.println("<div class='ui red message'><i class='remove sign icon'></i>Non sei iscritto a nessun gruppo.</div>");
             }
             out.println("</div>");
-            out.println("<div class='four wide column'></div>");
+            out.println("<div class='two wide column'></div>");
+            out.println("</div>");
             out.println("</div>");
             MainLayout.printFooter(out);
         } finally {
