@@ -5,6 +5,12 @@
     Description:
         Purpose of the stylesheet follows.
 */
+
+
+#tasto:hover{
+    color:#6ECFF5;
+}
+
 body, html{
     font-family: 'Source Sans Pro', sans-serif;
     color:#555555;

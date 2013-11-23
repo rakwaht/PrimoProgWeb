@@ -122,7 +122,6 @@ public class AvatarServlet extends HttpServlet {
             out.println("</form>");
              out.println("</div>");
              out.println("<div class='five wide column'></div>");
-            out.println("<a href='/PrimoProgettoWeb/secure/home'>INDIETRO</a>");
             
             MainLayout.printFooter(out);
         } finally {

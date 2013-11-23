@@ -11,6 +11,7 @@ import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
+import static com.deadormi.servlet.HomeServlet.AVATAR_RESOURCE_PATH;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -27,8 +28,8 @@ import org.apache.log4j.Logger;
  */
 public class InvitoServlet extends HttpServlet {
 
-    static Logger  log = Logger.getLogger(InvitoServlet.class);
-    
+    static Logger log = Logger.getLogger(InvitoServlet.class);
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -47,51 +48,105 @@ public class InvitoServlet extends HttpServlet {
         Integer id_gruppo;
         Integer id_invitante = null;
         Utente invitante = null;
+        Utente utente = null;
         Gruppo gruppo = null;
         try {
             inviti = InvitoController.getInvitiByUserId(request);
+            utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
         } catch (SQLException ex) {
             log.error(ex);
         }
+        String avatar_path = request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();
+
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
-            out.println("<h1>INVITI: " + request.getContextPath() + "</h1>");
-            out.println("<a href='home'>Indietro</a><br />");
-            if (inviti != null && inviti.size()>0) {
-                out.println("<h2>Inviti</h2>");
+            out.println("<div class='ui inverted large vertical left menu fixed home-menu'>");
+
+            out.println("<a href='home' class='item center'>");
+            if (utente.getNome_avatar() == null) {
+                out.println("<img class='circular ui image user-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+            } else {
+                out.println("<img class='circular ui image user-image' src='" + avatar_path + "' alt='Smiley face' style='margin:0 auto; width:100px; height:100px'>");
+            }
+            out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
+            out.println("</a>");
+
+            out.println("<a href='cambia_avatar' class='item active'>");
+            out.println("<i class='edit icon'></i>Cambia Avatar");
+            out.println("</a>");
+
+            out.println("<a href='tuoi_gruppi' class='item '>");
+            out.println("<i class=' users icon'></i>");
+            out.println("Gruppi");
+            out.println("</a>");
+
+            out.println("<a href='crea' class='item active'>");
+            out.println("<i class=' add sign icon'></i>");
+            out.println("Crea Gruppo");
+            out.println("</a>");
+
+            out.println("<a href='home' class='item'>");
+            out.println("<i class=' reply mail icon'></i>");
+            out.println("Indietro");
+            out.println("</a>");
+
+            out.println("<a href='logout' class='item active'>");
+            out.println("<i class='sign out icon'></i>");
+            out.println("Logout");
+            out.println("</a>");
+
+            out.println("</div>");
+
+            out.println("<div id='main-container' class='main container'>");
+            out.println("<h1 class='center' style='margin-bottom:20px;margin-top:20px;'><i class='browser icon'></i>Inviti</h1>");
+            out.println("<div class='ui grid' style='margin-top:20px;'>");
+            out.println("<div class='four wide column'></div>");
+            out.println("<div class='eight wide column'>");
+
+            if (inviti != null && inviti.size() > 0) {
+
                 out.println("<form method='POST'>");
-                out.println("<table>");
-                
+                out.println("<table class='ui table blue segment'>");
+                out.println("<tr>");
+                out.println("<th>Gruppo</th>");
+                out.println("<th>Mittente</th>");
+                out.println("<th>Accetti?</th>");
+                out.println("</tr>");
                 for (int i = 0; i < inviti.size(); i++) {
                     invito = inviti.get(i);
                     id_gruppo = invito.getId_gruppo();
                     try {
-                        gruppo = GruppoController.getGruppoById(request,id_gruppo);
+                        gruppo = GruppoController.getGruppoById(request, id_gruppo);
                     } catch (SQLException ex) {
                         log.error(ex);
                     }
                     id_invitante = invito.getId_invitante();
                     try {
-                        invitante = UtenteController.getUserById(request,id_invitante);
+                        invitante = UtenteController.getUserById(request, id_invitante);
                     } catch (SQLException ex) {
                         log.error(ex);
                     }
-                    
+
                     out.println("<tr>");
-                    out.println("<td>" + gruppo.getNome() + " da " + invitante.getUsername() + "</td>");
+                    out.println("<td>" + gruppo.getNome() + "</td><td>" + invitante.getUsername() + "</td>");
+                    out.println("<div class='ui radio checkbox'>");
                     out.println("<td><input type='radio' name='" + gruppo.getId_gruppo() + "'  value='true'>Si");
+                    out.println("</div>");
                     out.println("<input type='radio' name='" + gruppo.getId_gruppo() + "'  value='false'>No</td>");
                     out.println("</tr>");
                 }
-                
-                
+                out.println("<tr><td colspan='3' class='center ' ><button class='ui blue button' type='submit' value='ISCRIVITI'><i class='edit sign icon'></i>ISCRIVITI</button></td></tr>");
                 out.println("</table>");
-                out.println("<input type='submit' value='ISCRIVITI'/>");
+
                 out.println("</form>");
+                out.println("</div>");
             } else {
-                out.println("Nessun invito nel db!");
+                out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun invito.</div>");
+
+                out.println("</div>");
             }
+            out.println("<div class='four wide column'></div>");
             MainLayout.printFooter(out);
         } finally {
             out.close();
