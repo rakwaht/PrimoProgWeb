@@ -101,8 +101,15 @@ public class HomeServlet extends HttpServlet {
             out.println("</a>");
 
             out.println("</div>");
+
+            out.println("<div class=\"ui fixed transparent inverted main menu\">");
+            out.println("<div class='container'>");
+            out.println("<div id='buffo' class='item' style='cursor: pointer'><i class=\"icon list\"></i>MENU</div>");
+            out.println("<div class='item'>" + utente.getUsername().toUpperCase() + "</div>");
+            out.println("</div>");
+            out.println("</div>");
+
             out.println("<div id='main-container' class='main container'>");
-            out.println(" <div id='buffo' class=\"ui black basic button\"><i class=\"icon list\"></i>MENU</div>");
             if (ultimo_login != null) {
                 out.println("<div class='ui icon message'>");
                 out.println("<i class='blue time icon'></i>");
