@@ -110,11 +110,11 @@ public class CreaGruppoServlet extends HttpServlet {
             out.println("</div>");
 
             out.println("<div id='main-container' class='main container center'>");
+            out.println("<h1><i class='add sign icon'></i>Crea Gruppo</h1>");
             out.println("<div class='ui grid'>");
             out.println("<div class='row'>");
             out.println("<div class='four wide column'></div>");
             out.println("<div class='eight wide column'>");
-            out.println("<h1><i class='add sign icon'></i>Crea Gruppo</h1>");
             out.println("<form class='ui fluid form message' method='POST'>");
             out.println("<div class='field'>");
             out.println("<div class='ui blue ribbon label'>Titolo</div>");
