@@ -136,6 +136,7 @@ public class HomeServlet extends HttpServlet {
                     }
 
                     //Boolean stampa_post = !post.getId_scrivente().equals(request.getSession().getAttribute("user_id"));                    
+                    out.println("<div class='row'>");
                     if (i % 2 == 0) {
                         out.println("<div class='three wide column center' >");
                         if (scrivente.getNome_avatar() != null) {
@@ -172,8 +173,6 @@ public class HomeServlet extends HttpServlet {
                         out.println("</div>");
 
                         out.println("</div>");
-                        out.println("<div class='ui divider'></div>");
-
                     } else {
                         out.println("<div class='thirteen wide column'>");
 
@@ -210,9 +209,8 @@ public class HomeServlet extends HttpServlet {
                         }
                         out.println("<h2 style='margin-top:0px;'class='ui header center'>" + scrivente.getUsername() + "</h2>");
                         out.println("</div>");
-                        out.println("<div class='ui divider'></div>");
-
                     }
+                    out.println("</div>");
                 }
                 //out.println("</div>");
             }
