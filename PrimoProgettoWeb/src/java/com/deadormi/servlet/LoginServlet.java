@@ -66,7 +66,7 @@ public class LoginServlet extends HttpServlet {
                 out.println("</head>");
                 out.println("<body>");
 
-                out.println("<h1 class='center ui header'>SiteName</h1>");
+                out.println("<h1 class='center ui header'>Coffee ClassRoom</h1>");
                 out.println("<div class='ui grid'>");
                 out.println("<div class='five wide column'></div>");
 

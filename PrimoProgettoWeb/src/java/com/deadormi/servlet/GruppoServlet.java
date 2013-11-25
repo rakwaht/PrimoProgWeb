@@ -97,7 +97,7 @@ public class GruppoServlet extends HttpServlet {
 
             if (utente.getId_utente().equals(gruppo.getId_proprietario())) {
                 out.println("<a href='" + securePath + "modifica_gruppo?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
-                out.println("<i class='wrench icon'></i>Modifica " + gruppo.getNome());
+                out.println("<i class='wrench icon'></i>Modifica gruppo");
                 out.println("</a>");
             }
 
@@ -223,16 +223,17 @@ public class GruppoServlet extends HttpServlet {
 
             }
 
+            /* -------------------- INFO GRUPPO -------------------- */
             out.println("</div>");
             out.println("<div class='five wide column'>");
-            out.println("<h1>" + gruppo.getNome() + "</h1>");
-            out.println("<h2>di <i>" + proprietario.getUsername() + "</i></h2>");
-            out.println("<div class='ui blue message'>");
-            out.println("<p>" + gruppo.getDescrizione() + "</p>");
-            out.println("</div>");
+
+            out.println("<div class=\"ui top attached message blue\"><div class=\"ui right blue corner label\">\n" +
+"    <i class=\"folder open icon\"></i>\n" +
+"  </div><h2 style='margin-top: 0px'>" + gruppo.getNome() + "</h2></div>");
+            out.println("<div class=\"ui attached segment\"><p>" + gruppo.getDescrizione() + "</p></div>");
+            out.println("<div class=\"ui bottom attached segment\"><p style='text-align: right'> di <i>" + proprietario.getUsername() + "</i></p></div>");
 
             /* -------------------- LISTA MEMBRI -------------------- */
-            out.println("<p>Utenti");
             List<Utente> utenti = null;
             Utente membro = null;
             try {
@@ -244,19 +245,21 @@ public class GruppoServlet extends HttpServlet {
             if (utenti.size() == 1) {
                 out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun utente oltre a te.</div>");
             } else {
-                out.println("<ul>");
+                out.println("<table class='ui table segment'>");
+                out.println("<thead><tr><th>Membri</th></tr></thead>");
                 for (int i = 0; i < utenti.size(); i++) {
                     membro = utenti.get(i);
                     if (!utente.getId_utente().equals(membro.getId_utente())) {
-                        out.println("<li>" + membro.getUsername() + "</li>");
+                        out.println("<tr><td>" + membro.getUsername() + "</tr></td>");
+                    } else {
+                        out.println("<tr><td><b>" + membro.getUsername() + "</b></tr></td>");
                     }
                 }
-                out.println("</ul>");
+                out.println("<tfoot><tr><th>" + utenti.size() + " utenti</th></tr></tfoot>");
+                out.println("</table>");
             }
-            out.println("</p>");
 
             /* -------------------- LISTA FILES -------------------- */
-            out.println("<p>Files");
             List<FileApp> group_files = null;
             FileApp group_file = null;
             String fileName = null;
@@ -269,14 +272,16 @@ public class GruppoServlet extends HttpServlet {
             if (group_files.size() == 0) {
                 out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun utente oltre a te.</div>");
             } else {
-                out.println("<ul>");
+                out.println("<table class='ui table segment'>");
+                out.println("<thead><tr><th>Files</th></tr></thead>");
+
                 for (int i = 0; i < group_files.size(); i++) {
                     group_file = group_files.get(i);
                     fileName = group_file.getId_file() + "-" + group_file.getNome_file();
-                    out.println("<li><a href='/PrimoProgettoWeb/resource/files/" + gruppo.getId_gruppo() + "/" + fileName + "'>" + fileName + "</li>");
+                    out.println("<tr><td><a href='/PrimoProgettoWeb/resource/files/" + gruppo.getId_gruppo() + "/" + fileName + "'>" + fileName + "</tr></td>");
                 }
-                out.println("</ul>");
-                out.println("</p>");
+                out.println("<tfoot><tr><th>" + group_files.size() + " files</th></tr></tfoot>");
+                out.println("</table>");
             }
 
             out.println("</div>");
