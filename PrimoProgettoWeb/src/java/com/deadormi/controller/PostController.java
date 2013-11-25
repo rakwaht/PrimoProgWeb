@@ -44,7 +44,7 @@ public class PostController {
         Post post = null;
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
-        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo=? ORDER BY data_creazione");
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo=? ORDER BY data_creazione DESC");
         ResultSet rs;
         try {
             stm.setInt(1, id_gruppo);

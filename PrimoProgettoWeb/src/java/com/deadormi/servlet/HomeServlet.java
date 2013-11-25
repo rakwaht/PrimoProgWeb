@@ -130,7 +130,7 @@ public class HomeServlet extends HttpServlet {
                 Integer POST_SIZE = posts.size();
                 out.println("<div class='ui grid'>");
                 for (int i = 0; i < POST_SIZE; i++) {
-                    Post post = posts.get(posts.size() - 1);
+                    Post post = posts.get(i);
                     Utente scrivente = null;
                     Gruppo gruppo_post = null;
                     List<FileApp> files = null;
@@ -158,7 +158,6 @@ public class HomeServlet extends HttpServlet {
                         out.println("<div  class='ui blue fluid top attached segment tip-l' >");
                         out.println("<p><i class='quote left icon'></i>" + post.getTesto() + "<i class='quote right icon'></i></p><br/>");
 
-                        posts.remove(post);
                         out.println("</div>");
                         out.println("<div  class='ui fluid bottom attached segment' >");
                         if (!files.isEmpty()) {
@@ -186,7 +185,6 @@ public class HomeServlet extends HttpServlet {
                         out.println("<div  class='ui blue fluid top attached segment tip-r' >");
                         out.println("<p><i class='quote left icon'></i>" + post.getTesto() + "<i class='quote right icon'></i></p><br/>");
 
-                        posts.remove(post);
                         out.println("</div>");
                         out.println("<div  class='ui fluid bottom attached segment' >");
                         if (!files.isEmpty()) {

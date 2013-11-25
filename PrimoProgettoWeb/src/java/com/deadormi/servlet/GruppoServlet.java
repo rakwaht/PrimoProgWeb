@@ -101,7 +101,7 @@ public class GruppoServlet extends HttpServlet {
                 out.println("</a>");
             }
 
-            out.println("<a href='" + securePath + "tuoi_gruppi' class='item'>");
+            out.println("<a href='" + securePath + "logout' class='item'>");
             out.println("<i class='sign out icon'></i>");
             out.println("Logout");
             out.println("</a>");
@@ -132,7 +132,8 @@ public class GruppoServlet extends HttpServlet {
                 out.println("<div class='ui grid' style='margin-top: 20px'>");
 
                 for (int i = 0; i < posts.size(); i++) {
-                    post = posts.get(posts.size() - 1);
+                    post = posts.get(i);
+                    System.out.println(posts.size() + "--------------------------------------");
                     Utente scrivente = null;
                     Gruppo gruppo_post = null;
                     try {
@@ -213,9 +214,7 @@ public class GruppoServlet extends HttpServlet {
                         out.println("<h2 style='margin-top:0px;'class='ui header center'>" + scrivente.getUsername() + "</h2>");
                         out.println("</div>"); //chiude sezione img avatar
                     }
-                    posts.remove(post);
                     out.println("</div>"); //chiude row
-
                 }
 
                 out.println("</div>"); //chiude nested grid                
