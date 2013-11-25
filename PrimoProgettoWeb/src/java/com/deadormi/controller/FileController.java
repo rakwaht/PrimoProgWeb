@@ -143,7 +143,7 @@ public class FileController {
         Connection connection = dbmanager.getConnection();
         ResultSet rs;
         FileApp file;
-        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.FILE NATURAL JOIN ROOT.GRUPPO WHERE id_gruppo=?");
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.FILE NATURAL JOIN ROOT.POST WHERE id_gruppo=?");
         try {
             stm.setInt(1, id_gruppo);
             rs = stm.executeQuery();

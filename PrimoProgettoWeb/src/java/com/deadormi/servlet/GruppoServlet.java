@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -47,6 +48,7 @@ public class GruppoServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        String securePath = "/PrimoProgettoWeb/secure/";
         Integer id_gruppo = Integer.parseInt(request.getParameter("id_gruppo"));
         Gruppo gruppo = null;
         Utente proprietario = null;
@@ -72,7 +74,7 @@ public class GruppoServlet extends HttpServlet {
 
             out.println("<div class='ui large inverted vertical demo sidebar menu active fixed'>");
 
-            out.println("<a href='/PrimoProgettoWeb/secure/home' class='item center'>");
+            out.println("<a href='" + securePath + "home' class='item center'>");
             if (utente.getNome_avatar() == null) {
                 out.println("<img class='circular ui image user-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
             } else {
@@ -81,7 +83,7 @@ public class GruppoServlet extends HttpServlet {
             out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
             out.println("</a>");
 
-            out.println("<a href='/PrimoProgettoWeb/secure/tuoi_gruppi' class='item'>");
+            out.println("<a href='" + securePath + "tuoi_gruppi' class='item'>");
             out.println("<i class='users icon'></i> Gruppi");
             out.println("</a>");
 
@@ -94,12 +96,12 @@ public class GruppoServlet extends HttpServlet {
             out.println("</a>");
 
             if (utente.getId_utente().equals(gruppo.getId_proprietario())) {
-                out.println("<a href='/PrimoProgettoWeb/secure/modifica_gruppo?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
+                out.println("<a href='" + securePath + "modifica_gruppo?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
                 out.println("<i class='wrench icon'></i>Modifica " + gruppo.getNome());
                 out.println("</a>");
             }
 
-            out.println("<a href='logout' class='item'>");
+            out.println("<a href='" + securePath + "tuoi_gruppi' class='item'>");
             out.println("<i class='sign out icon'></i>");
             out.println("Logout");
             out.println("</a>");
@@ -109,7 +111,7 @@ public class GruppoServlet extends HttpServlet {
             out.println("<div class=\"ui fixed transparent inverted main menu\">");
             out.println("<div class='container'>");
             out.println("<div id='buffo' class='item' style='cursor: pointer'><i class=\"icon list\"></i></div>");
-            out.println("<a href='/PrimoProgettoWeb/secure/tuoi_gruppi' class='item'><i class=\"left arrow icon\"></i>INDIETRO</a>");
+            out.println("<a href='" + securePath + "tuoi_gruppi' class='item'><i class=\"left arrow icon\"></i>INDIETRO</a>");
             out.println("<div class='item'><i class='browser icon'></i>" + gruppo.getNome() + "</div>");
             out.println("</div>");
             out.println("</div>");
@@ -118,17 +120,8 @@ public class GruppoServlet extends HttpServlet {
             out.println("<div class='ui grid'>");
             out.println("<div class='row'>");
 
-            out.println("<div class='two wide column'></div>");
-            out.println("<div class='twelve wide column'>");
-            //out.println("<h1>GRUPPO: " + gruppo.getNome() + " di " + proprietario.getUsername() + "</h1>");
-            out.println("<p>DESCRIZIONE: " + gruppo.getDescrizione() + "</p>");
-            out.println("<a href='/PrimoProgettoWeb/secure/tuoi_gruppi'>Indietro</a><br />");
-            out.println("</div>");
-            out.println("<div class='two wide column'></div>");
-
-            out.println("</div>");
-            out.println("</div>");
-            out.println("</div>");
+            out.println("<div class='eleven wide column'>");
+            out.println("<a href='" + securePath + "nuovo_post?id_gruppo=" + gruppo.getId_gruppo() + "' class='ui blue button'><i class='outline chat icon'></i>Nuovo post</a>");
 
             try {
                 posts = PostController.getPostByGruppoId(request, id_gruppo);
@@ -161,9 +154,71 @@ public class GruppoServlet extends HttpServlet {
                 }
                 out.println("</table>");
             } else {
-                out.println("<p>Non vi sono posts nel db!</p>");
+                out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun post.</div>");
+
             }
-            out.println("<a href='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo=" + gruppo.getId_gruppo() + "' class='ui blue button'><i class='outline chat icon'></i>Nuovo post</a>");
+
+            out.println("</div>");
+            out.println("<div class='five wide column'>");
+            out.println("<h1>" + gruppo.getNome() + "</h1>");
+            out.println("<h2>di <i>" + proprietario.getUsername() + "</i></h2>");
+            out.println("<div class='ui blue message'>");
+            out.println("<p>" + gruppo.getDescrizione() + "</p>");
+            out.println("</div>");
+
+            /* -------------------- LISTA MEMBRI -------------------- */
+            out.println("<p>Utenti");
+            List<Utente> utenti = null;
+            Utente membro = null;
+            try {
+                utenti = UtenteController.getUserByGroupId(request, id_gruppo);
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (utenti.size() == 1) {
+                out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun utente oltre a te.</div>");
+            } else {
+                out.println("<ul>");
+                for (int i = 0; i < utenti.size(); i++) {
+                    membro = utenti.get(i);
+                    if (!utente.getId_utente().equals(membro.getId_utente())) {
+                        out.println("<li>" + membro.getUsername() + "</li>");
+                    }
+                }
+                out.println("</ul>");
+            }
+            out.println("</p>");
+
+            /* -------------------- LISTA FILES -------------------- */
+            out.println("<p>Files");
+            List<FileApp> group_files = null;
+            FileApp group_file = null;
+            String fileName = null;
+            try {
+                group_files = FileController.getFilesByGroupId(request, id_gruppo);
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(GruppoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (group_files.size() == 0) {
+                out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun utente oltre a te.</div>");
+            } else {
+                out.println("<ul>");
+                for (int i = 0; i < group_files.size(); i++) {
+                    group_file = group_files.get(i);
+                    fileName = group_file.getId_file() + "-" + group_file.getNome_file();
+                    out.println("<li><a href='/PrimoProgettoWeb/resource/files/"+ gruppo.getId_gruppo() + "/" + fileName +"'>" + fileName + "</li>");
+                }
+                out.println("</ul>");
+                out.println("</p>");
+            }
+
+            out.println("</div>");
+
+            out.println("</div>");
+            out.println("</div>");
+            out.println("</div>");
             MainLayout.printFooter(out);
         } finally {
             out.close();
