@@ -163,10 +163,7 @@ public class GruppoServlet extends HttpServlet {
             } else {
                 out.println("<p>Non vi sono posts nel db!</p>");
             }
-            out.println("<form method='POST'>");
-            out.println("<input type='submit' name='nuovo_post' value='NUOVO POST'/>");
-
-            out.println("</form>");
+            out.println("<a href='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo=" + gruppo.getId_gruppo() + "' class='ui blue button'><i class='outline chat icon'></i>Nuovo post</a>");
             MainLayout.printFooter(out);
         } finally {
             out.close();
@@ -201,17 +198,7 @@ public class GruppoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Integer id = Integer.parseInt(request.getParameter("id_gruppo"));
-        request.setAttribute("id_gruppo", id);
-        RequestDispatcher rd;
-        if (request.getParameter("nuovo_post") != null) {
-            rd = request.getRequestDispatcher("/secure/nuovo_post");
-            rd.forward(request, response);
-        } else if (request.getParameter("modifica_gruppo") != null) {
-            rd = request.getRequestDispatcher("/secure/modifica_gruppo?id_gruppo=" + id);
-            rd.forward(request, response);
-        }
-
+        processRequest(request, response);
     }
 
     /**

@@ -113,7 +113,7 @@ public class CreaPostFilter implements Filter {
             ((HttpServletResponse)response).sendRedirect("/PrimoProgettoWeb/secure/home");
         }
         else{
-        Integer gruppo_id = (Integer)request.getAttribute("id_gruppo");
+        Integer gruppo_id = Integer.parseInt(request.getParameter("id_gruppo"));
         boolean isMultipart = ServletFileUpload.isMultipartContent((HttpServletRequest) request);
         try {
             if(isMultipart){

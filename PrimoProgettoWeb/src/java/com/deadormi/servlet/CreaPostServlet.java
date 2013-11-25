@@ -42,7 +42,7 @@ public class CreaPostServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        Integer id_gruppo = (Integer) request.getAttribute("id_gruppo");
+        Integer id_gruppo = Integer.parseInt(request.getParameter("id_gruppo"));
         List<FileApp> files = null;
         try {
             files = FileController.getFilesByGroupId(request, id_gruppo);
