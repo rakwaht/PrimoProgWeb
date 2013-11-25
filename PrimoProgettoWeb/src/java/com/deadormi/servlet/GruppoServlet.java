@@ -121,7 +121,7 @@ public class GruppoServlet extends HttpServlet {
             out.println("<div class='row'>");
 
             out.println("<div class='eleven wide column'>");
-            out.println("<a href='" + securePath + "nuovo_post?id_gruppo=" + gruppo.getId_gruppo() + "' class='ui blue button'><i class='outline chat icon'></i>Nuovo post</a>");
+            out.println("<a href='" + securePath + "nuovo_post?id_gruppo=" + gruppo.getId_gruppo() + "' class='ui blue button fluid large'><i class='outline chat icon'></i>Nuovo post</a>");
 
             try {
                 posts = PostController.getPostByGruppoId(request, id_gruppo);
@@ -129,30 +129,96 @@ public class GruppoServlet extends HttpServlet {
                 log.error(ex);
             }
             if (posts != null && posts.size() != 0) {
-                out.println("<table>");
-                for (int i = posts.size() - 1; i >= 0; i--) {
+                out.println("<div class='ui grid' style='margin-top: 20px'>");
 
-                    post = posts.get(i);
+                for (int i = 0; i < posts.size(); i++) {
+                    post = posts.get(posts.size() - 1);
+                    Utente scrivente = null;
+                    Gruppo gruppo_post = null;
                     try {
-                        utente = UtenteController.getUserById(request, post.getId_scrivente());
+                        scrivente = UtenteController.getUserById(request, post.getId_scrivente());
+                        gruppo_post = GruppoController.getGruppoById(request, post.getId_gruppo());
                         files = FileController.getFilesByPostId(request, post.getId_post());
                     } catch (SQLException ex) {
-                        log.error(ex);
+                        //  Logger.getLogger(HomeServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    out.println("<tr>");
-                    out.println("<td>" + post.getTesto() + "</td>");
-                    out.println("<td> scritto il " + post.getData_creazione() + "</td>");
-                    out.println("<td> da: " + utente.getUsername() + "</td>");
-                    if (files.size() > 0) {
-                        for (int j = 0; j < files.size(); j++) {
-                            FileApp file = files.get(j);
+                    out.println("<div class='row'>");
 
-                            out.println("<td> FILE:<a href='" + request.getContextPath() + "/resource/files/" + id_gruppo + "/" + file.getId_file() + "-" + file.getNome_file() + "' target='_blank'>" + file.getNome_file() + "</a></td>");
+                    if (i % 2 == 0) {
+                        out.println("<div class='three wide column center' >");
+                        if (scrivente.getNome_avatar() != null) {
+                            out.println("<img class='circular ui image scrivente-image center user-avatar' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' />");
+                        } else {
+                            out.println("<img class='circular ui image scrivente-image center user-avatar' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' />");
                         }
+                        out.println("<h2 style='margin-top:0px;'class='ui header center'>" + scrivente.getUsername() + "</h2>");
+                        out.println("</div>"); //chiude sezione img avatar
+
+                        out.println("<div class='thirteen wide column center' >");
+
+                        out.println("<div  class='ui blue fluid top attached segment tip-l' >");
+                        out.println("<p><i class='quote left icon'></i>" + post.getTesto() + "<i class='quote right icon'></i></p><br/>");
+                        out.println("</div>");
+                        out.println("<div  class='ui fluid bottom attached segment' >");
+                        if (!files.isEmpty()) {
+                            FileApp file = null;
+                            String filePath = null;
+                            for (int j = 0; j < files.size(); j++) {
+                                file = files.get(j);
+                                filePath = request.getContextPath() + "/resource/files/" + post.getId_gruppo() + "/" + file.getId_file() + "-" + file.getNome_file();
+                                out.println("<i class='icon blue attachment'></i>");
+                                out.println("<a href='" + filePath + "' target='_blank'>" + file.getId_file() + "-" + file.getNome_file() + "</a>");
+                                if (j != files.size() - 1) {
+                                    out.println("/");
+                                }
+                            }
+
+                        }
+                        out.println("<p style='text-align:right; color:#ababab; margin-top:0px;'>scritto il <i>" + post.getData_creazione() + "</i></p>");
+                        out.println("</div>");
+
+                        out.println("</div>"); //chiude sezione post
+                    } else {
+                        out.println("<div class='thirteen wide column center' >");
+
+                        out.println("<div  class='ui blue fluid top attached segment tip-r' >");
+                        out.println("<p><i class='quote left icon'></i>" + post.getTesto() + "<i class='quote right icon'></i></p><br/>");
+                        out.println("</div>");
+                        out.println("<div  class='ui fluid bottom attached segment' >");
+                        if (!files.isEmpty()) {
+                            FileApp file = null;
+                            String filePath = null;
+                            for (int j = 0; j < files.size(); j++) {
+                                file = files.get(j);
+                                filePath = request.getContextPath() + "/resource/files/" + post.getId_gruppo() + "/" + file.getId_file() + "-" + file.getNome_file();
+                                out.println("<i class='icon blue attachment'></i>");
+                                out.println("<a href='" + filePath + "' target='_blank'>" + file.getId_file() + "-" + file.getNome_file() + "</a>");
+                                if (j != files.size() - 1) {
+                                    out.println("/");
+                                }
+                            }
+
+                        }
+                        out.println("<p style='text-align:right; color:#ababab; margin-top:0px;'>scritto il <i>" + post.getData_creazione() + "</i></p>");
+                        out.println("</div>");
+
+                        out.println("</div>"); //chiude sezione post
+
+                        out.println("<div class='three wide column center' >");
+                        if (scrivente.getNome_avatar() != null) {
+                            out.println("<img class='circular ui image scrivente-image center user-avatar' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' />");
+                        } else {
+                            out.println("<img class='circular ui image scrivente-image center user-avatar' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' />");
+                        }
+                        out.println("<h2 style='margin-top:0px;'class='ui header center'>" + scrivente.getUsername() + "</h2>");
+                        out.println("</div>"); //chiude sezione img avatar
                     }
-                    out.println("</tr>");
+                    posts.remove(post);
+                    out.println("</div>"); //chiude row
+
                 }
-                out.println("</table>");
+
+                out.println("</div>"); //chiude nested grid                
             } else {
                 out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun post.</div>");
 
@@ -208,7 +274,7 @@ public class GruppoServlet extends HttpServlet {
                 for (int i = 0; i < group_files.size(); i++) {
                     group_file = group_files.get(i);
                     fileName = group_file.getId_file() + "-" + group_file.getNome_file();
-                    out.println("<li><a href='/PrimoProgettoWeb/resource/files/"+ gruppo.getId_gruppo() + "/" + fileName +"'>" + fileName + "</li>");
+                    out.println("<li><a href='/PrimoProgettoWeb/resource/files/" + gruppo.getId_gruppo() + "/" + fileName + "'>" + fileName + "</li>");
                 }
                 out.println("</ul>");
                 out.println("</p>");

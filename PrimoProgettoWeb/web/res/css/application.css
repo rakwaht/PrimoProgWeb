@@ -35,6 +35,13 @@ a {
     text-decoration: none;
 }
 
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    border: solid 10px #6ECFF5;
+    margin: 0 auto;
+}
+
 .home-menu{
     height:100%;
     min-height:100%;
@@ -65,31 +72,34 @@ a {
     cursor:default;
 }
 
-.scrivente-image{
-    border: solid 10px #6ECFF5;
-}
-
 
 .tip-l:before {
-  position: absolute;
-  display: block;
-  content: "";
-  border-color: transparent #fff transparent transparent;
-  border-style: solid;
-  border-width: 20px;
-  position: absolute;
-  bottom: 20px;
-  left: -40px;
+    position: absolute;
+    display: block;
+    content: "";
+    border-color: transparent #fff transparent transparent;
+    border-style: solid;
+    border-width: 20px;
+    position: absolute;
+    bottom: 20px;
+    left: -40px;
 }
 
 .tip-r:before {
-  position: absolute;
-  display: block;
-  content: "";
-  border-color: transparent transparent transparent #fff;
-  border-style: solid;
-  border-width: 20px;
-  position: absolute;
-  bottom: 20px;
-  right: -40px;
+    position: absolute;
+    display: block;
+    content: "";
+    border-color: transparent transparent transparent #fff;
+    border-style: solid;
+    border-width: 20px;
+    position: absolute;
+    bottom: 20px;
+    right: -40px;
+}
+
+@media screen and (max-width: 1080px) {
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+    }
 }

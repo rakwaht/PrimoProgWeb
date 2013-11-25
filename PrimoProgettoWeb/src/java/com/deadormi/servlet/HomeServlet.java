@@ -147,9 +147,9 @@ public class HomeServlet extends HttpServlet {
                     if (i % 2 == 0) {
                         out.println("<div class='three wide column center' >");
                         if (scrivente.getNome_avatar() != null) {
-                            out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image center' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+                            out.println("<img class='circular ui image scrivente-image center user-avatar' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' />");
                         } else {
-                            out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image center' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; height:100px;' />");
+                            out.println("<img class='circular ui image scrivente-image center user-avatar' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' />");
                         }
                         out.println("<h2 style='margin-top:0px;'class='ui header center'>" + scrivente.getUsername() + "</h2>");
                         out.println("</div>");
@@ -210,9 +210,9 @@ public class HomeServlet extends HttpServlet {
                         out.println("</div>");
                         out.println("<div class='three wide column center' >");
                         if (scrivente.getNome_avatar() != null) {
-                            out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image center' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+                            out.println("<img class='circular ui image center user-avatar' src='" + request.getContextPath() + "/resource/avatar/" + scrivente.getId_utente() + "_" + scrivente.getNome_avatar() + "' alt='Smiley face' />");
                         } else {
-                            out.println("<img style='height:100px;width:100px;' class='circular ui image scrivente-image center' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+                            out.println("<img class='circular ui image center user-avatar' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' />");
                         }
                         out.println("<h2 style='margin-top:0px;'class='ui header center'>" + scrivente.getUsername() + "</h2>");
                         out.println("</div>");
