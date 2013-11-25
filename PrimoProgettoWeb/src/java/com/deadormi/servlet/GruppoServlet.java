@@ -270,7 +270,7 @@ public class GruppoServlet extends HttpServlet {
             }
 
             if (group_files.size() == 0) {
-                out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun utente oltre a te.</div>");
+                out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è alcun file in questo gruppo.</div>");
             } else {
                 out.println("<table class='ui table segment'>");
                 out.println("<thead><tr><th>Files</th></tr></thead>");
