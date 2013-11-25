@@ -57,7 +57,7 @@ public class ModificaGruppoServlet extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             PrintWriter out = response.getWriter();
-            Integer id_gruppo = (Integer) request.getAttribute("id_gruppo");
+            Integer id_gruppo = Integer.parseInt(request.getParameter("id_gruppo"));
             Integer user_id = (Integer) request.getSession().getAttribute("user_id");
             Gruppo gruppo = GruppoController.getGruppoById(request, id_gruppo);
             List<Utente> iscritti = UtenteController.getUserByGroupId(request, id_gruppo);

@@ -36,5 +36,7 @@ $( document ).ready(function() {
         $('.demo.sidebar').sidebar('toggle');
     });
 
+    name = $("#userName").val;
+    pass = $("#passWord").val;
 });
 

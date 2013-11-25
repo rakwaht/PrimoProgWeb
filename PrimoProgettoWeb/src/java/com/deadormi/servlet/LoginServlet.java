@@ -78,7 +78,7 @@ public class LoginServlet extends HttpServlet {
                 out.println("<div class='field'>");
                 out.println("<div class='ui blue ribbon label'>Username</div>");
                 out.println("<div class='ui left icon input login-input'>");
-                out.println("<input placeholder='Username' type='text' name='username'/>");
+                out.println("<input id='userName' placeholder='Username' type='text' name='username'/>");
                 out.println("<i class='icon user'></i>");
                 out.println("</div>");
                 out.println("</div>");
@@ -86,11 +86,11 @@ public class LoginServlet extends HttpServlet {
                 out.println("<div class='ui blue ribbon label'>Password</div>");
                 out.println("<div class='ui left icon input login-input'>");
                 out.println("<i class='icon key'></i>");
-                out.println("<input placeholder='Password' type='password' name='password'/>");
+                out.println("<input id='passWord' placeholder='Password' type='password' name='password'/>");
                 out.println("</div>");
                 out.println("</div>");
                 out.println("<div class='field'>");
-                out.println("<button type='submit' class='ui blue submit fluid button'>Invia</button>");
+                out.println("<button id='login-btn' type='submit' class='ui blue submit fluid button'>Invia</button>");
                 out.println("</div>");
                 out.println("</form>");
                 out.println("</div>");
