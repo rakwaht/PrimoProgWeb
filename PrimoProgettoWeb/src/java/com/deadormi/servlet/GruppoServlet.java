@@ -246,7 +246,7 @@ public class GruppoServlet extends HttpServlet {
                 out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun utente oltre a te.</div>");
             } else {
                 out.println("<table class='ui table segment'>");
-                out.println("<thead><tr><th>Membri</th></tr></thead>");
+                out.println("<thead><tr><th><i class='icon users'></i>Membri</th></tr></thead>");
                 for (int i = 0; i < utenti.size(); i++) {
                     membro = utenti.get(i);
                     if (!utente.getId_utente().equals(membro.getId_utente())) {
@@ -273,7 +273,7 @@ public class GruppoServlet extends HttpServlet {
                 out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è alcun file in questo gruppo.</div>");
             } else {
                 out.println("<table class='ui table segment'>");
-                out.println("<thead><tr><th>Files</th></tr></thead>");
+                out.println("<thead><tr><th><i class='icon list'></i>Files</th></tr></thead>");
 
                 for (int i = 0; i < group_files.size(); i++) {
                     group_file = group_files.get(i);
