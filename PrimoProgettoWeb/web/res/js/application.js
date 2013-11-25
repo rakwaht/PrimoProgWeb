@@ -35,6 +35,6 @@ $( document ).ready(function() {
         $('body').toggleClass('pushed');
         $('.demo.sidebar').sidebar('toggle');
     });
-;
+
 });
 
