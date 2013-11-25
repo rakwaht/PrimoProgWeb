@@ -13,6 +13,7 @@ import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Post;
 import com.deadormi.entity.Utente;
+import com.deadormi.layout.MainLayout;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -38,14 +39,13 @@ import org.apache.log4j.Logger;
  * @author Timbu
  */
 public class ModificaGruppoServlet extends HttpServlet {
-    
-    static Logger  log = Logger.getLogger(ModificaGruppoServlet.class);
+
+    static Logger log = Logger.getLogger(ModificaGruppoServlet.class);
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
-    
+
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -64,13 +64,8 @@ public class ModificaGruppoServlet extends HttpServlet {
             List<Utente> non_iscritti = UtenteController.getUserNotInGroupByGroupId(request, id_gruppo);
             System.out.println(non_iscritti.size());
             try {
-                /* TODO output your page here. You may use following sample code. */
-                out.println("<!DOCTYPE html>");
-                out.println("<html>");
-                out.println("<head>");
-                out.println("<title>Servlet ModificaGruppoServlet </title>");
-                out.println("</head>");
-                out.println("<body>");
+                MainLayout.printHeader(out);
+
                 out.println("<h1>Servlet ModificaGruppoServlet at " + gruppo.getNome() + "</h1>");
                 out.println("<form method='POST' action='/PrimoProgettoWeb/secure/modifica_gruppo?id_gruppo=" + id_gruppo + "''>");
                 out.println("Titolo:<input type='text' value='" + gruppo.getNome() + "' name='titolo'  /><br />");
@@ -100,8 +95,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("</form>");
                 out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "'>Indietro</a><br />");
 
-                out.println("</body>");
-                out.println("</html>");
+                MainLayout.printFooter(out);
             } finally {
                 out.close();
             }
@@ -112,8 +106,7 @@ public class ModificaGruppoServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -127,8 +120,7 @@ public class ModificaGruppoServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -168,7 +160,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 try {
                     iscritti = UtenteController.getUserByGroupId(request, gruppo_id);
                 } catch (SQLException ex) {
-                   log.error(ex);
+                    log.error(ex);
                 }
                 PdfWriter.getInstance(document, response.getOutputStream());
                 document.open();
@@ -196,23 +188,20 @@ public class ModificaGruppoServlet extends HttpServlet {
                     table.addCell(posts.size() + "");
                     //inserisco avatar
                     String imageUrl;
-                    if(utente.getNome_avatar() != null){
-                        String baseUrl = request.getScheme() + "://" + request.getServerName()  + ":"+ request.getServerPort();
-                        imageUrl = baseUrl + request.getContextPath()+AVATAR_RESOURCE_PATH+"/"+utente.getId_utente() + "_" + utente.getNome_avatar();;
-                    }
-                    else{
+                    if (utente.getNome_avatar() != null) {
+                        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+                        imageUrl = baseUrl + request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();;
+                    } else {
                         imageUrl = "http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y";
                     }
                     Image image = Image.getInstance(new URL(imageUrl));
                     image.scaleToFit(50, 50);
                     table.addCell("Avatar");
                     table.addCell(image);
-                    
 
                 }
                 document.add(table);
                 document.close();
-
 
             } catch (DocumentException ex) {
                 log.error(ex);

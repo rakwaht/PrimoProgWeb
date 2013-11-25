@@ -226,7 +226,7 @@ public class PostController {
         if (cookies != null && old_cookie != null) {
             DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
             Connection connection = dbmanager.getConnection();
-            PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo IN (SELECT id_gruppo FROM ROOT.GRUPPO_UTENTE WHERE id_utente=? AND gruppo_utente_abilitato='true') AND data_creazione>=?  AND data_creazione<=? ORDER BY data_creazione");
+            PreparedStatement stm = connection.prepareStatement("SELECT * FROM ROOT.POST WHERE id_gruppo IN (SELECT id_gruppo FROM ROOT.GRUPPO_UTENTE WHERE id_utente=? AND gruppo_utente_abilitato='true') AND data_creazione>=?  AND data_creazione<=? ORDER BY data_creazione DESC");
             ResultSet rs;
             try {
                 stm.setInt(1, user_id);
