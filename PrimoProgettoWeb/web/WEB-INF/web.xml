@@ -48,6 +48,10 @@
         <servlet-name>AvatarServlet</servlet-name>
         <servlet-class>com.deadormi.servlet.AvatarServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreaPdfServlet</servlet-name>
+        <servlet-class>com.deadormi.servlet.CreaPdfServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/secure/home</url-pattern>
@@ -92,6 +96,10 @@
         <servlet-name>AvatarServlet</servlet-name>
         <url-pattern>/secure/cambia_avatar</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreaPdfServlet</servlet-name>
+        <url-pattern>/secure/crea_pdf</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -105,6 +113,14 @@
         <filter-name>ModificaGruppoFilter</filter-name>
         <filter-class>com.deadormi.util.ModificaGruppoFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>CreaPdfFilter</filter-name>
+        <filter-class>com.deadormi.util.CreaPdfFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CreaPdfFilter</filter-name>
+        <servlet-name>CreaPdfServlet</servlet-name>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>ModificaGruppoFilter</filter-name>
         <servlet-name>ModificaGruppoServlet</servlet-name>

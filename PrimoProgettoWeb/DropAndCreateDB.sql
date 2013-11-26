@@ -73,3 +73,7 @@ INSERT INTO utente (username,password)
 VALUES ('gino','perna');
 INSERT INTO utente (username,password)
 VALUES ('giovanni','rossi');
+INSERT INTO utente (username,password)
+VALUES ('susanna','panna');
+INSERT INTO utente (username,password)
+VALUES ('giovanna','panna');

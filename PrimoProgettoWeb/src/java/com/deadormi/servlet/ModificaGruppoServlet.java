@@ -14,6 +14,7 @@ import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Post;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
+import static com.deadormi.servlet.HomeServlet.AVATAR_RESOURCE_PATH;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -55,6 +56,8 @@ public class ModificaGruppoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            String securePath = "/PrimoProgettoWeb/secure/";
+
             response.setContentType("text/html;charset=UTF-8");
             PrintWriter out = response.getWriter();
             Integer id_gruppo = Integer.parseInt(request.getParameter("id_gruppo"));
@@ -63,38 +66,126 @@ public class ModificaGruppoServlet extends HttpServlet {
             List<Utente> iscritti = UtenteController.getUserByGroupId(request, id_gruppo);
             List<Utente> non_iscritti = UtenteController.getUserNotInGroupByGroupId(request, id_gruppo);
             System.out.println(non_iscritti.size());
+            Utente utente = null;
+            utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
+            String avatar_path = request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();
+
             try {
                 MainLayout.printHeader(out);
+                out.println("<div class='ui large inverted vertical demo sidebar menu active fixed'>");
 
-                out.println("<h1>Servlet ModificaGruppoServlet at " + gruppo.getNome() + "</h1>");
-                out.println("<form method='POST' action='/PrimoProgettoWeb/secure/modifica_gruppo?id_gruppo=" + id_gruppo + "''>");
-                out.println("Titolo:<input type='text' value='" + gruppo.getNome() + "' name='titolo'  /><br />");
-                out.println("Descrizione:<textarea type='text' name='descrizione' >" + gruppo.getDescrizione() + "</textarea><br />");
-                if (iscritti.size() > 1) {
-                    out.println("<p>ELIMINA UTENTI:</p>");
-                    for (int i = 0; i < iscritti.size(); i++) {
-                        if (!iscritti.get(i).getId_utente().equals(user_id)) {
-                            out.println(iscritti.get(i).getUsername() + "<input type='checkbox' name='utenti_selezionati' value='" + iscritti.get(i).getId_utente() + "'/><br />");
-                        }
-                    }
+                out.println("<a href='/PrimoProgettoWeb/secure/home' class='item center'>");
+                if (utente.getNome_avatar() == null) {
+                    out.println("<img class='circular ui image user-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+                } else {
+                    out.println("<img class='circular ui image user-image' src='" + avatar_path + "' alt='Smiley face' style='margin:0 auto; width:100px; height:100px'>");
                 }
+                out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
+                out.println("</a>");
+
+                out.println("<a href='" + securePath + "tuoi_gruppi' class='item'>");
+                out.println("<i class='users icon'></i> Gruppi");
+                out.println("</a>");
+
+                out.println("<a href='" + securePath + "/gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
+                if (utente.getId_utente().equals(gruppo.getId_proprietario())) {
+                    out.println("<i class='book icon'></i><div class='ui blue label'>admin</div>" + gruppo.getNome());
+                } else {
+                    out.println("<i class='book icon'></i>" + gruppo.getNome());
+                }
+                out.println("</a>");
+
+                if (utente.getId_utente().equals(gruppo.getId_proprietario())) {
+                    out.println("<a href='" + securePath + "modifica_gruppo?id_gruppo=" + gruppo.getId_gruppo() + "' class='item active'>");
+                    out.println("<i class='wrench icon'></i>Modifica gruppo");
+                    out.println("</a>");
+                }
+                out.println("<a href='/PrimoProgettoWeb/secure/crea_pdf?id_gruppo="+ gruppo.getId_gruppo() +"' class='item'>");
+                out.println("<i class='copy icon'></i>");
+                out.println("Genera PDF");
+                out.println("</a>");
+
+                out.println("<a href='" + securePath + "logout' class='item'>");
+                out.println("<i class='sign out icon'></i>");
+                out.println("Logout");
+                out.println("</a>");
+
+                out.println("</div>");
+
+                out.println("<div class=\"ui fixed transparent inverted main menu\">");
+                out.println("<div class='container'>");
+                out.println("<div id='buffo' class='item' style='cursor: pointer'><i class=\"icon list\"></i></div>");
+                out.println("<a href='" + securePath + "/gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'><i class=\"left arrow icon\"></i>INDIETRO</a>");
+
+                out.println("<div class='item'><i class='home icon'></i>Home</div>");
+                out.println("</div>");
+                out.println("</div>");
+
+                out.println("<div id='main-container' class='main container'>");
+                out.println("<div class='ui grid'>");
+                out.println("<div class='row'>");
+                out.println("<div class='four wide column'></div>");
+                out.println("<div class='eight wide column'>");
+                //FORM
+                out.println("<form method='POST' class='ui form segment' action='/PrimoProgettoWeb/secure/modifica_gruppo?id_gruppo=" + id_gruppo + "''>");
+                out.println("<div class='field'>");
+                out.println("<div class='ui blue ribbon label'>Titolo</div>");
+                out.println("<div class='ui left icon input login-input'>");
+                out.println("<input placeholder='Titolo' value='" + gruppo.getNome() + "' name='titolo' />");
+                out.println("<i class='align justify icon'></i>");
+                out.println("</div>");
+                out.println("</div>");
+
+                out.println("<div class='field'>");
+                out.println("<div class='ui blue ribbon label'>Descrizione</div>");
+                out.println("<div class='ui login-input'>");
+                out.println("<textarea type='text' name='descrizione'>" + gruppo.getDescrizione() + "</textarea>");
+                out.println("</div>");
+                out.println("</div>");
+
+               
                 if (non_iscritti.size() > 0) {
-                    out.println("<p>INVITA UTENTI:</p>");
-                    for (int i = 0; i < non_iscritti.size(); i++) {
 
+                    out.println("<div class='ui blue ribbon label'><i class='icon users '></i>Invita Utenti</div><br/>");
+
+                    for (int i = 0; i < non_iscritti.size(); i++) {
+                        out.println("<p>");
                         if (!InvitoController.checkInvitoByUserId(request, non_iscritti.get(i).getId_utente(), id_gruppo)) {
-                            out.println(non_iscritti.get(i).getUsername() + "<input type='checkbox' name='non_utenti_selezionati' value='" + non_iscritti.get(i).getId_utente() + "'/><br />");
+
+                            out.println("<div class='ui toggle checkbox'>");
+                            out.println("<input type='checkbox' name='non_utenti_selezionati' value='" + non_iscritti.get(i).getId_utente() + "'>");
+                            out.println("<label>" + non_iscritti.get(i).getUsername() + "</label></div>");
                         } else {
-                            out.println(non_iscritti.get(i).getUsername() + " gia invitato! <br />");
+                            out.println("<div class='ui small green label'>GIA INVITATO</div><label>" + non_iscritti.get(i).getUsername() + "</label>");
 
                         }
+                        out.println("</p>");
                     }
-                }
-                out.println("<input type='submit' name='generapdf' value='GENERA PDF'/>");
-                out.println("<input type='submit' name='modifica' value='MODIFICA'/>");
-                out.println("</form>");
-                out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "'>Indietro</a><br />");
 
+                }
+                 if (iscritti.size() > 1) {
+                    out.println("<div class='ui blue ribbon label'><i class='icon delete'></i>&nbsp;Elimina Utenti</div><br/>");
+
+                    for (int i = 0; i < iscritti.size(); i++) {
+                        out.println("<p>");
+                        if (!iscritti.get(i).getId_utente().equals(user_id)) {
+                            out.println("<div class='ui toggle checkbox'>");
+                            out.println("<input type='checkbox' name='utenti_selezionati' value='" + iscritti.get(i).getId_utente() + "'/>");
+                            out.println("<label>" + iscritti.get(i).getUsername() + "</label></div>");
+                        }
+                        out.println("<p>");
+                    }
+
+                }
+                out.println("<br/>");
+                out.println("<div class='center'>");
+                out.println("<button class='ui blue button' type='submit' name='modifica' value='MODIFICA'/><i class='icon save'></i>SALVA</button>");
+                out.println("</form>");
+                out.println("</div>");
+                out.println("<div class='four wide column'></div>");
+                out.println("</div>");
+                out.println("</div>");
+                out.println("</div>");
                 MainLayout.printFooter(out);
             } finally {
                 out.close();
@@ -145,65 +236,6 @@ public class ModificaGruppoServlet extends HttpServlet {
                 InvitoController.processaRe_Inviti(request, gruppo_id);
                 response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id);
             } catch (SQLException ex) {
-                log.error(ex);
-            }
-
-        } else if (request.getParameter("generapdf") != null) {
-            try {
-                Document document = new Document();
-                String url = request.getQueryString();
-                Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
-                response.setContentType("application/pdf");
-                response.setHeader("Content-Disposition", " attachment; filename='gruppo_" + gruppo_id + "_report.pdf'");
-                List<Utente> iscritti = null;
-                List<Post> posts = null;
-                try {
-                    iscritti = UtenteController.getUserByGroupId(request, gruppo_id);
-                } catch (SQLException ex) {
-                    log.error(ex);
-                }
-                PdfWriter.getInstance(document, response.getOutputStream());
-                document.open();
-                Paragraph p = new Paragraph("REPORT", FontFactory.getFont(FontFactory.HELVETICA, 20));
-                p.setAlignment(Element.ALIGN_CENTER);
-                document.add(p);
-                PdfPTable table = new PdfPTable(2);
-                for (int i = 0; i < iscritti.size(); i++) {
-                    Utente utente = iscritti.get(i);
-                    try {
-                        posts = PostController.getPostByGruppoIdAndUserId(request, gruppo_id, utente.getId_utente());
-                    } catch (SQLException ex) {
-                        log.error(ex);
-                    }
-                    table.addCell("Username");
-                    table.addCell(utente.getUsername());
-                    table.addCell("Data Ultimo Post");
-                    if (posts.isEmpty()) {
-                        table.addCell("N/A");
-                    } else {
-                        //L'ultimo è sempre il piu recente siccome la query è ORDER BY data_creazione
-                        table.addCell(posts.get(posts.size() - 1).getData_creazione());
-                    }
-                    table.addCell("Numero post");
-                    table.addCell(posts.size() + "");
-                    //inserisco avatar
-                    String imageUrl;
-                    if (utente.getNome_avatar() != null) {
-                        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-                        imageUrl = baseUrl + request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();;
-                    } else {
-                        imageUrl = "http://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y";
-                    }
-                    Image image = Image.getInstance(new URL(imageUrl));
-                    image.scaleToFit(50, 50);
-                    table.addCell("Avatar");
-                    table.addCell(image);
-
-                }
-                document.add(table);
-                document.close();
-
-            } catch (DocumentException ex) {
                 log.error(ex);
             }
         } else {
