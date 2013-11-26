@@ -54,7 +54,7 @@ public class CreaPdfServlet extends HttpServlet {
                 String url = request.getQueryString();
                 Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
                 
-                response.setHeader("Content-Disposition", " attachment; filename='gruppo_" + gruppo_id + "_report.pdf'");
+                //response.setHeader("Content-Disposition", " attachment; filename='gruppo_" + gruppo_id + "_report.pdf'");
                 List<Utente> iscritti = null;
                 List<Post> posts = null;
                 try {
