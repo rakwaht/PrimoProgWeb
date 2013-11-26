@@ -114,7 +114,9 @@ public class CreaGruppoServlet extends HttpServlet {
             out.println("<div class='row'>");
             out.println("<div class='four wide column'></div>");
             out.println("<div class='eight wide column'>");
-            out.println("<form class='ui fluid form message' method='POST'>");
+            
+            //FORM
+            out.println("<form class='ui fluid form blue segment' method='POST'>");
             out.println("<div class='field'>");
             out.println("<div class='ui blue ribbon label'>Titolo</div>");
             out.println("<div class='ui left icon input login-input'>");
