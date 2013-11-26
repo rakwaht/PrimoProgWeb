@@ -177,8 +177,9 @@ public class ModificaGruppoServlet extends HttpServlet {
                     }
 
                 }
-                out.println("<br/>");
-                out.println("<div class='center'>");
+               
+                out.println("<div class='ui divider'></div>");
+                out.println("<div class='center '>");
                 out.println("<button class='ui blue button' type='submit' name='modifica' value='MODIFICA'/><i class='icon save'></i>SALVA</button>");
                 out.println("</form>");
                 out.println("</div>");
