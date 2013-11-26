@@ -112,8 +112,8 @@ public class TuoiGruppiServlet extends HttpServlet {
             out.println("<div id='main-container' class='main container center'>");
             out.println("<div class='ui grid'>");
             out.println("<div class='row'>");
-            out.println("<div class='two wide column'></div>");
-            out.println("<div class='twelve wide column'>");
+            out.println("<div class='one wide column'></div>");
+            out.println("<div class='fourteen wide column'>");
             if (gruppi != null && gruppi.size() > 0) {
                 out.println("<table class='ui blue table segment'>");
                 out.println("<th>Gruppo</th>");
@@ -138,7 +138,7 @@ public class TuoiGruppiServlet extends HttpServlet {
                     } catch (SQLException ex) {
                         java.util.logging.Logger.getLogger(TuoiGruppiServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    out.println("<td>" + gruppo.getNome() +" <small><i>(" + numeroDiPost + " post)</i></small></td>");
+                    out.println("<td>" + gruppo.getNome() +" <br /><small><i>(" + numeroDiPost + " post)</i></small></td>");
                     out.println("<td>" + gruppo.getDescrizione() + "</td>");
                     out.println("<td>" + proprietario.getUsername() + "</td>");
                     out.println("<td><div class=\"ui large blue label\">" + filesSize + "</div></td>");
@@ -150,7 +150,7 @@ public class TuoiGruppiServlet extends HttpServlet {
                 out.println("<div class='ui red message'><i class='remove sign icon'></i>Non sei iscritto a nessun gruppo.</div>");
             }
             out.println("</div>");
-            out.println("<div class='two wide column'></div>");
+            out.println("<div class='one wide column'></div>");
             out.println("</div>");
             out.println("</div>");
             MainLayout.printFooter(out);
