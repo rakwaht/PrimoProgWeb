@@ -6,11 +6,6 @@
         Purpose of the stylesheet follows.
 */
 
-
-#tasto:hover{
-    color:#6ECFF5;
-}
-
 body, html {
     font-family: 'Source Sans Pro', "Helvetica Neue", "Helvetica", "Arial", sans-serif;
     color:#555555;
@@ -22,6 +17,10 @@ body, html {
 
 .pushed {
     margin-left: 275px !important;
+}
+
+#tasto:hover{
+    color:#6ECFF5;
 }
 
 #main-container {
@@ -42,6 +41,10 @@ a {
     margin: 0 auto;
 }
 
+.user-image{
+    border: solid 10px #555555;    
+}
+
 .home-menu{
     height:100%;
     min-height:100%;
@@ -60,10 +63,6 @@ a {
     margin: 0 auto;
 }
 
-.user-image{
-    border: solid 20px #555555;    
-}
-
 .menu-item{
     padding: 50px;
 }
@@ -71,7 +70,6 @@ a {
 #null-item:hover{
     cursor:default;
 }
-
 
 .tip-l:before {
     position: absolute;
@@ -95,6 +93,11 @@ a {
     position: absolute;
     top: 10px;
     right: -35px;
+}
+
+::selection {
+    color: white;
+    background-color: #DA009F;
 }
 
 @media screen and (max-width: 1080px) {

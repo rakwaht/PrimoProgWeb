@@ -109,9 +109,9 @@ public class AvatarServlet extends HttpServlet {
 
             out.println("<div id='main-container' class='main container'>");
             if (utente.getNome_avatar() != null) {
-                out.println("<img style='height:100px;width:100px;'  class=' center circular ui image scrivente-image' src='" + avatar_path + "' alt='Smiley face' /><br />");
+                out.println("<img class=' center circular ui image user-avatar' src='" + avatar_path + "' alt='Smiley face' /><br />");
             } else {
-                out.println("<img style='height:100px;width:100px; ' class=' center circular ui image scrivente-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+                out.println("<img class=' center circular ui image user-avatar' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
 
             }
             out.println("<div class='ui grid' style='margin-top:20px;'>");

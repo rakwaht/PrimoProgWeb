@@ -114,7 +114,7 @@ public class HomeServlet extends HttpServlet {
                 out.println("<div class='ui icon message'>");
                 out.println("<i class='blue time icon'></i>");
                 out.println("<div class='header'>Bentornato " + utente.getUsername().toUpperCase() + "!</div>");
-                out.println("<p>Il tuo ultimo login è stato:" + ultimo_login + ".</p>");
+                out.println("<p>Il tuo ultimo login è stato il " + ultimo_login + ".</p>");
                 out.println("</div>");
 
             } else {
@@ -126,7 +126,7 @@ public class HomeServlet extends HttpServlet {
             }
 
             if (posts.size() > 0 && ultimo_login != null) {
-                out.println("<h2 class='center ui header'><i class='list layout icon'></i> Nuovi post dall'ultimo login</h2>");
+                out.println("<h2 class='center ui header'><i class='list layout icon'></i>Nuovi post</h2>");
                 Integer POST_SIZE = posts.size();
                 out.println("<div class='ui grid'>");
                 for (int i = 0; i < POST_SIZE; i++) {

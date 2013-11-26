@@ -4,9 +4,12 @@
  */
 package com.deadormi.servlet;
 
+import com.deadormi.controller.FileController;
 import com.deadormi.controller.Gruppo_UtenteController;
 import com.deadormi.controller.InvitoController;
+import com.deadormi.controller.PostController;
 import com.deadormi.controller.UtenteController;
+import com.deadormi.entity.FileApp;
 import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Invito;
 import com.deadormi.entity.Utente;
@@ -16,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +50,7 @@ public class TuoiGruppiServlet extends HttpServlet {
         List<Gruppo> gruppi = null;
         Utente utente = null;
         List<Invito> inviti = null;
+        Integer filesSize = null;
         try {
             inviti = InvitoController.getInvitiByUserId(request);
             utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
@@ -114,20 +119,29 @@ public class TuoiGruppiServlet extends HttpServlet {
                 out.println("<th>Gruppo</th>");
                 out.println("<th>Descrizione</th>");
                 out.println("<th>Amministratore</th>");
+                out.println("<th>Files</th>");
                 out.println("<th>Vai</th>");
                 for (int i = 0; i < gruppi.size(); i++) {
                     Gruppo gruppo = gruppi.get(i);
                     Utente proprietario = null;
                     try {
+                        filesSize = FileController.getFilesByGroupId(request, gruppo.getId_gruppo()).size();
                         proprietario = UtenteController.getUserById(request, gruppo.getId_proprietario());
                     } catch (SQLException ex) {
                         log.error(ex);
                     }
 
                     out.println("<tr>");
-                    out.println("<td>" + gruppo.getNome() + "</td>");
+                    Integer numeroDiPost = null;
+                    try {
+                        numeroDiPost = PostController.getPostByGruppoId(request, gruppo.getId_gruppo()).size();
+                    } catch (SQLException ex) {
+                        java.util.logging.Logger.getLogger(TuoiGruppiServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    out.println("<td>" + gruppo.getNome() +" <small><i>(" + numeroDiPost + " post)</i></small></td>");
                     out.println("<td>" + gruppo.getDescrizione() + "</td>");
                     out.println("<td>" + proprietario.getUsername() + "</td>");
+                    out.println("<td><div class=\"ui large blue label\">" + filesSize + "</div></td>");
                     out.println("<td><a href='gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "'><i id='tasto' class='forward mail icon' style='font-size:30px'></i></a></td>");
                     out.println("</tr>");
                 }
