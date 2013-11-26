@@ -155,7 +155,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                             out.println("<input type='checkbox' name='non_utenti_selezionati' value='" + non_iscritti.get(i).getId_utente() + "'>");
                             out.println("<label>" + non_iscritti.get(i).getUsername() + "</label></div>");
                         } else {
-                            out.println("<div class='ui small green label'>GIA INVITATO</div><label>" + non_iscritti.get(i).getUsername() + "</label>");
+                            out.println("<div class='ui small green label'><i class=\"checkmark icon\"></i>INVITATO</div><label>" + non_iscritti.get(i).getUsername() + "</label>");
 
                         }
                         out.println("</p>");
