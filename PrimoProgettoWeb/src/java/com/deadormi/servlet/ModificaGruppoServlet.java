@@ -65,7 +65,6 @@ public class ModificaGruppoServlet extends HttpServlet {
             Gruppo gruppo = GruppoController.getGruppoById(request, id_gruppo);
             List<Utente> iscritti = UtenteController.getUserByGroupId(request, id_gruppo);
             List<Utente> non_iscritti = UtenteController.getUserNotInGroupByGroupId(request, id_gruppo);
-            System.out.println(non_iscritti.size());
             Utente utente = null;
             utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
             String avatar_path = request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();
@@ -127,7 +126,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("<div class='four wide column'></div>");
                 out.println("<div class='eight wide column'>");
                 //FORM
-                out.println("<form method='POST' class='ui form segment' action='/PrimoProgettoWeb/secure/modifica_gruppo?id_gruppo=" + id_gruppo + "''>");
+                out.println("<form method='POST' class='ui form blue segment' action='/PrimoProgettoWeb/secure/modifica_gruppo?id_gruppo=" + id_gruppo + "''>");
                 out.println("<div class='field'>");
                 out.println("<div class='ui blue ribbon label'>Titolo</div>");
                 out.println("<div class='ui left icon input login-input'>");

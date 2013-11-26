@@ -133,7 +133,6 @@ public class GruppoServlet extends HttpServlet {
 
                 for (int i = 0; i < posts.size(); i++) {
                     post = posts.get(i);
-                    System.out.println(posts.size() + "--------------------------------------");
                     Utente scrivente = null;
                     Gruppo gruppo_post = null;
                     try {
