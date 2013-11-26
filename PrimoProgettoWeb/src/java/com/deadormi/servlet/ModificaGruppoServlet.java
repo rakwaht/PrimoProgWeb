@@ -98,7 +98,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("<i class='wrench icon'></i>Modifica Gruppo");
                 out.println("</a>");
                
-                out.println("<a href='/PrimoProgettoWeb/secure/crea_pdf?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
+                out.println("<a href='/PrimoProgettoWeb/secure/crea_pdf?id_gruppo=" + gruppo.getId_gruppo() + "' class='item' >");
                 out.println("<i class='copy icon'></i>");
                 out.println("Genera PDF");
                 out.println("</a>");

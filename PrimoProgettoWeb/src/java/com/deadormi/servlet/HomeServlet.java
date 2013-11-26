@@ -113,7 +113,7 @@ public class HomeServlet extends HttpServlet {
             if (ultimo_login != null) {
                 out.println("<div class='ui icon message'>");
                 out.println("<i class='blue time icon'></i>");
-                out.println("<div class='header'>Bentornato " + utente.getUsername().toUpperCase() + "!</div>");
+                out.println("<div class='header'>Bentornato " + utente.getUsername().toUpperCase() + " ciaooo!</div>");
                 out.println("<p>Il tuo ultimo login è stato il " + ultimo_login + ".</p>");
                 out.println("</div>");
 
