@@ -97,7 +97,7 @@ public class GruppoServlet extends HttpServlet {
 
             if (utente.getId_utente().equals(gruppo.getId_proprietario())) {
                 out.println("<a href='" + securePath + "modifica_gruppo?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
-                out.println("<i class='wrench icon'></i>Modifica gruppo");
+                out.println("<i class='wrench icon'></i>Modifica Gruppo");
                 out.println("</a>");
             }
 

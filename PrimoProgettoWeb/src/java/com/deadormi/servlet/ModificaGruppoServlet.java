@@ -97,7 +97,7 @@ public class ModificaGruppoServlet extends HttpServlet {
 
                 if (utente.getId_utente().equals(gruppo.getId_proprietario())) {
                     out.println("<a href='" + securePath + "modifica_gruppo?id_gruppo=" + gruppo.getId_gruppo() + "' class='item active'>");
-                    out.println("<i class='wrench icon'></i>Modifica gruppo");
+                    out.println("<i class='wrench icon'></i>Modifica Gruppo");
                     out.println("</a>");
                 }
                 out.println("<a href='/PrimoProgettoWeb/secure/crea_pdf?id_gruppo="+ gruppo.getId_gruppo() +"' class='item'>");
@@ -117,7 +117,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("<div id='buffo' class='item' style='cursor: pointer'><i class=\"icon list\"></i></div>");
                 out.println("<a href='" + securePath + "/gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'><i class=\"left arrow icon\"></i>INDIETRO</a>");
 
-                out.println("<div class='item'><i class='home icon'></i>Home</div>");
+                out.println("<div class='item'><i class='wrench icon'></i>Modifica Gruppo</div>");
                 out.println("</div>");
                 out.println("</div>");
 
