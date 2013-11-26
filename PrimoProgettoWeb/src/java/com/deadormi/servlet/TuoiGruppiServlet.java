@@ -138,7 +138,7 @@ public class TuoiGruppiServlet extends HttpServlet {
                     } catch (SQLException ex) {
                         java.util.logging.Logger.getLogger(TuoiGruppiServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    out.println("<td>" + gruppo.getNome() +" <br /><small><i>(" + numeroDiPost + " post)</i></small></td>");
+                    out.println("<td><h3>" + gruppo.getNome() +"</h3><small><i>(" + numeroDiPost + " post)</i></small></td>");
                     out.println("<td>" + gruppo.getDescrizione() + "</td>");
                     out.println("<td>" + proprietario.getUsername() + "</td>");
                     out.println("<td><div class=\"ui large blue label\">" + filesSize + "</div></td>");

@@ -218,7 +218,7 @@ public class GruppoServlet extends HttpServlet {
 
                 out.println("</div>"); //chiude nested grid                
             } else {
-                out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun post.</div>");
+                out.println("<div class='ui blue message'><i class='attention icon'></i>Non c'è nessun post.</div>");
 
             }
 
@@ -242,7 +242,7 @@ public class GruppoServlet extends HttpServlet {
             }
 
             if (utenti.size() == 1) {
-                out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun utente oltre a te.</div>");
+                out.println("<div class='ui blue message'><i class='attention icon'></i>Non c'è nessun utente oltre a te.</div>");
             } else {
                 out.println("<table class='ui table segment'>");
                 out.println("<thead><tr><th><i class='icon users'></i>Membri</th></tr></thead>");
@@ -269,7 +269,7 @@ public class GruppoServlet extends HttpServlet {
             }
 
             if (group_files.size() == 0) {
-                out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è alcun file in questo gruppo.</div>");
+                out.println("<div class='ui blue message'><i class='attention icon'></i>Non c'è alcun file in questo gruppo.</div>");
             } else {
                 out.println("<table class='ui table segment'>");
                 out.println("<thead><tr><th><i class='icon list'></i>Files</th></tr></thead>");

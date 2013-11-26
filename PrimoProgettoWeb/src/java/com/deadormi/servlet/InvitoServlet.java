@@ -152,7 +152,7 @@ public class InvitoServlet extends HttpServlet {
                 out.println("</form>");
                 out.println("</div>");
             } else {
-                out.println("<div class='ui red message'><i class='remove sign icon'></i>Non c'è nessun invito.</div>");
+                out.println("<div class='ui blue message'><i class='attention icon'></i>Non c'è nessun invito.</div>");
 
                 out.println("</div>");
             }
