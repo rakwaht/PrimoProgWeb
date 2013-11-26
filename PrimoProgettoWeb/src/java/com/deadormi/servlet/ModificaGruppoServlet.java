@@ -94,14 +94,19 @@ public class ModificaGruppoServlet extends HttpServlet {
                 }
                 out.println("</a>");
 
-                if (utente.getId_utente().equals(gruppo.getId_proprietario())) {
-                    out.println("<a href='" + securePath + "modifica_gruppo?id_gruppo=" + gruppo.getId_gruppo() + "' class='item active'>");
-                    out.println("<i class='wrench icon'></i>Modifica Gruppo");
-                    out.println("</a>");
-                }
-                out.println("<a href='/PrimoProgettoWeb/secure/crea_pdf?id_gruppo="+ gruppo.getId_gruppo() +"' class='item'>");
+                out.println("<a href='" + securePath + "modifica_gruppo?id_gruppo=" + gruppo.getId_gruppo() + "' class='item active'>");
+                out.println("<i class='wrench icon'></i>Modifica Gruppo");
+                out.println("</a>");
+               
+                out.println("<a href='/PrimoProgettoWeb/secure/crea_pdf?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
                 out.println("<i class='copy icon'></i>");
                 out.println("Genera PDF");
+                out.println("</a>");
+               
+
+                out.println("<a href='" + securePath + "nuovo_post?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
+                out.println("<i class='outline chat icon'></i>");
+                out.println("Nuovo Post");
                 out.println("</a>");
 
                 out.println("<a href='" + securePath + "logout' class='item'>");
@@ -142,7 +147,6 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("</div>");
                 out.println("</div>");
 
-               
                 if (non_iscritti.size() > 0) {
 
                     out.println("<div class='ui blue ribbon label'><i class='icon users '></i>Invita Utenti</div><br/>");
@@ -162,7 +166,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                     }
 
                 }
-                 if (iscritti.size() > 1) {
+                if (iscritti.size() > 1) {
                     out.println("<div class='ui blue ribbon label'><i class='icon delete'></i>&nbsp;Elimina Utenti</div><br/>");
 
                     for (int i = 0; i < iscritti.size(); i++) {
@@ -176,7 +180,7 @@ public class ModificaGruppoServlet extends HttpServlet {
                     }
 
                 }
-               
+
                 out.println("<div class='ui divider'></div>");
                 out.println("<div class='center '>");
                 out.println("<button class='ui blue button' type='submit' name='modifica' value='MODIFICA'/><i class='icon save'></i>SALVA</button>");

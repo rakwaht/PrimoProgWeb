@@ -131,7 +131,7 @@ public class PostController {
             // Create a new file upload handler
             while (i2.hasNext()) {
                 FileItem fi = (FileItem) i2.next();
-                if (fi.getFieldName().equals("file") && fi.getSize() > 0) {
+                if (!fi.isFormField() && fi.getFieldName().equals("file") && fi.getSize() > 0) {
                     // Get the uploaded file parameters
                     String fieldName = fi.getFieldName();
                     String fileName = fi.getName();

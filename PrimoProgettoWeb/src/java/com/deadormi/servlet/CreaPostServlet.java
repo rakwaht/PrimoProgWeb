@@ -6,9 +6,14 @@
 package com.deadormi.servlet;
 
 import com.deadormi.controller.FileController;
+import com.deadormi.controller.GruppoController;
 import com.deadormi.controller.PostController;
+import com.deadormi.controller.UtenteController;
 import com.deadormi.entity.FileApp;
+import com.deadormi.entity.Gruppo;
+import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
+import static com.deadormi.servlet.HomeServlet.AVATAR_RESOURCE_PATH;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -26,12 +31,11 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
  */
 public class CreaPostServlet extends HttpServlet {
 
-    static Logger  log = Logger.getLogger(CreaPostServlet.class);
-    
+    static Logger log = Logger.getLogger(CreaPostServlet.class);
+
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -44,34 +48,120 @@ public class CreaPostServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         Integer id_gruppo = Integer.parseInt(request.getParameter("id_gruppo"));
         List<FileApp> files = null;
+        Utente utente = null;
+        String securePath = "/PrimoProgettoWeb/secure/";
+        Gruppo gruppo = null;
         try {
             files = FileController.getFilesByGroupId(request, id_gruppo);
+            utente = UtenteController.getUserById(request, (Integer) request.getSession().getAttribute("user_id"));
+            gruppo = GruppoController.getGruppoById(request, id_gruppo);
         } catch (SQLException ex) {
-           log.error(ex);
+            log.error(ex);
         }
+        String avatar_path = request.getContextPath() + AVATAR_RESOURCE_PATH + "/" + utente.getId_utente() + "_" + utente.getNome_avatar();
+
         try {
             /* TODO output your page here. You may use following sample code. */
             MainLayout.printHeader(out);
-            out.println("<h1>Crea Post da gruppo: " + id_gruppo + "</h1>");
-            out.println("<form method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo=" + id_gruppo + "' enctype='multipart/form-data'>");
-            out.println("<textarea id='testo_post' name='testo'></textarea><br />");
-            out.println("Aggiungi file?<INPUT TYPE='FILE' NAME='file' onchange='add_upload_file();'> <BR />");
-            out.println("<input type='submit' name='creapost' value='CREA POST' />");
-            out.println("</form>");
-            if(files != null && files.size()>0){
-            out.println("<div id='scelte'>");
-            for(int i = 0; i<files.size(); i++){
-                out.println("<input type='checkbox' name='file' value='" + files.get(i).getId_file() + "-" + files.get(i).getNome_file() + "'>");
-                out.println(files.get(i).getNome_file() + ", del post" + files.get(i).getId_post() +"<br>");
-                
+            out.println("<div class='ui large inverted vertical demo sidebar menu active fixed'>");
+
+            out.println("<a href='" + securePath + "home' class='item center'>");
+            if (utente.getNome_avatar() == null) {
+                out.println("<img class='circular ui image user-image' src='" + request.getContextPath() + "/res/images/user_avatar.png' alt='Smiley face' style='margin:0 auto; width:100px; heigth:100px;' />");
+            } else {
+                out.println("<img class='circular ui image user-image' src='" + avatar_path + "' alt='Smiley face' style='margin:0 auto; width:100px; height:100px'>");
             }
-            out.println("<input type='button' value='Linka Selezionati' onclick='linka_selezionati()' />");
+            out.println("<h3>" + utente.getUsername().toUpperCase() + "</h3>");
+            out.println("</a>");
+
+            out.println("<a href='" + securePath + "tuoi_gruppi' class='item'>");
+            out.println("<i class='users icon'></i> Gruppi");
+            out.println("</a>");
+
+            out.println("<a href='" + securePath + "/gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
+            if (utente.getId_utente().equals(gruppo.getId_proprietario())) {
+                out.println("<i class='book icon'></i><div class='ui blue label'>admin</div>" + gruppo.getNome());
+            } else {
+                out.println("<i class='book icon'></i>" + gruppo.getNome());
+            }
+            out.println("</a>");
+
+            if (utente.getId_utente().equals(gruppo.getId_proprietario())) {
+                out.println("<a href='" + securePath + "modifica_gruppo?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
+                out.println("<i class='wrench icon'></i>Modifica Gruppo");
+                out.println("</a>");
+            }
+
+            out.println("<a href='" + securePath + "nuovo_post?id_gruppo=" + gruppo.getId_gruppo() + "' class='item active'>");
+            out.println("<i class='outline chat icon'></i>");
+            out.println("Nuovo Post");
+            out.println("</a>");
+
+            out.println("<a href='" + securePath + "logout' class='item'>");
+            out.println("<i class='sign out icon'></i>");
+            out.println("Logout");
+            out.println("</a>");
+
             out.println("</div>");
-            }
-            else{
+
+            out.println("<div class=\"ui fixed transparent inverted main menu\">");
+            out.println("<div class='container'>");
+            out.println("<div id='buffo' class='item' style='cursor: pointer'><i class=\"icon list\"></i></div>");
+            out.println("<a href='" + securePath + "/gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'><i class=\"left arrow icon\"></i>INDIETRO</a>");
+            out.println("<div class='item'><i class='outline chat icon'></i>Crea Post</div>");
+            out.println("</div>");
+            out.println("</div>");
+
+            out.println("<div id='main-container' class='main container center'>");
+            out.println("<div class='ui grid'>");
+            out.println("<div class='row'>");
+            out.println("<div class='four wide column'></div>");
+            out.println("<div class='eight wide column'>");
+
+            out.println("<form class='ui form segment blue' method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo=" + id_gruppo + "' enctype='multipart/form-data'>");
+            out.println("<div class='field'>");
+            out.println("<div class='ui blue ribbon label'><i class='icon comment'></i>Testo</div>");
+            out.println("<div class='ui login-input'>");
+            out.println("<textarea id='testo_post' name='testo' type='text'></textarea>");
+            out.println("</div>");
+            out.println("</div>");
+
+            out.println("<div class='field'>");
+            out.println("<div class='ui blue ribbon label'><i class='icon save'></i>FILES</div>");
+            out.println("<div class='ui login-input center'>");
+            out.println("<input type='file' name='file' onchange='add_upload_file();'> <br />");
+             out.println("</div>");
+            
+            if (files != null && files.size() > 0) {
+                out.println("<div class='ui divider'></div>");
+
+                out.println("<div id='scelte'>");
+                for (int i = 0; i < files.size(); i++) {
+                    out.println("<div class='ui checkbox' style='margin:5px'>");
+                    out.println("<input type='checkbox' name='file' value='" + files.get(i).getId_file() + "-" + files.get(i).getNome_file() + "'>");
+                    out.println("<label>"+files.get(i).getNome_file() + ", del post" + files.get(i).getId_post() + "</label>");
+                    out.println("</div><br/>");
+                }
+                out.println("<button type='button' class='ui small blue button' value='Linka Selezionati' onclick='linka_selezionati()' ><i class='icon attachment'></i>Linka Selezionati</button>");
+                out.println("</div>");
+            } else {
                 out.println("<p>Non ci sono files in questo gruppo</p>");
             }
-            out.println("<a href='/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + id_gruppo + "'>Indietro</a>");
+
+            out.println("<div class='ui divider'></div>");
+            out.println("<div class='center'>");
+            out.println("<button type='submit' class='ui blue button ' name='creapost' value='CREA POST' /><i class='icon plus sign'></i>Crea Post</button>");
+            out.println("</div>");
+            out.println("</div>");
+            out.println("</div>");
+
+            out.println("</form>");
+
+            out.println("</div>");
+            out.println("<div class='four wide column'></div>");
+            out.println("</div>");
+            out.println("</div>");
+
             MainLayout.printFooter(out);
         } finally {
             out.close();
@@ -80,8 +170,7 @@ public class CreaPostServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -95,8 +184,7 @@ public class CreaPostServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -113,7 +201,7 @@ public class CreaPostServlet extends HttpServlet {
             try {
                 PostController.creaPost(request);
             } catch (SQLException ex) {
-               log.error(ex);
+                log.error(ex);
             } catch (org.apache.commons.fileupload.FileUploadException ex) {
                 log.error(ex);
             }

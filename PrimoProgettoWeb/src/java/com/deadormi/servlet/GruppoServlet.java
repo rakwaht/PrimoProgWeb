@@ -100,7 +100,14 @@ public class GruppoServlet extends HttpServlet {
                 out.println("<i class='wrench icon'></i>Modifica Gruppo");
                 out.println("</a>");
             }
+            //            out.println("<a href='" + securePath + "nuovo_post?id_gruppo=" + gruppo.getId_gruppo() + "' class='ui blue button fluid large'><i class='outline chat icon'></i>Nuovo post</a>");
 
+             out.println("<a href='" + securePath + "nuovo_post?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
+            out.println("<i class='outline chat icon'></i>");
+            out.println("Nuovo Post");
+            out.println("</a>");
+            
+            
             out.println("<a href='" + securePath + "logout' class='item'>");
             out.println("<i class='sign out icon'></i>");
             out.println("Logout");

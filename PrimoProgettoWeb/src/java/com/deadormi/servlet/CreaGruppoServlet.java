@@ -147,7 +147,7 @@ public class CreaGruppoServlet extends HttpServlet {
                 out.println("<div class='ui divider'></div>");
 
             } else {
-                out.println("Nessuna persona nel db!");
+                out.println("<div class='ui blue segment'>Nessuna persona!</div>");
             }
             out.println("<button class='ui button blue fluid' type='submit' style='margin-top:10px;'><i class='add icon'></i>Crea</button>");
             out.println("</form>");
