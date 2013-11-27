@@ -117,6 +117,14 @@
         <filter-name>CreaPdfFilter</filter-name>
         <filter-class>com.deadormi.util.CreaPdfFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>FileFilter</filter-name>
+        <filter-class>com.deadormi.util.FileFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FileFilter</filter-name>
+        <url-pattern>/resource/files/*</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>CreaPdfFilter</filter-name>
         <servlet-name>CreaPdfServlet</servlet-name>
