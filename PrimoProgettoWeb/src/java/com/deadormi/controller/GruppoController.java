@@ -35,7 +35,9 @@ public class GruppoController {
             log.error(ex);
         }
         String titolo = request.getParameter("titolo");
+        titolo = titolo.replaceAll("<[^>]*>", "");
         String descrizione = request.getParameter("descrizione");
+        descrizione = descrizione.replaceAll("<[^>]*>", "");
         if (!titolo.equals("") && !descrizione.equals("")) {
             PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.GRUPPO (nome,id_proprietario,data_creazione,descrizione) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ResultSet generated_keys;
@@ -98,7 +100,9 @@ public class GruppoController {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
         String titolo = request.getParameter("titolo");
+        titolo = titolo.replaceAll("<[^>]*>", "");
         String descrizione = request.getParameter("descrizione");
+        descrizione = descrizione.replaceAll("<[^>]*>", "");
         PreparedStatement stm = connection.prepareStatement("UPDATE ROOT.GRUPPO SET nome=?, descrizione=? WHERE id_gruppo=?");
         ResultSet rs;
         try {
