@@ -120,7 +120,7 @@ public class HomeServlet extends HttpServlet {
             } else {
                 out.println("<div class='ui icon message'>");
                 out.println("<i class='blue home icon'></i>");
-                out.println("<div class='header'>Benvenuto " + utente.getUsername().toUpperCase() + "!</div>");
+                out.println("<div class='header'>Benvenuto " + utente.getUsername().toUpperCase() + "</div>");
                 out.println("<p>Usa il menù a fianco per spostarti tra le pagine.</p>");
                 out.println("</div>");
             }
