@@ -34,12 +34,9 @@ public class CreaPostServlet extends HttpServlet {
     private Integer error = 0;
     static Logger log = Logger.getLogger(CreaPostServlet.class);
 
-    
-    
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -121,12 +118,21 @@ public class CreaPostServlet extends HttpServlet {
             out.println("<div class='row'>");
             out.println("<div class='four wide column'></div>");
             out.println("<div class='eight wide column'>");
-
-            out.println("<form class='ui form segment blue' method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo=" + id_gruppo + "' enctype='multipart/form-data'>");
             if (error == 1) {
-                out.println("File troppo grande");
+                out.println("<div class='ui icon red message'>");
+                out.println("<i class='remove sign icon'></i>");
+                out.println("<div class='content'>");
+                out.println("<div class='header'>");
+                out.println("Errore!");
+                out.println("</div>");
+                out.println("<p>I file caricati superano il peso totale massimo (10MB)!</p>");
+                out.println("</div>");
+                out.println("</div>");
+
                 error = 0;
             }
+            out.println("<form class='ui form segment blue' method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo=" + id_gruppo + "' enctype='multipart/form-data'>");
+
             out.println("<div class='field'>");
             out.println("<div class='ui blue ribbon label'><i class='icon comment'></i>Testo</div>");
             out.println("<div class='ui login-input'>");
@@ -134,8 +140,8 @@ public class CreaPostServlet extends HttpServlet {
             out.println("</div>");
             out.println("</div>");
 
-            out.println("<div class='field'>");
-            out.println("<div class='ui blue ribbon label'><i class='icon save'></i>FILES</div>");
+            out.println("<div class='field '>");
+            out.println("<div class='ui blue ribbon label'><i class='icon save'></i>FILES</div><small>(Peso Totale Massimo: 10 MB)</small>");
             out.println("<div class='ui login-input center'>");
             out.println("<input type='file' name='file' onchange='add_upload_file();'> <br />");
             out.println("</div>");
@@ -178,8 +184,7 @@ public class CreaPostServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -193,8 +198,7 @@ public class CreaPostServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
