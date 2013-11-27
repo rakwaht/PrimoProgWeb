@@ -25,15 +25,13 @@ import org.apache.log4j.Logger;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
+    private Integer error = 0;
     static Logger log = Logger.getLogger(LoginServlet.class);
 
-    @Override
-    public void init() throws ServletException {
-    }
-
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -108,7 +106,8 @@ public class LoginServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -123,7 +122,8 @@ public class LoginServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -135,16 +135,23 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         log.debug("richiesta doPost");
         Utente utente = null;
-        try {
-            utente = UtenteController.authenticate(request, response);
-        } catch (SQLException ex) {
-            log.warn("Authenticate Excepion" + ex);
+        if (request.getParameter("username") == null || request.getParameter("username").equals("")) {
+            error = 1; // error 1 significa username mancante
+        } else if (request.getParameter("password") == null || request.getParameter("password").equals("")) {
+            error = 2; // error 2 significa password mancante
+        } else {
+            try {
+                utente = UtenteController.authenticate(request, response);
+            } catch (SQLException ex) {
+                log.warn("Authenticate Excepion" + ex);
+            }
         }
         String redirect = "/secure/home";
         if (utente != null) {
             log.info("Login Effettuato " + utente.getUsername());
             response.sendRedirect(request.getContextPath() + redirect);
         } else {
+            error = 3; //coppia utente password non combaciano
             processRequest(request, response);
         }
     }
