@@ -65,13 +65,14 @@ public class LoginServlet extends HttpServlet {
                 out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
                 out.println("</head>");
                 out.println("<body>");
-
-                out.println("<h1 class='center ui header'>Coffee ClassRoom</h1>");
+                out.println("<div class='ui message attached top'>");
+                out.println("<h1 class='center ui header' style='font-size:100px;'><i class='coffee icon blue'></i>Coffee ClassRoom</h1>");
+                out.println("</div>");
                 out.println("<div class='ui grid'>");
                 out.println("<div class='five wide column'></div>");
 
                 out.println("<div class='six wide column'>");
-                out.println("<form class='ui fluid form message' method='POST'");
+                out.println("<form class='ui fluid form segment blue' method='POST' style='margin-top:25px;'");
                 out.println("<div class='three fields'>");
                 out.println("<h2 class='center ui header' id='login-title'><i class='circular inverted blue icon sign in'></i>Login</h2>");
                 out.println("<div class='ui divider'></div>");
