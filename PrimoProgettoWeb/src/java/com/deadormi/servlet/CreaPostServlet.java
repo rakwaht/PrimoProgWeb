@@ -129,11 +129,25 @@ public class CreaPostServlet extends HttpServlet {
                 out.println("</div>");
                 out.println("</div>");
 
-                error = 0;
+                
+            }
+            else if (error == 2||error==3) {
+                out.println("<div class='ui icon red message'>");
+                out.println("<i class='remove sign icon'></i>");
+                out.println("<div class='content'>");
+                out.println("<div class='header'>");
+                out.println("Errore!");
+                out.println("</div>");
+                if(error ==2)out.println("<p>Campo di testo vuoto!</p>");
+                else if(error==3)out.println("<p>Hai superato il limite massimo di parole!</p>");
+                out.println("</div>");
+                out.println("</div>");
+
+              
             }
             out.println("<form class='ui form segment blue' method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo=" + id_gruppo + "' enctype='multipart/form-data'>");
-
-            out.println("<div class='field'>");
+            if(error==2||error==3)out.println("<div class='field error'>");
+            else out.println("<div class='field'>");
             out.println("<div class='ui blue ribbon label'><i class='icon comment'></i>Testo</div>");
             out.println("<div class='ui login-input'>");
             out.println("<textarea id='testo_post' name='testo' type='text'></textarea>");
@@ -175,7 +189,7 @@ public class CreaPostServlet extends HttpServlet {
             out.println("<div class='four wide column'></div>");
             out.println("</div>");
             out.println("</div>");
-
+              error = 0;
             MainLayout.printFooter(out);
         } finally {
             out.close();
@@ -214,14 +228,16 @@ public class CreaPostServlet extends HttpServlet {
             Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
             try {
                 error = PostController.creaPost(request);
-                if (error == 1) {
-                    processRequest(request, response);
-                }
+               
             } catch (SQLException ex) {
-                log.error(ex);
+                error = 3;
+                log.debug("String troppo grande: "+ex);
             } catch (org.apache.commons.fileupload.FileUploadException ex) {
                 log.error(ex);
             }
+             if (error > 0) {
+                    processRequest(request, response);
+                }
             response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id);
         } else {
             processRequest(request, response);
