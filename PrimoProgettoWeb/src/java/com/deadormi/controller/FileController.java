@@ -4,6 +4,7 @@
  */
 package com.deadormi.controller;
 
+import static com.deadormi.controller.PostController.log;
 import com.deadormi.dbmanager.DbManager;
 import com.deadormi.entity.FileApp;
 import com.deadormi.entity.Utente;
@@ -29,8 +30,8 @@ import org.apache.log4j.Logger;
  * @author Davide
  */
 public class FileController {
-    
-    static Logger  log = Logger.getLogger(FileController.class);
+
+    static Logger log = Logger.getLogger(FileController.class);
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
 
     static Integer salvaFile(HttpServletRequest request, String fileName, Integer post_id) throws SQLException {
@@ -54,7 +55,7 @@ public class FileController {
         }
     }
 
-    public static void cambiaAvatar(HttpServletRequest request) throws SQLException {
+    public static Integer cambiaAvatar(HttpServletRequest request) throws SQLException {
         String avatar_path = request.getServletContext().getRealPath(AVATAR_RESOURCE_PATH + "/");
         HttpSession session = request.getSession();
         String user_id = session.getAttribute("user_id").toString();
@@ -70,6 +71,10 @@ public class FileController {
         // maximum file size to be uploaded.
         upload.setSizeMax(maxFileSize);
         List fileItems = null;
+        if (request.getContentLength() >= maxFileSize) {
+            log.debug("Troppo grande " + request.getContentLength());
+            return 1; //file troppo grande
+        }
         try {
             fileItems = upload.parseRequest(request);
         } catch (FileUploadException ex) {
@@ -103,11 +108,13 @@ public class FileController {
                     } catch (Exception ex) {
                         log.error(ex);
                     }
+                    return 0;
                 } else {
-                    //non è un immagine non faccio niente
+                    return 2; // file non è un immagine
                 }
             }
         }
+        return 3; //nessun campo nel form
     }
 
     public static List<FileApp> getFilesByPostId(HttpServletRequest request, Integer id_post) throws SQLException {
@@ -181,7 +188,7 @@ public class FileController {
                 return false;
             }
             // only got here if we didn't return false
-           
+
 
             try {
                 stm.setInt(1, id_gruppo);

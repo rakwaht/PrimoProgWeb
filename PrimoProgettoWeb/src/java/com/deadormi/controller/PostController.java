@@ -80,7 +80,7 @@ public class PostController {
         int maxFileSize = 10 * 1024 * 1024;
         if(request.getContentLength() >= maxFileSize){
             log.debug("Troppo grande " + request.getContentLength());
-            return 1;
+            return 1; //file troppo grande
         }
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // maximum size that will be stored in memory
@@ -115,7 +115,10 @@ public class PostController {
         }
         testo = PostController.checkTesto(request, testo, Integer.parseInt(group_id));
 
-        if (!testo.trim().equals("")) {
+        if (testo.trim().equals("")) {
+            return 2; // testo vuoto
+        }
+        else{
             try {
 
                 stm.setInt(1, (Integer) session.getAttribute("user_id"));

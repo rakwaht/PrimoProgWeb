@@ -26,7 +26,8 @@ import org.apache.log4j.Logger;
  * @author Davide
  */
 public class AvatarServlet extends HttpServlet {
-
+    
+    private Integer error = 0;
     static Logger log = Logger.getLogger(AvatarServlet.class);
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
 
@@ -117,6 +118,43 @@ public class AvatarServlet extends HttpServlet {
             out.println("<div class='ui grid' style='margin-top:20px;'>");
             out.println("<div class='five wide column'></div>");
             out.println("<div class='six wide column'>");
+             if (error == 1) {
+                out.println("<div class='ui icon red message'>");
+                out.println("<i class='remove sign icon'></i>");
+                out.println("<div class='content'>");
+                out.println("<div class='header'>");
+                out.println("Errore!");
+                out.println("</div>");
+                out.println("<p>I file caricati superano il peso totale massimo (10MB)!</p>");
+                out.println("</div>");
+                out.println("</div>");
+
+                
+            }else  if (error == 2) {
+                out.println("<div class='ui icon red message'>");
+                out.println("<i class='remove sign icon'></i>");
+                out.println("<div class='content'>");
+                out.println("<div class='header'>");
+                out.println("Errore!");
+                out.println("</div>");
+                out.println("<p>Il file caricato non è un'immagine.</p>");
+                out.println("</div>");
+                out.println("</div>");
+
+                
+            }else  if (error == 3) {
+                out.println("<div class='ui icon red message'>");
+                out.println("<i class='remove sign icon'></i>");
+                out.println("<div class='content'>");
+                out.println("<div class='header'>");
+                out.println("Errore!");
+                out.println("</div>");
+                out.println("<p>Non hai caricato nessun file!</p>");
+                out.println("</div>");
+                out.println("</div>");
+
+                
+            }
             out.println("<form class='ui form fluid message center' method='POST' enctype='multipart/form-data' >");
             out.println("<input type='file' name='avatar'/>");
             out.println("<div class='ui divider'></div>");
@@ -124,7 +162,7 @@ public class AvatarServlet extends HttpServlet {
             out.println("</form>");
             out.println("</div>");
             out.println("<div class='five wide column'></div>");
-
+            error=0;
             MainLayout.printFooter(out);
         } finally {
             out.close();
@@ -158,7 +196,7 @@ public class AvatarServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            FileController.cambiaAvatar(request);
+            error = FileController.cambiaAvatar(request);
         } catch (SQLException ex) {
             log.error(ex);
         }
