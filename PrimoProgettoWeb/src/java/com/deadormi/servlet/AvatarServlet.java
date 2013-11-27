@@ -26,7 +26,8 @@ import org.apache.log4j.Logger;
  * @author Davide
  */
 public class AvatarServlet extends HttpServlet {
-
+    
+    private Integer error = 0;
     static Logger log = Logger.getLogger(AvatarServlet.class);
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
 
@@ -158,7 +159,7 @@ public class AvatarServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            FileController.cambiaAvatar(request);
+            error = FileController.cambiaAvatar(request);
         } catch (SQLException ex) {
             log.error(ex);
         }
