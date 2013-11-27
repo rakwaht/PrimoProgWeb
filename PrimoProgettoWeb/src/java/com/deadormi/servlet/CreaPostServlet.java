@@ -31,11 +31,15 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
  */
 public class CreaPostServlet extends HttpServlet {
 
+    private Integer error = 0;
     static Logger log = Logger.getLogger(CreaPostServlet.class);
 
+    
+    
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -119,6 +123,10 @@ public class CreaPostServlet extends HttpServlet {
             out.println("<div class='eight wide column'>");
 
             out.println("<form class='ui form segment blue' method='POST' action='/PrimoProgettoWeb/secure/nuovo_post?id_gruppo=" + id_gruppo + "' enctype='multipart/form-data'>");
+            if (error == 1) {
+                out.println("File troppo grande");
+                error = 0;
+            }
             out.println("<div class='field'>");
             out.println("<div class='ui blue ribbon label'><i class='icon comment'></i>Testo</div>");
             out.println("<div class='ui login-input'>");
@@ -130,8 +138,8 @@ public class CreaPostServlet extends HttpServlet {
             out.println("<div class='ui blue ribbon label'><i class='icon save'></i>FILES</div>");
             out.println("<div class='ui login-input center'>");
             out.println("<input type='file' name='file' onchange='add_upload_file();'> <br />");
-             out.println("</div>");
-            
+            out.println("</div>");
+
             if (files != null && files.size() > 0) {
                 out.println("<div class='ui divider'></div>");
 
@@ -139,7 +147,7 @@ public class CreaPostServlet extends HttpServlet {
                 for (int i = 0; i < files.size(); i++) {
                     out.println("<div class='ui checkbox' style='margin:5px'>");
                     out.println("<input type='checkbox' name='file' value='" + files.get(i).getId_file() + "-" + files.get(i).getNome_file() + "'>");
-                    out.println("<label>"+files.get(i).getNome_file() + ", del post" + files.get(i).getId_post() + "</label>");
+                    out.println("<label>" + files.get(i).getNome_file() + ", del post" + files.get(i).getId_post() + "</label>");
                     out.println("</div><br/>");
                 }
                 out.println("<button type='button' class='ui small blue button' value='Linka Selezionati' onclick='linka_selezionati()' ><i class='icon attachment'></i>Linka Selezionati</button>");
@@ -170,7 +178,8 @@ public class CreaPostServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -184,7 +193,8 @@ public class CreaPostServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -199,7 +209,10 @@ public class CreaPostServlet extends HttpServlet {
             String url = request.getQueryString();
             Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("=") + 1, url.length()));
             try {
-                PostController.creaPost(request);
+                error = PostController.creaPost(request);
+                if (error == 1) {
+                    processRequest(request, response);
+                }
             } catch (SQLException ex) {
                 log.error(ex);
             } catch (org.apache.commons.fileupload.FileUploadException ex) {

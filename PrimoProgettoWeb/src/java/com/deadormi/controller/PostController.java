@@ -68,7 +68,7 @@ public class PostController {
         return posts;
     }
 
-    public static void creaPost(HttpServletRequest request) throws SQLException, FileUploadException {
+    public static Integer creaPost(HttpServletRequest request) throws SQLException, FileUploadException {
         String group_id = request.getParameter("id_gruppo");
         HttpSession session = request.getSession();
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
@@ -77,10 +77,14 @@ public class PostController {
         //preparo l'estrazione del testo dal form
         String testo = null;
         Integer post_id;
-        int maxFileSize = 4 * 1024 * 1024;
+        int maxFileSize = 10 * 1024 * 1024;
+        if(request.getContentLength() >= maxFileSize){
+            log.debug("Troppo grande " + request.getContentLength());
+            return 1;
+        }
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // maximum size that will be stored in memory
-        factory.setSizeThreshold(maxFileSize); //max file size 4 mega
+        factory.setSizeThreshold(maxFileSize); //max file size 10 mega
         // Location to save data that is larger than maxMemSize.
         factory.setRepository(new File("c:\\temp"));
         // Create a new file upload handler
@@ -146,9 +150,11 @@ public class PostController {
                     } catch (Exception ex) {
                         log.error(ex);
                     }
+                    
                 }
             }
         }
+        return 0;
     }
 
     public static List<Post> getPostByGruppoIdAndUserId(HttpServletRequest request, Integer gruppo_id, Integer id_utente) throws SQLException {
