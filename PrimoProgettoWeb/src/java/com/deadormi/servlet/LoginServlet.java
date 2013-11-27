@@ -29,9 +29,8 @@ public class LoginServlet extends HttpServlet {
     static Logger log = Logger.getLogger(LoginServlet.class);
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -64,24 +63,38 @@ public class LoginServlet extends HttpServlet {
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<div class='ui message attached top'>");
-                out.println("<h1 class='center ui header' style='font-size:100px;'><i class='coffee icon blue'></i>Coffee ClassRoom</h1>");
+                out.println("<h1 class='center ui header' style='font-size:40px;'><i class='coffee icon blue'></i>Coffee ClassRoom</h1>");
                 out.println("</div>");
                 out.println("<div class='ui grid'>");
                 out.println("<div class='five wide column'></div>");
 
                 out.println("<div class='six wide column'>");
+               if (error == 3) {
+                    out.println("<br/><div class='ui icon red message'>");
+                    out.println("<i class='remove sign icon'></i>");
+                    out.println("<div class='content'>");
+                    out.println("<div class='header'>");
+                    out.println("Errore!");
+                    out.println("</div>");
+                    out.println("<p>Username e/o Password non corretti!</p>");
+                    out.println("</div>");
+                    out.println("</div>");
+
+                }
                 out.println("<form class='ui fluid form segment blue' method='POST' style='margin-top:25px;'");
                 out.println("<div class='three fields'>");
                 out.println("<h2 class='center ui header' id='login-title'><i class='circular inverted blue icon sign in'></i>Login</h2>");
                 out.println("<div class='ui divider'></div>");
-                out.println("<div class='field'>");
+                if(error==3) out.println("<div class='field error'>");
+                else out.println("<div class='field'>");
                 out.println("<div class='ui blue ribbon label'>Username</div>");
                 out.println("<div class='ui left icon input login-input'>");
                 out.println("<input id='userName' placeholder='Username' type='text' name='username'/>");
                 out.println("<i class='icon user'></i>");
                 out.println("</div>");
                 out.println("</div>");
-                out.println("<div class='field'>");
+                if(error==3) out.println("<div class='field error'>");
+                else out.println("<div class='field'>");
                 out.println("<div class='ui blue ribbon label'>Password</div>");
                 out.println("<div class='ui left icon input login-input'>");
                 out.println("<i class='icon key'></i>");
@@ -97,6 +110,7 @@ public class LoginServlet extends HttpServlet {
                 out.println("<div class='five wide column'></div>");
 
                 out.println("</div>");
+                error=0;
                 MainLayout.printFooter(out);
             } finally {
                 out.close();
@@ -106,8 +120,7 @@ public class LoginServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -122,8 +135,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
