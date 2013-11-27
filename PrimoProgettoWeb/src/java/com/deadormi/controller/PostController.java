@@ -139,6 +139,8 @@ public class PostController {
                     // Get the uploaded file parameters
                     String fieldName = fi.getFieldName();
                     String fileName = fi.getName();
+                    fileName = fileName.replace('\'','-');
+                    log.debug("Name after check " + fileName);
                     String contentType = fi.getContentType();
                     boolean isInMemory = fi.isInMemory();
                     long sizeInBytes = fi.getSize();
