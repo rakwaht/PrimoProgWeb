@@ -82,7 +82,7 @@ public class CreaPdfServlet extends HttpServlet {
             PdfWriter.getInstance(document, baos);
             document.open();
 
-            String title = "Report\nGruppo " + gruppo.getNome() + "\n " + CurrentDate.getCurrentDate();
+            String title = "Report\nGruppo " + gruppo.getNome() + "\ndel " + CurrentDate.getCurrentDate();
             Paragraph pTitle = new Paragraph(title, FontFactory.getFont(FontFactory.HELVETICA, 18, BaseColor.BLUE));
             pTitle.setAlignment(Element.ALIGN_CENTER);
             pTitle.setSpacingAfter(60);
