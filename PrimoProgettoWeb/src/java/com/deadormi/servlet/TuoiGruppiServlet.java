@@ -144,9 +144,9 @@ public class TuoiGruppiServlet extends HttpServlet {
                     out.println("<td><h3>" + gruppo.getNome() + "</h3><small><i>(" + numeroDiPost + " post)</i></small></td>");
                     out.println("<td>" + gruppo.getDescrizione() + "</td>");
                     if (proprietario.getId_utente().equals(utente.getId_utente())) {
-                        out.println("<td><b><i class='star blue icon'></i>&nbsp;" + proprietario.getUsername() + "</b></td>");
+                        out.println("<td class='center'><b><i class='star blue icon'></i>&nbsp;" + proprietario.getUsername() + "</b></td>");
                     } else {
-                        out.println("<td>" + proprietario.getUsername() + "</td>");
+                        out.println("<td class='center'>" + proprietario.getUsername() + "</td>");
                     }
                     out.println("<td class='center'><div class='ui large blue label '>" + filesSize + "</div></td>");
                     out.println("<td class='center'><div class='ui large blue label '>" + iscritti.size() + "</div></td>");
