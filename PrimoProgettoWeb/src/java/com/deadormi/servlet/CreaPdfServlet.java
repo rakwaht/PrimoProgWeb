@@ -125,7 +125,13 @@ public class CreaPdfServlet extends HttpServlet {
                 cellNumPost.setBorder(Rectangle.NO_BORDER);
 
                 //L'ultimo è sempre il piu recente siccome la query è ORDER BY data_creazione
-                PdfPCell cellData = new PdfPCell(new Paragraph(posts.get(posts.size() - 1).getData_creazione()));
+                PdfPCell cellData;
+                if (posts.size() != 0) {
+                    cellData = new PdfPCell(new Paragraph(posts.get(posts.size() - 1).getData_creazione()));
+                } else {
+                    cellData = new PdfPCell(new Paragraph("N/A"));
+
+                }
                 cellData.setBorder(Rectangle.NO_BORDER);
 
                 PdfPCell cellVoidBottom = new PdfPCell(new Paragraph(" "));
