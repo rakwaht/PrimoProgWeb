@@ -117,17 +117,41 @@ public class CreaGruppoServlet extends HttpServlet {
             out.println("<div class='row'>");
             out.println("<div class='four wide column'></div>");
             out.println("<div class='eight wide column'>");
-            
+            if (errore == 1) {
+                    out.println("<br/><div class='ui icon red message'>");
+                    out.println("<i class='remove sign icon'></i>");
+                    out.println("<div class='content'>");
+                    out.println("<div class='header'>");
+                    out.println("Errore!");
+                    out.println("</div>");
+                    out.println("<p>Campo titolo vuoto!</p>");
+                    out.println("</div>");
+                    out.println("</div>");
+                }
+            else if(errore==2){
+                out.println("<br/><div class='ui icon red message'>");
+                    out.println("<i class='remove sign icon'></i>");
+                    out.println("<div class='content'>");
+                    out.println("<div class='header'>");
+                    out.println("Errore!");
+                    out.println("</div>");
+                    out.println("<p>Campo descrizione vuoto!</p>");
+                    out.println("</div>");
+                    out.println("</div>");
+            }
             //FORM
             out.println("<form class='ui fluid form blue segment' method='POST'>");
-            out.println("<div class='field'>");
+            if(errore==1) out.println("<div class='field error'>");
+            else out.println("<div class='field'>");
             out.println("<div class='ui blue ribbon label'>Titolo</div>");
             out.println("<div class='ui left icon input login-input'>");
             out.println("<input placeholder='Titolo' type='text' name='titolo'/>");
             out.println("<i class='align justify icon'></i>");
             out.println("</div>");
             out.println("</div>");
-            out.println("<div class='field'>");
+            
+             if(errore==2) out.println("<div class='field error'>");
+            else out.println("<div class='field'>");
             out.println("<div class='ui blue ribbon label'>Descrizione</div>");
             out.println("<div class='ui login-input'>");
             out.println("<textarea type='text' name='descrizione'></textarea>");
@@ -158,6 +182,7 @@ public class CreaGruppoServlet extends HttpServlet {
             out.println("<div class='four wide column'></div>");
             out.println("</div>");
             out.println("</div>");
+            errore = 0;
             MainLayout.printFooter(out);
         } finally {
             out.close();
