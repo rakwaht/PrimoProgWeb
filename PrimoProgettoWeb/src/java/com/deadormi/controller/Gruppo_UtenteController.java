@@ -114,11 +114,13 @@ public class Gruppo_UtenteController {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
         String[] utenti_selezionati = request.getParameterValues("utenti_selezionati");
-        PreparedStatement stm = connection.prepareStatement("UPDATE ROOT.GRUPPO_UTENTE SET gruppo_utente_abilitato='false' WHERE id_gruppo=? AND id_utente=?");
         
         if (utenti_selezionati != null) {
+            
+            System.out.println(utenti_selezionati.length);
             for (int i = 0; i < utenti_selezionati.length; i++) {
-                
+                        PreparedStatement stm = connection.prepareStatement("UPDATE ROOT.GRUPPO_UTENTE SET gruppo_utente_abilitato='false' WHERE id_gruppo=? AND id_utente=?");
+
                 try {
                     stm.setInt(1, (Integer) gruppo_id);
                     stm.setInt(2, Integer.parseInt(utenti_selezionati[i]));
