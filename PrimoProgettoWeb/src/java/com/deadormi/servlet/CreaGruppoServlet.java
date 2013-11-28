@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,8 @@ import org.apache.log4j.Logger;
  */
 public class CreaGruppoServlet extends HttpServlet {
 
+    
+    private Integer errore = 0;
     static Logger log = Logger.getLogger(CreaGruppoServlet.class);
 
     /**
@@ -187,17 +190,25 @@ public class CreaGruppoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            Integer id_gruppo = GruppoController.creaGruppo(request);
+            Integer id_gruppo;
+            try {
+                id_gruppo = GruppoController.creaGruppo(request);
+            } catch (Exception ex) {
+                if(ex.getMessage().equals("titolo vuoto")){
+                    errore = 1; //errore 1 = titolo vuoto
+                }
+                else if(ex.getMessage().equals("descrizione vuota")){
+                    errore = 2; //errore 2 per la descrizione vuota
+                }
+                id_gruppo = 0;
+                log.debug(ex);
+            }
             if (id_gruppo > 0) {
                 response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + id_gruppo);
 
             } else {
                 processRequest(request, response);
             }
-        } catch (SQLException ex) {
-            log.error(ex);
-        }
 
     }
 

@@ -26,7 +26,7 @@ public class GruppoController {
 
     static Logger  log = Logger.getLogger(GruppoController.class);
     
-    public static Integer creaGruppo(HttpServletRequest request) throws SQLException {
+    public static Integer creaGruppo(HttpServletRequest request) throws SQLException, Exception {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
         try {
@@ -35,10 +35,16 @@ public class GruppoController {
             log.error(ex);
         }
         String titolo = request.getParameter("titolo");
+        if(titolo == null || titolo.trim().length() == 0){
+            throw new Exception("titolo vuoto");
+        }
         titolo = titolo.replaceAll("<[^>]*>", "");
         String descrizione = request.getParameter("descrizione");
+         if(descrizione == null || descrizione.trim().length() == 0){
+            throw new Exception("descrizione vuota");
+        }
         descrizione = descrizione.replaceAll("<[^>]*>", "");
-        if (!titolo.equals("") && !descrizione.equals("")) {
+        if (!titolo.trim().equals("") && !descrizione.trim().equals("")) {
             PreparedStatement stm = connection.prepareStatement("INSERT INTO ROOT.GRUPPO (nome,id_proprietario,data_creazione,descrizione) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ResultSet generated_keys;
             HttpSession session = request.getSession();
