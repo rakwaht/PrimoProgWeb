@@ -120,13 +120,16 @@ public class TuoiGruppiServlet extends HttpServlet {
                 out.println("<th>Descrizione</th>");
                 out.println("<th>Amministratore</th>");
                 out.println("<th>Files</th>");
+                out.println("<th>Iscritti</th>");
                 out.println("<th>Vai</th>");
                 for (int i = 0; i < gruppi.size(); i++) {
                     Gruppo gruppo = gruppi.get(i);
                     Utente proprietario = null;
+                    List<Utente> iscritti = null;
                     try {
                         filesSize = FileController.getFilesByGroupId(request, gruppo.getId_gruppo()).size();
                         proprietario = UtenteController.getUserById(request, gruppo.getId_proprietario());
+                        iscritti = UtenteController.getUserByGroupId(request, gruppo.getId_gruppo());
                     } catch (SQLException ex) {
                         log.error(ex);
                     }
@@ -138,10 +141,16 @@ public class TuoiGruppiServlet extends HttpServlet {
                     } catch (SQLException ex) {
                         java.util.logging.Logger.getLogger(TuoiGruppiServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    out.println("<td><h3>" + gruppo.getNome() +"</h3><small><i>(" + numeroDiPost + " post)</i></small></td>");
+                    out.println("<td><h3>" + gruppo.getNome() + "</h3><small><i>(" + numeroDiPost + " post)</i></small></td>");
                     out.println("<td>" + gruppo.getDescrizione() + "</td>");
-                    out.println("<td>" + proprietario.getUsername() + "</td>");
-                    out.println("<td><div class=\"ui large blue label\">" + filesSize + "</div></td>");
+                    if (proprietario.getId_utente().equals(utente.getId_utente())) {
+                        out.println("<td><b><i class='star blue icon'></i>&nbsp;" + proprietario.getUsername() + "</b></td>");
+                    } else {
+                        out.println("<td>" + proprietario.getUsername() + "</td>");
+                    }
+                    out.println("<td class='center'><div class='ui large blue label '>" + filesSize + "</div></td>");
+                    out.println("<td class='center'><div class='ui large blue label '>" + iscritti.size() + "</div></td>");
+
                     out.println("<td><a href='gruppo/show?id_gruppo=" + gruppo.getId_gruppo() + "'><i id='tasto' class='forward mail icon' style='font-size:30px'></i></a></td>");
                     out.println("</tr>");
                 }
