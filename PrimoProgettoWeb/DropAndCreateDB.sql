@@ -69,15 +69,15 @@ FOREIGN KEY (id_gruppo) REFERENCES gruppo(id_gruppo)
 
 
 INSERT INTO utente (username,password)
-VALUES ('federico','federico');
+VALUES ('federico','616706c4d6f7bdf68b30893f860cbb2b');
 INSERT INTO utente (username,password)
-VALUES ('davide','davide');
+VALUES ('davide','446fca5553df49ad9c6348cf1ff71d51');
 INSERT INTO utente (username,password)
-VALUES ('francesco','francesco');
+VALUES ('francesco','0581938f0767a65b373cea80e905c25f');
 INSERT INTO utente (username,password)
-VALUES ('susanna','susanna');
+VALUES ('susanna','a469b67883041eb9814865e1a7a41d75');
 INSERT INTO utente (username,password)
-VALUES ('giovanna','giovanna');
+VALUES ('giovanna','79d2d812bf677287382b68106237b5ee');
 
 
 INSERT INTO gruppo (nome,id_proprietario,data_creazione,descrizione)

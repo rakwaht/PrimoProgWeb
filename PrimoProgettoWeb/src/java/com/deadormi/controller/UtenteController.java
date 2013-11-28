@@ -7,6 +7,7 @@ package com.deadormi.controller;
 import com.deadormi.dbmanager.DbManager;
 import com.deadormi.entity.Utente;
 import com.deadormi.util.CookiesManager;
+import com.deadormi.util.Md5;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,6 +30,8 @@ public class UtenteController {
     public static Utente authenticate(HttpServletRequest request, HttpServletResponse response) throws SQLException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        password = Md5.getMD5(password);
+        log.error(password);
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         
         Connection connection = dbmanager.getConnection();
