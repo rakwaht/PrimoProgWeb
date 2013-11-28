@@ -95,6 +95,7 @@ public class FileController {
                 // Get the uploaded file parameters
                 String fieldName = fi.getFieldName();
                 String fileName = fi.getName();
+                fileName = fileName.replace("'", "-");
                 String contentType = fi.getContentType();
                 boolean isInMemory = fi.isInMemory();
                 long sizeInBytes = fi.getSize();
