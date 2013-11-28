@@ -14,6 +14,7 @@ import com.deadormi.entity.Gruppo;
 import com.deadormi.entity.Post;
 import com.deadormi.entity.Utente;
 import com.deadormi.layout.MainLayout;
+import static com.deadormi.servlet.CreaGruppoServlet.log;
 import static com.deadormi.servlet.HomeServlet.AVATAR_RESOURCE_PATH;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -26,7 +27,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
  */
 public class ModificaGruppoServlet extends HttpServlet {
 
+    private Integer error = 0;
     static Logger log = Logger.getLogger(ModificaGruppoServlet.class);
     final static String AVATAR_RESOURCE_PATH = "/resource/avatar";
 
@@ -239,8 +240,15 @@ public class ModificaGruppoServlet extends HttpServlet {
                 Gruppo_UtenteController.eliminaUser(request, gruppo_id);
                 InvitoController.processaRe_Inviti(request, gruppo_id);
                 response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id);
-            } catch (SQLException ex) {
-                log.error(ex);
+            } catch (Exception ex) {
+                if(ex.getMessage().equals("titolo vuoto")){
+                    error = 1; //errore 1 = titolo vuoto
+                }
+                else if(ex.getMessage().equals("descrizione vuota")){
+                    error = 2; //errore 2 per la descrizione vuota
+                }
+                log.debug(ex);
+                processRequest(request, response);
             }
         } else {
             processRequest(request, response);

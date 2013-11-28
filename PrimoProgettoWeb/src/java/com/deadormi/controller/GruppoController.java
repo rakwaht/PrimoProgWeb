@@ -102,13 +102,21 @@ public class GruppoController {
         return gruppo;
     }
 
-    public static void modificaGruppo(HttpServletRequest request, Integer gruppo_id) throws SQLException {
+    public static void modificaGruppo(HttpServletRequest request, Integer gruppo_id) throws SQLException, Exception {
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         Connection connection = dbmanager.getConnection();
         String titolo = request.getParameter("titolo");
         titolo = titolo.replaceAll("<[^>]*>", "");
         String descrizione = request.getParameter("descrizione");
         descrizione = descrizione.replaceAll("<[^>]*>", "");
+        //check titolo e descrizione validi
+        if(titolo == null || titolo.trim().length() == 0){
+            throw new Exception("titolo vuoto");
+        }
+        else if(descrizione == null || descrizione.trim().length() == 0){
+            throw new Exception("descrizione vuota");
+        }
+        log.debug("salvo");
         PreparedStatement stm = connection.prepareStatement("UPDATE ROOT.GRUPPO SET nome=?, descrizione=? WHERE id_gruppo=?");
         ResultSet rs;
         try {
