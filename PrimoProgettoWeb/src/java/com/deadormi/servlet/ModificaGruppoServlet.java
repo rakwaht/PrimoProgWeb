@@ -98,12 +98,11 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("<a href='" + securePath + "modifica_gruppo?id_gruppo=" + gruppo.getId_gruppo() + "' class='item active'>");
                 out.println("<i class='wrench icon'></i>Modifica Gruppo");
                 out.println("</a>");
-               
+
                 out.println("<a href='/PrimoProgettoWeb/secure/crea_pdf?id_gruppo=" + gruppo.getId_gruppo() + "' class='item' target='_blank'>");
                 out.println("<i class='copy icon'></i>");
                 out.println("Genera PDF");
                 out.println("</a>");
-               
 
                 out.println("<a href='" + securePath + "nuovo_post?id_gruppo=" + gruppo.getId_gruppo() + "' class='item'>");
                 out.println("<i class='outline chat icon'></i>");
@@ -131,9 +130,34 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("<div class='row'>");
                 out.println("<div class='four wide column'></div>");
                 out.println("<div class='eight wide column'>");
+                if (error == 1) {
+                    out.println("<br/><div class='ui icon red message'>");
+                    out.println("<i class='remove sign icon'></i>");
+                    out.println("<div class='content'>");
+                    out.println("<div class='header'>");
+                    out.println("Errore!");
+                    out.println("</div>");
+                    out.println("<p>Campo titolo vuoto!</p>");
+                    out.println("</div>");
+                    out.println("</div>");
+                } else if (error == 2) {
+                    out.println("<br/><div class='ui icon red message'>");
+                    out.println("<i class='remove sign icon'></i>");
+                    out.println("<div class='content'>");
+                    out.println("<div class='header'>");
+                    out.println("Errore!");
+                    out.println("</div>");
+                    out.println("<p>Campo descrizione vuoto!</p>");
+                    out.println("</div>");
+                    out.println("</div>");
+                }
                 //FORM
                 out.println("<form method='POST' class='ui form blue segment' action='/PrimoProgettoWeb/secure/modifica_gruppo?id_gruppo=" + id_gruppo + "''>");
-                out.println("<div class='field'>");
+                if (error == 1) {
+                    out.println("<div class='field error'>");
+                } else {
+                    out.println("<div class='field'>");
+                }
                 out.println("<div class='ui blue ribbon label'>Titolo</div>");
                 out.println("<div class='ui left icon input login-input'>");
                 out.println("<input placeholder='Titolo' value='" + gruppo.getNome() + "' name='titolo' />");
@@ -141,7 +165,11 @@ public class ModificaGruppoServlet extends HttpServlet {
                 out.println("</div>");
                 out.println("</div>");
 
-                out.println("<div class='field'>");
+                if (error == 2) {
+                    out.println("<div class='field error'>");
+                } else {
+                    out.println("<div class='field'>");
+                }
                 out.println("<div class='ui blue ribbon label'>Descrizione</div>");
                 out.println("<div class='ui login-input'>");
                 out.println("<textarea type='text' name='descrizione'>" + gruppo.getDescrizione() + "</textarea>");
@@ -241,10 +269,9 @@ public class ModificaGruppoServlet extends HttpServlet {
                 InvitoController.processaRe_Inviti(request, gruppo_id);
                 response.sendRedirect("/PrimoProgettoWeb/secure/gruppo/show?id_gruppo=" + gruppo_id);
             } catch (Exception ex) {
-                if(ex.getMessage().equals("titolo vuoto")){
+                if (ex.getMessage().equals("titolo vuoto")) {
                     error = 1; //errore 1 = titolo vuoto
-                }
-                else if(ex.getMessage().equals("descrizione vuota")){
+                } else if (ex.getMessage().equals("descrizione vuota")) {
                     error = 2; //errore 2 per la descrizione vuota
                 }
                 log.debug(ex);
