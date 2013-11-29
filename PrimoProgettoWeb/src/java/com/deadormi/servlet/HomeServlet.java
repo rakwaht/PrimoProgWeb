@@ -218,6 +218,8 @@ public class HomeServlet extends HttpServlet {
                     out.println("</div>");
                 }
                 //out.println("</div>");
+            } else {
+                out.println("<div class='ui blue message'><i class='attention icon'></i>Non c'è nessun nuovo post dal tuo ultimo loginr.</div>");
             }
             out.println("</div>");
 
