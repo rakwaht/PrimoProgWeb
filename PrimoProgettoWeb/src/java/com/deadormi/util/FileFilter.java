@@ -24,26 +24,24 @@ import org.apache.log4j.Logger;
  * @author Davide
  */
 public class FileFilter implements Filter {
-    
-    
-    static Logger  log = Logger.getLogger(FileFilter.class);
-    
+
+    static Logger log = Logger.getLogger(FileFilter.class);
+
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
     private FilterConfig filterConfig = null;
-    
+
     public FileFilter() {
-    }    
-    
+    }
+
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        
-            log.debug("FileFilter:DoBeforeProcessing");
-        
+
+        log.debug("FileFilter:DoBeforeProcessing");
+
         // Write code here to process the request and/or response before
         // the rest of the filter chain is invoked.
-
         // For example, a logging filter might log items on the request object,
         // such as the parameters.
 	/*
@@ -62,16 +60,15 @@ public class FileFilter implements Filter {
          log(buf.toString());
          }
          */
-    }    
-    
+    }
+
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-        
-            log.debug("FileFilter:DoAfterProcessing");
-        
+
+        log.debug("FileFilter:DoAfterProcessing");
+
         // Write code here to process the request and/or response after
         // the rest of the filter chain is invoked.
-
         // For example, a logging filter might log the attributes on the
         // request object after the request has been processed. 
 	/*
@@ -82,7 +79,6 @@ public class FileFilter implements Filter {
 
          }
          */
-
         // For example, a filter might append something to the response.
 	/*
          PrintWriter respOut = new PrintWriter(response.getWriter());
@@ -102,25 +98,29 @@ public class FileFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        
-            log.debug("FileFilter:doFilter()");
-        
+
+        log.debug("FileFilter:doFilter()");
+
         doBeforeProcessing(request, response);
         //cerco l'utente
-        Integer user_id = (Integer)((HttpServletRequest)request).getSession().getAttribute("user_id");
+        Integer user_id = (Integer) ((HttpServletRequest) request).getSession().getAttribute("user_id");
         //cerco il gruppo (il 6 è perche files/ è lunfo 6 caratteri)
-        String url = ((HttpServletRequest)request).getServletPath();
-        Integer gruppo_id = Integer.parseInt(url.substring(url.indexOf("files/") + 6, url.lastIndexOf("/")));
-       
+        String url = ((HttpServletRequest) request).getServletPath();
+        Integer gruppo_id = null;
+        try {
+            gruppo_id = Integer.parseInt(url.substring(url.indexOf("files/") + 6, url.lastIndexOf("/")));
+        } catch (Exception e) {
+            ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/secure/home");
+
+        }
         log.debug("gruppo " + gruppo_id);
-        
+
         Throwable problem = null;
         try {
-            if(Gruppo_UtenteController.checkUser_Group(((HttpServletRequest)request),user_id,gruppo_id)){
+            if (Gruppo_UtenteController.checkUser_Group(((HttpServletRequest) request), user_id, gruppo_id)) {
                 chain.doFilter(request, response);
-            }
-            else{
-                ((HttpServletResponse)response).sendRedirect(((HttpServletRequest)request).getContextPath()+ "/secure/tuoi_gruppi");
+            } else {
+                ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/secure/tuoi_gruppi");
             }
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
@@ -129,7 +129,7 @@ public class FileFilter implements Filter {
             problem = t;
             t.printStackTrace();
         }
-        
+
         doAfterProcessing(request, response);
 
         // If there was a problem, we want to rethrow it if it is
@@ -164,17 +164,17 @@ public class FileFilter implements Filter {
     /**
      * Destroy method for this filter
      */
-    public void destroy() {        
+    public void destroy() {
     }
 
     /**
      * Init method for this filter
      */
-    public void init(FilterConfig filterConfig) {        
+    public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
-                log.debug("FileFilter:Initializing filter");
-            
+            log.debug("FileFilter:Initializing filter");
+
         }
     }
 
@@ -191,20 +191,20 @@ public class FileFilter implements Filter {
         sb.append(")");
         return (sb.toString());
     }
-    
+
     private void sendProcessingError(Throwable t, ServletResponse response) {
-        String stackTrace = getStackTrace(t);        
-        
+        String stackTrace = getStackTrace(t);
+
         if (stackTrace != null && !stackTrace.equals("")) {
             try {
                 response.setContentType("text/html");
                 PrintStream ps = new PrintStream(response.getOutputStream());
-                PrintWriter pw = new PrintWriter(ps);                
+                PrintWriter pw = new PrintWriter(ps);
                 pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
 
                 // PENDING! Localize this for next official release
-                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");                
-                pw.print(stackTrace);                
+                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
+                pw.print(stackTrace);
                 pw.print("</pre></body>\n</html>"); //NOI18N
                 pw.close();
                 ps.close();
@@ -221,7 +221,7 @@ public class FileFilter implements Filter {
             }
         }
     }
-    
+
     public static String getStackTrace(Throwable t) {
         String stackTrace = null;
         try {
@@ -235,8 +235,8 @@ public class FileFilter implements Filter {
         }
         return stackTrace;
     }
-    
+
     public void log(String msg) {
-        filterConfig.getServletContext().log(msg);        
+        filterConfig.getServletContext().log(msg);
     }
 }
