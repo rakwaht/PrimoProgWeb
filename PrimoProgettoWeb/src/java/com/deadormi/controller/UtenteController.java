@@ -31,7 +31,6 @@ public class UtenteController {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         password = Md5.getMD5(password);
-        log.error(password);
         DbManager dbmanager = (DbManager) request.getServletContext().getAttribute("dbmanager");
         
         Connection connection = dbmanager.getConnection();
